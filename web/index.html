@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Findr™ — Coming Soon</title>
+  <style>
+    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .logo{font-weight:800; letter-spacing:0.5px}
+    .badge{display:inline-block; padding:6px 10px; border:1px solid #23324a; border-radius:999px; color:var(--muted); font-size:12px}
+    .hero{padding:72px 0 32px}
+    .hero h1{font-size:clamp(32px, 6vw, 56px); margin:0 0 12px; line-height:1.05}
+    .hero p{color:var(--muted); font-size:18px; max-width:60ch}
+    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px}
+    .grid{display:grid; gap:16px}
+    @media (min-width: 800px){ .grid{grid-template-columns:1.2fr 1fr} }
+    h2{font-size:18px; margin:0 0 8px}
+    .footer{margin-top:48px; font-size:12px; color:var(--muted)}
+    .divider{height:1px; background:#1b263a; margin:16px 0}
+    a{color:var(--accent); text-decoration:none}
+    .owner{font-weight:600}
+    .small{font-size:12px; color:var(--muted)}
+    .powered{display:flex; align-items:center; gap:12px; margin-top:8px}
+    .powered img{width:90px; height:90px; object-fit:contain}
+    .stack{display:flex; flex-direction:column; gap:6px}
+    .muted{color:var(--muted)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="logo">Findrr<span class="muted">.ca</span></div>
+      <span class="badge">AI‑first real estate search</span>
+    </header>
+
+    <section class="hero">
+      <h1>Real estate search, reimagined.</h1>
+      <p>We’re building an AI‑first, map‑centric search that turns plain‑language requests (like “quiet street near SkyTrain, dog‑friendly strata, south light”) into precise results. Private alpha coming soon.</p>
+    </section>
+
+    <section class="grid">
+      <div class="card">
+        <h2>Contact</h2>
+        <div class="stack">
+          <div class="owner">Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty</div>
+          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty">marcusr@lariviererealty</a></div>
+          <div class="small">Site owner & operator (Participant responsible for this Website).</div>
+        </div>
+        <div class="divider"></div>
+        <h2>Compliance</h2>
+<div class="powered">
+  <a href="#" aria-label="Powered by REALTOR.ca">
+    <img src="assets/powered-by-realtor.svg"
+         alt="Powered by REALTOR.ca"
+         width="90" height="90" />
+  </a>
+</div>
+
+        <p class="small">Each listing will also display the <strong>Listing Brokerage name</strong> adjacent to the property details.</p>
+      </div>
+
+      <div class="card">
+        <h2>Trademark & Legal Statements</h2>
+        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks that are owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). These certification marks identify real estate professionals who are members of CREA and who must abide by CREA’s By‑Laws, Rules, and the REALTOR® Code.</p>
+        <p class="small">The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
+        <p class="small">The trademark DDF® is owned by The Canadian Real Estate Association (CREA) and identifies CREA’s Data Distribution Facility (DDF®).</p>
+        <div class="divider"></div>
+        <p class="small">© 2025 Findr™. All rights reserved.</p>
+      </div>
+    </section>
+
+    <section class="footer">
+      <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
+<p><a href="terms.html">Terms of Use</a></p>    
+</section>
+  </div>
+</body>
+</html>
