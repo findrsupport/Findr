@@ -34,12 +34,12 @@
   <div class="wrap">
     <header>
       <div class="logo">Findrr<span class="muted">.ca</span></div>
-      <span class="badge">AI‑first real estate search</span>
+      <span class="badge">AI-first real estate search</span>
     </header>
 
     <section class="hero">
       <h1>Real estate search, reimagined.</h1>
-      <p>We’re building an AI‑first, map‑centric search that turns plain‑language requests (like “quiet street near SkyTrain, dog‑friendly strata, south light”) into precise results. Private alpha coming soon.</p>
+      <p>We’re building an AI-first, map-centric search that turns plain-language requests (like “quiet street near SkyTrain, dog-friendly strata, south light”) into precise results. Private alpha coming soon.</p>
     </section>
 
     <section class="grid">
@@ -47,25 +47,22 @@
         <h2>Contact</h2>
         <div class="stack">
           <div class="owner">Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty</div>
-          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty">marcusr@lariviererealty</a></div>
+          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></div>
           <div class="small">Site owner & operator (Participant responsible for this Website).</div>
         </div>
         <div class="divider"></div>
         <h2>Compliance</h2>
-<div class="powered">
-  <a href="#" aria-label="Powered by REALTOR.ca">
-    <img src="assets/powered-by-realtor.svg"
-         alt="Powered by REALTOR.ca"
-         width="90" height="90" />
-  </a>
-</div>
-
+        <div class="powered">
+          <a href="#" aria-label="Powered by REALTOR.ca">
+            <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" width="90" height="90" />
+          </a>
+        </div>
         <p class="small">Each listing will also display the <strong>Listing Brokerage name</strong> adjacent to the property details.</p>
       </div>
 
       <div class="card">
         <h2>Trademark & Legal Statements</h2>
-        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks that are owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). These certification marks identify real estate professionals who are members of CREA and who must abide by CREA’s By‑Laws, Rules, and the REALTOR® Code.</p>
+        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks that are owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). These certification marks identify real estate professionals who are members of CREA and who must abide by CREA’s By-Laws, Rules, and the REALTOR® Code.</p>
         <p class="small">The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
         <p class="small">The trademark DDF® is owned by The Canadian Real Estate Association (CREA) and identifies CREA’s Data Distribution Facility (DDF®).</p>
         <div class="divider"></div>
@@ -73,11 +70,33 @@
       </div>
     </section>
 
+    <!-- Waitlist section (with honeypot) -->
+    <section class="card" style="margin-top:32px;">
+      <h2>Join the Waitlist</h2>
+      <p class="small">Be the first to try Findrr when our private beta launches.</p>
+      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" style="margin-top:12px;">
+        <input type="hidden" name="form-name" value="waitlist" />
+        <!-- Honeypot (invisible to humans) -->
+        <p style="display:none;">
+          <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="email" name="email" placeholder="Your email address" required
+                 style="flex:1; padding:10px; border-radius:6px; border:1px solid #223148; background:#0b0f17; color:#e8eef7;" />
+          <button type="submit"
+                  style="padding:10px 16px; border:none; border-radius:6px; background:#6aa1ff; color:#fff; font-weight:600; cursor:pointer;">
+            Join
+          </button>
+        </div>
+      </form>
+    </section>
+
     <section class="footer">
       <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
-<p><a href="terms.html">Terms of Use</a></p>    
-</section>
+      <p><a href="terms.html">Terms of Use</a></p>
+    </section>
+
+    <!-- deploy test -->
   </div>
 </body>
 </html>
-<!-- deploy test -->
