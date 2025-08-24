@@ -8,7 +8,7 @@
     "baths": 2,
     "brokerage": "Example Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://source.unsplash.com/collection/483251/600x400?sig=1"
+    "photo": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80"
   },
   {
     "id": "L-1002",
@@ -19,7 +19,7 @@
     "baths": 2,
     "brokerage": "Downtown Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://source.unsplash.com/collection/483251/600x400?sig=2"
+    "photo": "https://images.unsplash.com/photo-1560448075-bb485b066d2a?auto=format&fit=crop&w=800&q=80"
   },
   {
     "id": "L-1003",
@@ -30,7 +30,7 @@
     "baths": 3,
     "brokerage": "North Shore Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://source.unsplash.com/collection/483251/600x400?sig=3"
+    "photo": "https://images.unsplash.com/photo-1599423300746-b62533397364?auto=format&fit=crop&w=800&q=80"
   },
   {
     "id": "L-1004",
@@ -41,7 +41,7 @@
     "baths": 3,
     "brokerage": "Valley Homes",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://source.unsplash.com/collection/483251/600x400?sig=4"
+    "photo": "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=800&q=80"
   },
   {
     "id": "L-1005",
@@ -52,7 +52,7 @@
     "baths": 1,
     "brokerage": "Quay Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://source.unsplash.com/collection/483251/600x400?sig=5"
+    "photo": "https://images.unsplash.com/photo-1523217582562-09d0def993a6?auto=format&fit=crop&w=800&q=80"
   },
   {
     "id": "L-1006",
@@ -63,6 +63,6 @@
     "baths": 2,
     "brokerage": "Kits Point Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://source.unsplash.com/collection/483251/600x400?sig=6"
+    "photo": "https://images.unsplash.com/photo-1600607688963-79c9c6ac1dc8?auto=format&fit=crop&w=800&q=80"
   }
 ]
