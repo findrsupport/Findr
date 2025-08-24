@@ -6,11 +6,9 @@
     "price": 749900,
     "beds": 2,
     "baths": 2,
-    "lat": 49.201,
-    "lon": -122.912,
     "brokerage": "Example Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://picsum.photos/seed/1204/600/400"
+    "photo": "https://source.unsplash.com/random/600x400?condo"
   },
   {
     "id": "L-1002",
@@ -19,11 +17,9 @@
     "price": 899000,
     "beds": 2,
     "baths": 2,
-    "lat": 49.275,
-    "lon": -123.118,
     "brokerage": "Downtown Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://picsum.photos/seed/2107/600/400"
+    "photo": "https://source.unsplash.com/random/600x400?apartment,condo"
   },
   {
     "id": "L-1003",
@@ -32,11 +28,9 @@
     "price": 1399000,
     "beds": 3,
     "baths": 3,
-    "lat": 49.337,
-    "lon": -123.034,
     "brokerage": "North Shore Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://picsum.photos/seed/3050/600/400"
+    "photo": "https://source.unsplash.com/random/600x400?house,home"
   },
   {
     "id": "L-1004",
@@ -45,11 +39,9 @@
     "price": 1195000,
     "beds": 4,
     "baths": 3,
-    "lat": 49.042,
-    "lon": -122.309,
     "brokerage": "Valley Homes",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://picsum.photos/seed/ross/600/400"
+    "photo": "https://source.unsplash.com/random/600x400?detached,house"
   },
   {
     "id": "L-1005",
@@ -58,11 +50,9 @@
     "price": 599000,
     "beds": 1,
     "baths": 1,
-    "lat": 49.204,
-    "lon": -122.908,
     "brokerage": "Quay Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://picsum.photos/seed/sixth/600/400"
+    "photo": "https://source.unsplash.com/random/600x400?loft,condo"
   },
   {
     "id": "L-1006",
@@ -71,10 +61,8 @@
     "price": 995000,
     "beds": 2,
     "baths": 2,
-    "lat": 49.268,
-    "lon": -123.167,
     "brokerage": "Kits Point Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://picsum.photos/seed/kits/600/400"
+    "photo": "https://source.unsplash.com/random/600x400?modern,house"
   }
 ]
