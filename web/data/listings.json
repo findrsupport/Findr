@@ -8,7 +8,7 @@
     "baths": 2,
     "brokerage": "Example Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c"
+    "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae" 
   },
   {
     "id": "L-1002",
@@ -19,10 +19,21 @@
     "baths": 2,
     "brokerage": "Downtown Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae"
+    "photo": "https://images.unsplash.com/photo-1493809842364-78817add7ffb"
   },
   {
     "id": "L-1003",
+    "address": "39 Sixth St #506",
+    "city": "New Westminster",
+    "price": 599000,
+    "beds": 1,
+    "baths": 1,
+    "brokerage": "Quay Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://images.unsplash.com/photo-1523217582562-09d0def993a6"
+  },
+  {
+    "id": "L-1004",
     "address": "3050 Mountain Hwy",
     "city": "North Vancouver",
     "price": 1399000,
@@ -33,7 +44,7 @@
     "photo": "https://images.unsplash.com/photo-1599423300746-b62533397364"
   },
   {
-    "id": "L-1004",
+    "id": "L-1005",
     "address": "5570 Ross Rd",
     "city": "Abbotsford",
     "price": 1195000,
@@ -42,17 +53,6 @@
     "brokerage": "Valley Homes",
     "realtorca_url": "https://www.realtor.ca/",
     "photo": "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-  },
-  {
-    "id": "L-1005",
-    "address": "39 Sixth St",
-    "city": "New Westminster",
-    "price": 599000,
-    "beds": 1,
-    "baths": 1,
-    "brokerage": "Quay Realty",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1523217582562-09d0def993a6"
   },
   {
     "id": "L-1006",
