@@ -1,0 +1,80 @@
+[
+  {
+    "id": "L-1001",
+    "address": "123 Quayside Dr #1204",
+    "city": "New Westminster",
+    "price": 749900,
+    "beds": 2,
+    "baths": 2,
+    "lat": 49.201,
+    "lon": -122.912,
+    "brokerage": "Example Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://picsum.photos/seed/1204/600/400"
+  },
+  {
+    "id": "L-1002",
+    "address": "88 Smithe St #2107",
+    "city": "Vancouver",
+    "price": 899000,
+    "beds": 2,
+    "baths": 2,
+    "lat": 49.275,
+    "lon": -123.118,
+    "brokerage": "Downtown Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://picsum.photos/seed/2107/600/400"
+  },
+  {
+    "id": "L-1003",
+    "address": "3050 Mountain Hwy",
+    "city": "North Vancouver",
+    "price": 1399000,
+    "beds": 3,
+    "baths": 3,
+    "lat": 49.337,
+    "lon": -123.034,
+    "brokerage": "North Shore Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://picsum.photos/seed/3050/600/400"
+  },
+  {
+    "id": "L-1004",
+    "address": "5570 Ross Rd",
+    "city": "Abbotsford",
+    "price": 1195000,
+    "beds": 4,
+    "baths": 3,
+    "lat": 49.042,
+    "lon": -122.309,
+    "brokerage": "Valley Homes",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://picsum.photos/seed/ross/600/400"
+  },
+  {
+    "id": "L-1005",
+    "address": "39 Sixth St",
+    "city": "New Westminster",
+    "price": 599000,
+    "beds": 1,
+    "baths": 1,
+    "lat": 49.204,
+    "lon": -122.908,
+    "brokerage": "Quay Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://picsum.photos/seed/sixth/600/400"
+  },
+  {
+    "id": "L-1006",
+    "address": "2468 W 4th Ave",
+    "city": "Vancouver",
+    "price": 995000,
+    "beds": 2,
+    "baths": 2,
+    "lat": 49.268,
+    "lon": -123.167,
+    "brokerage": "Kits Point Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://picsum.photos/seed/kits/600/400"
+  }
+]
