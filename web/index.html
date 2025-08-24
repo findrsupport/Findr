@@ -33,7 +33,7 @@
 <body>
   <div class="wrap">
     <header>
-      <div class="logo">Findrr<span class="muted">.ca</span></div>
+      <div class="logo">Findr™</div>
       <span class="badge">AI-first real estate search</span>
     </header>
 
@@ -70,11 +70,16 @@
       </div>
     </section>
 
-    <!-- Waitlist section (with honeypot) -->
+    <!-- Waitlist section (with honeypot + redirect) -->
     <section class="card" style="margin-top:32px;">
       <h2>Join the Waitlist</h2>
-      <p class="small">Be the first to try Findrr when our private beta launches.</p>
-      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" style="margin-top:12px;">
+      <p class="small">Be the first to try Findr™ when our private beta launches.</p>
+      <form name="waitlist"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            action="thank-you.html"
+            style="margin-top:12px;">
         <input type="hidden" name="form-name" value="waitlist" />
         <!-- Honeypot (invisible to humans) -->
         <p style="display:none;">
