@@ -4,13 +4,6 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Coming Soon</title>
-  <link rel="icon" type="image/png" href="assets/favicon.png">
-  <meta name="description" content="Findr™ is an AI-first real estate search. Private alpha coming soon.">
-  <meta property="og:title" content="Findr™ — AI-first real estate search">
-  <meta property="og:description" content="Plain-language search. Better results. Private alpha coming soon.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://findrr.ca/">
-  <meta property="og:image" content="https://findrr.ca/assets/favicon.png">
   <style>
     :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
     *{box-sizing:border-box}
@@ -26,7 +19,6 @@
     .grid{display:grid; gap:16px}
     @media (min-width: 800px){ .grid{grid-template-columns:1.2fr 1fr} }
     h2{font-size:18px; margin:0 0 8px}
-    .footer{margin-top:48px; font-size:12px; color:var(--muted)}
     .divider{height:1px; background:#1b263a; margin:16px 0}
     a{color:var(--accent); text-decoration:none}
     .owner{font-weight:600}
@@ -35,6 +27,14 @@
     .powered img{width:90px; height:90px; object-fit:contain}
     .stack{display:flex; flex-direction:column; gap:6px}
     .muted{color:var(--muted)}
+    .footer{margin-top:48px; font-size:12px; color:var(--muted); text-align:center;}
+    .footer a{color:var(--accent); text-decoration:none; margin:0 6px;}
+    /* Footer CTA button */
+    .footer-cta {
+      display:inline-block; margin:0 6px;
+      padding:8px 12px; border-radius:10px; font-weight:600;
+      background:var(--accent); color:#0b0f17 !important; border:0;
+    }
   </style>
 </head>
 <body>
@@ -77,7 +77,7 @@
       </div>
     </section>
 
-    <!-- Waitlist section (with honeypot + redirect) -->
+    <!-- Waitlist (honeypot + thank-you redirect intact) -->
     <section class="card" style="margin-top:32px;">
       <h2>Join the Waitlist</h2>
       <p class="small">Be the first to try Findr™ when our private beta launches.</p>
@@ -88,8 +88,7 @@
             action="thank-you.html"
             style="margin-top:12px;">
         <input type="hidden" name="form-name" value="waitlist" />
-        <!-- Honeypot (invisible to humans) -->
-        <p style="display:none;">
+        <p style="display:none">
           <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
         </p>
         <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -103,12 +102,15 @@
       </form>
     </section>
 
+    <!-- Footer with button-highlighted Map link -->
     <section class="footer">
       <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
       <p>
         <a href="terms.html">Terms of Use</a> · 
         <a href="privacy.html">Privacy Policy</a> · 
         <a href="listings.html">Preview Listings</a>
+        <!-- button-style CTA for the map -->
+        <a class="footer-cta" href="map.html">Map Preview</a>
       </p>
     </section>
 
