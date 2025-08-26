@@ -110,6 +110,8 @@
   <!-- Compliance scaffolding -->
   <script src="config.js"></script>
   <script src="js/ai-guard.js"></script>
+  <!-- Shared rules-based filters -->
+  <script src="js/filters.js"></script>
   <!-- Demo-only NL→filters stub (intent only; never touches listing payloads) -->
   <script src="js/ai-demo.js"></script>
 
@@ -161,6 +163,16 @@
       history.replaceState(null,'',newUrl);
     }
 
+    function toParamsFromControls(){
+      return {
+        q: $('q').value,
+        beds: $('beds').value,
+        baths: $('baths').value,
+        minp: $('minp').value,
+        maxp: $('maxp').value
+      };
+    }
+
     function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
 
     function renderWhy(){
@@ -186,11 +198,22 @@
       const minp=$('minp').value, maxp=$('maxp').value;
       if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
       const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
-      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" title="Clear">${c.label} ✕</button>`).join('');
+
+      // Action chips (non-filter): Copy link & Clear all
+      active.push({label:'Copy link', id:'copy'});
+      active.push({label:'Clear all', id:'clear'});
+
+      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" title="${c.id==='copy'?'Copy current URL to clipboard':'Clear filters'}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
       chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
         const id=b.getAttribute('data-id');
-        if(id==='q') $('q').value=''; if(id==='beds') $('beds').value=''; if(id==='baths') $('baths').value='';
-        if(id==='price'){ $('minp').value=''; $('maxp').value=''; } if(id==='sort') $('sort').value='relevance'; apply();
+        if(id==='copy'){ copyLink(b); return; }
+        if(id==='clear'){ clearAll(); return; }
+        if(id==='q') $('q').value='';
+        if(id==='beds') $('beds').value='';
+        if(id==='baths') $('baths').value='';
+        if(id==='price'){ $('minp').value=''; $('maxp').value=''; }
+        if(id==='sort') $('sort').value='relevance';
+        apply();
       }));
     }
 
@@ -216,22 +239,14 @@
     }
 
     function apply(){
-      const q=$('q').value.trim().toLowerCase();
-      const minBeds=+($('beds').value||0), minBaths=+($('baths').value||0);
-      const minPrice=+($('minp').value||0), maxPrice=+($('maxp').value||Number.MAX_SAFE_INTEGER);
+      // Deterministic filters (shared util)
+      VIEW = FILTERS.applyFilters(DATA, toParamsFromControls());
       const sort=$('sort').value;
-      VIEW = DATA.filter(it=>{
-        if(minBeds && it.beds<minBeds) return false;
-        if(minBaths && it.baths<minBaths) return false;
-        if(it.price<minPrice || it.price>maxPrice) return false;
-        if(q){ const blob=`${it.address} ${it.city} ${it.beds}bd ${it.baths}ba ${it.brokerage}`.toLowerCase(); if(!blob.includes(q)) return false; }
-        return true;
-      });
       switch(sort){
         case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
         case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
         case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
-        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break; /* fixed bug */
+        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
       }
       setParams();
       renderCount(); renderChips(); renderGrid(); renderWhy();
@@ -253,7 +268,6 @@
       if (!value) return;
       const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
       if (!opts.length) return;
-      // choose the smallest option >= value; if none, choose largest
       let chosen = opts.find(v=>v>=value) ?? opts[opts.length-1];
       sel.value = String(chosen);
     }
@@ -266,14 +280,12 @@
         if (spec.baths_min) $('baths').value = String(spec.baths_min);
         if (spec.min_price) nearestOption('minp', spec.min_price);
         if (spec.max_price) nearestOption('maxp', spec.max_price);
-        // If areas present, lightly bias with text search (keeps UI simple)
         if (Array.isArray(spec.areas) && spec.areas.length){
           const t = $('q').value.trim();
           if (!t.toLowerCase().includes(spec.areas[0].toLowerCase())) {
             $('q').value = `${t ? t+' ' : ''}${spec.areas[0]}`.trim();
           }
         }
-        // Sorting preference from spec
         if (spec.sort) $('sort').value = spec.sort;
         apply();
         $('why').open = true;
@@ -282,10 +294,24 @@
       }
     }
 
+    function clearAll(){
+      $('q').value=''; $('beds').value=''; $('baths').value=''; $('minp').value=''; $('maxp').value=''; $('sort').value='relevance';
+      apply();
+    }
+
+    async function copyLink(btn){
+      try{
+        await navigator.clipboard.writeText(window.location.href);
+        const old = btn.textContent; btn.textContent = 'Copied!';
+        setTimeout(()=>btn.textContent=old, 1200);
+      }catch{
+        prompt('Copy this URL:', window.location.href);
+      }
+    }
+
     async function boot(){
       try{
         DATA = await loadData(); VIEW = DATA.slice();
-        // Restore from URL
         const p = getParams();
         $('q').value=p.q; $('beds').value=p.beds; $('baths').value=p.baths; $('minp').value=p.minp; $('maxp').value=p.maxp; $('sort').value=p.sort;
         apply();

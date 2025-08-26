@@ -136,3 +136,53 @@ Netlify didn’t redeploy → Netlify Deploys → Trigger deploy; verify repo/br
 
 Map empty → ensure lat/lon present and numeric.
 
+# Findr™ — Project Notes (Source of Truth)
+
+_Last updated: 2025-08-26_
+
+## What we’re building
+Findr™ is an AI-first real estate search experience that turns plain-language intent into deterministic filters. **AI never processes MLS®/DDF listing payloads** in production. We demo advanced AI features only on **synthetic/mock** data.
+
+## Hosting & Repo
+- Hosting: **Netlify** (CD from GitHub)
+- Repo: **findrsupport/Findr**
+- Publish directory: `web/`
+- Domain: `findrr.ca`
+
+## Compliance (must keep)
+- Show **Listing Brokerage name** with each listing.
+- Display **“Powered by REALTOR.ca”** badge **linked** to the listing on REALTOR.ca.
+- Include CREA statements: REALTOR®, REALTORS®, MLS®, Multiple Listing Service®, DDF®.
+- Maintain Terms/Privacy pages.
+- Respect local board rules (GVR IDX access pending).
+
+## UI/UX (status)
+- **Theme**: Dark default; light/dark toggle persisted via `localStorage` (`<html data-theme>`).
+- **Top nav**: Consistent on all pages (Home · Listings · Map + theme toggle).
+- **Accessibility**: Alt text, ARIA labels, readable contrast.
+- **Tokens** (CSS variables): `--brand`, `--bg`, `--fg`, `--muted`, `--card`, `--stroke`, `--surface`.
+
+## Pages (web/)
+- `index.html` — Home / Coming soon + waitlist (Netlify form + honeypot)
+- `listings.html` — Mock listings grid; filters/sort; brokerage + badge; smart search (“intent → filters”); chips; URL params; “Why these results?”
+- `map.html` — Leaflet map; pins with photo/price/beds/baths; brokerage + badge; **URL-synced filters**
+- `terms.html`, `privacy.html`, `thank-you.html`, `404.html`
+
+## Data
+- Source of truth for demo: `web/data/listings.json`
+- **Schema** (example):
+  ```json
+  {
+    "address": "123 Example St",
+    "city": "Vancouver",
+    "price": 899000,
+    "beds": 2,
+    "baths": 2,
+    "lat": 49.2827,
+    "lon": -123.1207,
+    "brokerage": "Example Realty",
+    "realtorca_url": "https://www.realtor.ca/",
+    "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae",
+    "source": "mock" // for demo provenance; ignored by UI
+  }
+
