@@ -21,6 +21,7 @@
 
     /* Nav */
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:900}
     .navlinks{display:flex; align-items:center; gap:14px}
     .navlinks a{padding:8px 10px; border-radius:10px}
@@ -53,10 +54,12 @@
   <div class="wrap">
     <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="logo">Findr™</div>
+      <div class="brand">
+        <div class="logo" aria-label="Findr home">Findr™</div>
+      </div>
       <div class="navlinks">
         <a href="/">Home</a>
-        <a href="listings.html" class="active">Listings</a>
+        <a href="listings.html" class="active" aria-current="page">Listings</a>
         <a href="map.html">Map</a>
         <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
       </div>
@@ -100,16 +103,18 @@
       if (saved) root.setAttribute('data-theme', saved);
       const btn = document.getElementById('theme-toggle');
       const isDark = () => root.getAttribute('data-theme') !== 'light';
-      const render = () => { btn.textContent = isDark() ? '🌙' : '☀️'; };
-      btn.addEventListener('click', () => {
-        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
-        localStorage.setItem('theme', root.getAttribute('data-theme'));
-        render();
-      });
+      const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
+      if (btn) {
+        btn.addEventListener('click', () => {
+          root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+          localStorage.setItem('theme', root.getAttribute('data-theme'));
+          render();
+        });
+      }
       render();
     })();
 
-    // Listings logic (unchanged behavior, polished UI)
+    // Listings logic (unchanged behavior)
     const $ = (id) => document.getElementById(id);
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
@@ -137,17 +142,17 @@
       VIEW.forEach(it=>{
         const el=document.createElement('article'); el.className='card';
         el.innerHTML=`
-          <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
+          <img class="img" src="\${it.photo}" alt="Photo of \${it.address}, \${it.city}">
           <div class="content">
-            <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
-            <div class="meta"><span>${it.city}</span><span>•</span><span>${it.beds} bd</span><span>•</span><span>${it.baths} ba</span></div>
-            <div class="broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
+            <div class="row"><div class="addr">\${it.address}</div><div class="price">\${fmtPrice(it.price)}</div></div>
+            <div class="meta"><span>\${it.city}</span><span>•</span><span>\${it.beds} bd</span><span>•</span><span>\${it.baths} ba</span></div>
+            <div class="broker">Listing Brokerage: <strong>\${it.brokerage}</strong></div>
           </div>
           <div class="actions">
-            <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+            <a class="pbr" href="\${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
               <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" /><span style="color:var(--muted)">View on REALTOR.ca</span>
             </a>
-            <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
+            <a href="\${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
           </div>`;
         grid.appendChild(el);
       });
@@ -162,7 +167,7 @@
         if(minBeds && it.beds<minBeds) return false;
         if(minBaths && it.baths<minBaths) return false;
         if(it.price<minPrice || it.price>maxPrice) return false;
-        if(q){ const blob=`${it.address} ${it.city} ${it.beds}bd ${it.baths}ba ${it.brokerage}`.toLowerCase(); if(!blob.includes(q)) return false; }
+        if(q){ const blob=`\${it.address} \${it.city} \${it.beds}bd \${it.baths}ba \${it.brokerage}`.toLowerCase(); if(!blob.includes(q)) return false; }
         return true;
       });
       switch(sort){
