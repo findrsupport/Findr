@@ -6,20 +6,13 @@
   <title>Findr™ — Listings (Preview)</title>
   <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
   <style>
-    :root {
-      --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624;
-      --chip:#1a2335; --chip-border:#2a3c5a;
-    }
-    :root[data-theme="light"]{
-      --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff;
-      --chip:#f1f4f8; --chip-border:#e5ecf5;
-    }
+    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; --chip:#1a2335; --chip-border:#2a3c5a; }
+    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; --chip:#f1f4f8; --chip-border:#e5ecf5; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
     a{color:var(--brand); text-decoration:none}
     .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
 
-    /* Nav */
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:900}
@@ -29,12 +22,13 @@
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
 
     .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
-    /* ⬇️ add one more column for City */
+    /* +1 column for City */
     .toolbar{display:grid; grid-template-columns:1.6fr repeat(5, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
     @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
     .searchbox{display:flex; gap:8px}
     input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
     .smart{white-space:nowrap; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--card); color:var(--fg); cursor:pointer}
+
     .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
     .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
     .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
@@ -60,9 +54,7 @@
   <div class="wrap">
     <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <div class="logo" aria-label="Findr home">Findr™</div>
-      </div>
+      <div class="brand"><div class="logo" aria-label="Findr home">Findr™</div></div>
       <div class="navlinks">
         <a href="/">Home</a>
         <a href="listings.html" class="active" aria-current="page">Listings</a>
@@ -75,10 +67,11 @@
     <div class="panel">
       <div class="toolbar" role="region" aria-label="Search and filters">
         <div class="searchbox">
-          <input id="q" type="search" placeholder='Describe your needs, then press Enter or click “Smart” (e.g., "2 bed condo near SkyTrain under 900k")' aria-label="Search or describe your needs" />
+          <input id="q" type="search" placeholder='Describe your needs, then press Enter or click “Smart”' aria-label="Search or describe your needs" />
           <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
         </div>
-        <!-- ⬇️ New City select -->
+
+        <!-- City -->
         <select id="city" aria-label="City">
           <option value="">City (any)</option>
           <option>Vancouver</option><option>Burnaby</option><option>Richmond</option>
@@ -86,22 +79,52 @@
           <option>Port Coquitlam</option><option>New Westminster</option>
           <option>Langley</option><option>Maple Ridge</option>
         </select>
+
+        <!-- Beds (now up to 5+) -->
         <select id="beds" aria-label="Minimum bedrooms">
-          <option value="">Beds (any)</option><option value="1">1+ bed</option><option value="2">2+ bed</option><option value="3">3+ bed</option><option value="4">4+ bed</option>
+          <option value="">Beds (any)</option>
+          <option value="1">1+ bed</option><option value="2">2+ bed</option>
+          <option value="3">3+ bed</option><option value="4">4+ bed</option>
+          <option value="5">5+ bed</option>
         </select>
+
+        <!-- Baths (now up to 5+) -->
         <select id="baths" aria-label="Minimum bathrooms">
-          <option value="">Baths (any)</option><option value="1">1+ bath</option><option value="2">2+ bath</option><option value="3">3+ bath</option>
+          <option value="">Baths (any)</option>
+          <option value="1">1+ bath</option><option value="2">2+ bath</option>
+          <option value="3">3+ bath</option><option value="4">4+ bath</option>
+          <option value="5">5+ bath</option>
         </select>
+
+        <!-- Better price ranges -->
         <select id="minp" aria-label="Min price">
-          <option value="">Min price</option><option value="400000">$400k</option><option value="600000">$600k</option><option value="800000">$800k</option><option value="1000000">$1M</option>
+          <option value="">Min price</option>
+          <option value="300000">$300k</option><option value="400000">$400k</option>
+          <option value="500000">$500k</option><option value="600000">$600k</option>
+          <option value="700000">$700k</option><option value="800000">$800k</option>
+          <option value="900000">$900k</option><option value="1000000">$1.0M</option>
+          <option value="1200000">$1.2M</option><option value="1400000">$1.4M</option>
+          <option value="1600000">$1.6M</option><option value="1800000">$1.8M</option>
+          <option value="2000000">$2.0M</option>
         </select>
+
         <select id="maxp" aria-label="Max price">
-          <option value="">Max price</option><option value="700000">$700k</option><option value="900000">$900k</option><option value="1200000">$1.2M</option><option value="1500000">$1.5M</option>
+          <option value="">Max price</option>
+          <option value="500000">$500k</option><option value="600000">$600k</option>
+          <option value="700000">$700k</option><option value="800000">$800k</option>
+          <option value="900000">$900k</option><option value="1000000">$1.0M</option>
+          <option value="1200000">$1.2M</option><option value="1400000">$1.4M</option>
+          <option value="1600000">$1.6M</option><option value="1800000">$1.8M</option>
+          <option value="2000000">$2.0M</option><option value="2500000">$2.5M</option>
         </select>
+
         <select id="sort" aria-label="Sort">
-          <option value="relevance">Sort: Relevance</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option><option value="beds-desc">Beds ↓</option><option value="baths-desc">Baths ↓</option>
+          <option value="relevance">Sort: Relevance</option>
+          <option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option>
+          <option value="beds-desc">Beds ↓</option><option value="baths-desc">Baths ↓</option>
         </select>
       </div>
+
       <div class="row" style="margin:12px 0 10px">
         <div class="muted" id="count" aria-live="polite">Loading…</div>
         <div class="chips" id="chips" aria-live="polite"></div>
@@ -133,17 +156,14 @@
       const btn = document.getElementById('theme-toggle');
       const isDark = () => root.getAttribute('data-theme') !== 'light';
       const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
-      if (btn) {
-        btn.addEventListener('click', () => {
-          root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
-          localStorage.setItem('theme', root.getAttribute('data-theme'));
-          render();
-        });
-      }
+      if (btn) btn.addEventListener('click', () => {
+        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+        localStorage.setItem('theme', root.getAttribute('data-theme'));
+        render();
+      });
       render();
     })();
 
-    // Helpers
     const $ = (id) => document.getElementById(id);
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
@@ -201,8 +221,7 @@
       const minp=$('minp').value, maxp=$('maxp').value;
       if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
       const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
-      active.push({label:'Copy link', id:'copy'});
-      active.push({label:'Clear all', id:'clear'});
+      active.push({label:'Copy link', id:'copy'}); active.push({label:'Clear all', id:'clear'});
 
       chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" title="${c.id==='copy'?'Copy current URL to clipboard':'Clear filters'}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
       chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
@@ -253,13 +272,11 @@
         case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
         case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
       }
-      setParams();
-      renderCount(); renderChips(); renderGrid(); renderWhy();
+      setParams(); renderCount(); renderChips(); renderGrid(); renderWhy();
     }
 
     function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
-    // Resilient loader
     async function loadData(){
       const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
       for (const url of candidates){
@@ -268,7 +285,7 @@
       throw new Error('Could not load listings.json from expected paths.');
     }
 
-    // Smart → server first; clear free-text and set City control
+    // Snap Smart prices to nearest dropdown options
     function nearestOption(selectId, value){
       if (!value) return;
       const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
@@ -292,44 +309,30 @@
         console.debug('Intent API not available, falling back to demo:', e);
       }
 
-      if (!spec) {
-        spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
-      }
+      if (!spec) spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
 
       try{
         if (spec.beds_min) $('beds').value = String(spec.beds_min);
         if (spec.baths_min) $('baths').value = String(spec.baths_min);
         if (spec.min_price) nearestOption('minp', spec.min_price);
         if (spec.max_price) nearestOption('maxp', spec.max_price);
-
-        // Set City control if parsed; then clear free-text
-        if (Array.isArray(spec.areas) && spec.areas.length) {
-          $('city').value = spec.areas[0];
-        }
+        if (Array.isArray(spec.areas) && spec.areas.length) $('city').value = spec.areas[0];
         $('q').value = '';
-
         if (spec.sort) $('sort').value = spec.sort;
-        apply();
-        $('why').open = true;
-      }catch(err){
-        console.debug('Smart parse apply failed:', err);
-      }
+        apply(); $('why').open = true;
+      }catch(err){ console.debug('Smart parse apply failed:', err); }
     }
 
     function clearAll(){
       $('q').value=''; $('city').value=''; $('beds').value=''; $('baths').value='';
-      $('minp').value=''; $('maxp').value=''; $('sort').value='relevance';
-      apply();
+      $('minp').value=''; $('maxp').value=''; $('sort').value='relevance'; apply();
     }
 
     async function copyLink(btn){
       try{
         await navigator.clipboard.writeText(window.location.href);
-        const old = btn.textContent; btn.textContent = 'Copied!';
-        setTimeout(()=>btn.textContent=old, 1200);
-      }catch{
-        prompt('Copy this URL:', window.location.href);
-      }
+        const old = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=old,1200);
+      }catch{ prompt('Copy this URL:', window.location.href); }
     }
 
     async function boot(){

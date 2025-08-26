@@ -3,15 +3,25 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Map Preview</title>
-  <meta name="description" content="Findr™ map preview with mock listings.">
+  <title>Findr™ — Map</title>
+  <meta name="description" content="Findr™ map view — mock listings with deterministic filters." />
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <style>
-    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; }
-    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; }
+    :root {
+      --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624;
+      --chip:#1a2335; --chip-border:#2a3c5a;
+    }
+    :root[data-theme="light"]{
+      --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff;
+      --chip:#f1f4f8; --chip-border:#e5ecf5;
+    }
     *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
     a{color:var(--brand); text-decoration:none}
-    .wrap{max-width:1200px; margin:0 auto; padding:20px}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
+
+    /* Nav */
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:900}
@@ -19,22 +29,22 @@
     .navlinks a{padding:8px 10px; border-radius:10px}
     .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
-    .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:12px; margin-bottom:12px}
-    #map{height:72vh; border-radius:16px; overflow:hidden; border:1px solid var(--stroke)}
-    .legend{display:flex; gap:12px; align-items:center; font-size:12px; color:var(--muted)}
-    .legend img{width:20px; height:20px; object-fit:contain}
+
+    .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px; margin-bottom:14px}
+    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
     .muted{color:var(--muted)}
-    .popup-card{width:260px}
-    .popup-img{width:100%; height:150px; object-fit:cover; border-radius:10px}
-    .popup-top{display:flex; justify-content:space-between; align-items:center; margin-top:6px}
-    .popup-meta{color:var(--muted); font-size:12px; margin:2px 0}
-    .popup-price{font-weight:900}
-    .popup-row{display:flex; justify-content:space-between; align-items:center; margin-top:8px}
+    details#why summary{cursor:pointer; color:var(--muted)}
+
+    #map{height:72vh; width:100%; border-radius:16px; border:1px solid var(--stroke); overflow:hidden}
+    .leaflet-popup-content { margin: 10px 14px; }
+    .price{font-weight:900}
+    .addr{font-weight:800}
+    .meta{color:var(--muted); font-size:12px}
   </style>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="anonymous">
 </head>
 <body>
   <div class="wrap">
+    <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
       <div class="brand"><div class="logo" aria-label="Findr home">Findr™</div></div>
       <div class="navlinks">
@@ -45,31 +55,29 @@
       </div>
     </nav>
 
-    <div class="panel" aria-hidden="false">
-      <div class="legend">
-        <span>Preview map — mock data</span>
-        <span>·</span>
-        <span><a id="grid-link" href="listings.html">Grid view</a></span>
-        <span>·</span>
-        <span id="count" class="muted" aria-live="polite"></span>
-        <span style="margin-left:auto; display:flex; align-items:center; gap:8px">
-          <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca"><em>Links go to REALTOR.ca</em>
-        </span>
+    <!-- Summary -->
+    <div class="panel">
+      <div class="row">
+        <div class="muted" id="count" aria-live="polite">Loading…</div>
+        <div class="muted"><a href="listings.html" aria-label="View as a list">Switch to list →</a></div>
       </div>
+      <details id="why">
+        <summary>Why these results?</summary>
+        <div id="why-body" class="muted" style="margin-top:6px;"></div>
+      </details>
     </div>
 
-    <div id="map" role="region" aria-label="Listings map"></div>
+    <!-- Map -->
+    <div id="map" role="region" aria-label="Map of listings"></div>
   </div>
 
-  <!-- Compliance scaffolding -->
+  <!-- Scripts -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="config.js"></script>
   <script src="js/ai-guard.js"></script>
-  <!-- Shared rules-based filters -->
   <script src="js/filters.js"></script>
-
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="anonymous"></script>
-
   <script>
+    // Theme toggle
     (function(){
       const root = document.documentElement;
       const saved = localStorage.getItem('theme');
@@ -87,89 +95,94 @@
       render();
     })();
 
-    const fmtPrice = (n) => new Intl.NumberFormat('en-CA', {style:'currency', currency:'CAD', maximumFractionDigits:0}).format(n);
-
-    const map = L.map('map', { zoomControl: true }).setView([49.2827, -123.1207], 11);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {maxZoom: 19, attribution: '&copy; OpenStreetMap contributors'}).addTo(map);
-
-    const icon = L.icon({
-      iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-      shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
-      iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
-    });
-
-    async function loadData(){
-      const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
-      for (const url of candidates){
-        try{ const res = await fetch(url, { cache: 'no-store' }); if (res.ok) return await res.json(); }catch(_e){}
-      }
-      throw new Error('Could not load listings.json from expected paths.');
-    }
+    // Helpers
+    const $ = (id) => document.getElementById(id);
+    const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
 
     function getParams(){
       const p = new URLSearchParams(location.search);
       return {
-        q: (p.get('q') || '').trim().toLowerCase(),
-        beds: +(p.get('beds') || 0),
-        baths: +(p.get('baths') || 0),
-        minp: +(p.get('minp') || 0),
-        maxp: +(p.get('maxp') || 0) || Number.MAX_SAFE_INTEGER,
-        sort: p.get('sort') || 'relevance'
+        q: p.get('q') || '',
+        city: p.get('city') || '',
+        beds: p.get('beds') || '',
+        baths: p.get('baths') || '',
+        minp: p.get('minp') || '',
+        maxp: p.get('maxp') || ''
       };
     }
 
-    function setCount(n){
-      const el = document.getElementById('count');
-      if (el) el.textContent = `${n} result${n===1?'':'s'}`;
+    function renderWhy(params){
+      const parts=[];
+      if (params.q) parts.push(`Text: “${params.q}”`);
+      if (params.city) parts.push(params.city);
+      if (params.beds) parts.push(`${params.beds}+ bed`);
+      if (params.baths) parts.push(`${params.baths}+ bath`);
+      const left = params.minp ? fmtPrice(+params.minp) : 'Any';
+      const right = params.maxp ? fmtPrice(+params.maxp) : 'Any';
+      if (params.minp || params.maxp) parts.push(`Price: ${left}–${right}`);
+      $('why-body').textContent = parts.length ? parts.join(' · ') : 'No active filters (all listings).';
     }
 
-    function setGridLink(){
-      const a = document.getElementById('grid-link');
-      if (!a) return;
-      const qs = location.search;
-      a.href = `listings.html${qs || ''}`;
+    // Load data from multiple candidate paths (same as listings page)
+    async function loadData(){
+      const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
+      for (const url of candidates){
+        try{ const res = await fetch(url,{cache:'no-store'}); if(res.ok) return await res.json(); }catch(_e){}
+      }
+      throw new Error('Could not load listings.json from expected paths.');
     }
 
-    async function load() {
-      try {
+    // Map + markers
+    let map, layer;
+    function initMap(){
+      map = L.map('map', { scrollWheelZoom: true });
+      const dark = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+      L.tileLayer(dark, { attribution: '&copy; OpenStreetMap' }).addTo(map);
+      // Vancouver-ish default
+      map.setView([49.2827, -123.1207], 11);
+      layer = L.layerGroup().addTo(map);
+    }
+
+    function updateMarkers(list){
+      layer.clearLayers();
+      if (!list.length) return;
+      const bounds = [];
+      list.forEach(it=>{
+        if (typeof it.lat !== 'number' || typeof it.lng !== 'number') return;
+        const html = `
+          <div class="addr">${it.address}</div>
+          <div class="price">${fmtPrice(it.price)}</div>
+          <div class="meta">${it.city} · ${it.beds} bd · ${it.baths} ba</div>
+          <div style="margin-top:8px;">
+            <a href="${it.realtorca_url}" target="_blank" rel="noopener">View on REALTOR.ca →</a>
+          </div>`;
+        const m = L.marker([it.lat, it.lng]).bindPopup(html);
+        m.addTo(layer);
+        bounds.push([it.lat, it.lng]);
+      });
+      if (bounds.length) map.fitBounds(bounds, { padding:[40,40] });
+    }
+
+    async function boot(){
+      initMap();
+      try{
         const data = await loadData();
         const params = getParams();
         const filtered = FILTERS.applyFilters(data, params);
-        setCount(filtered.length);
-        setGridLink();
-
-        const group = L.featureGroup();
-        filtered.forEach(it => {
-          if (typeof it.lat !== 'number' || typeof it.lon !== 'number') return;
-          const img = it.photo ? `<img class="popup-img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">` : '';
-          const popup = `
-            <div class="popup-card">
-              ${img}
-              <div class="popup-top">
-                <div style="font-weight:800; line-height:1.2">${it.address}</div>
-                <div class="popup-price">${fmtPrice(it.price)}</div>
-              </div>
-              <div class="popup-meta">${it.city} · ${it.beds} bd · ${it.baths} ba</div>
-              <div class="popup-meta">Listing Brokerage: <strong>${it.brokerage}</strong></div>
-              <div class="popup-row">
-                <a href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">View on REALTOR.ca →</a>
-                <a href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="Powered by REALTOR.ca badge link">
-                  <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" width="24" height="24" />
-                </a>
-              </div>
-            </div>
-          `;
-          L.marker([it.lat, it.lon], { icon }).bindPopup(popup).addTo(group);
-        });
-
-        group.addTo(map);
-        if (group.getLayers().length) map.fitBounds(group.getBounds().pad(0.2));
-      } catch (e) {
-        console.error('Failed to load listings:', e);
-        alert('Could not load mock data. Place it at web/data/listings.json (preferred) or web/listings.json.');
+        $('count').textContent = `${filtered.length} result${filtered.length===1?'':'s'}`;
+        renderWhy(params);
+        updateMarkers(filtered);
+        if (!filtered.length){
+          // Keep a friendly default view around Metro Vancouver
+          map.setView([49.2827, -123.1207], 10);
+        }
+      }catch(e){
+        console.error(e);
+        $('count').textContent = '0 results';
+        $('why-body').textContent = 'Could not load mock data.';
       }
     }
-    load();
+    boot();
   </script>
 </body>
 </html>
