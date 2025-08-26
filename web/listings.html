@@ -1,142 +1,243 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Listings Preview</title>
-  <meta name="description" content="Mock listings grid with filters, sorting, and compliance badge.">
+  <title>Findr™ — Listings (Preview)</title>
+  <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <style>
-    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; --card:#223148; }
+    :root {
+      --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; --card:#223148; --ink:#101826;
+      --chip:#1a2335; --chip-border:#2a3c5a;
+    }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
     a{color:var(--accent); text-decoration:none}
-
-    /* Top bar (canonical) */
-    .topbar{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:rgba(11,15,23,.86); border-bottom:1px solid rgba(255,255,255,0.06)}
-    .topbar-inner{max-width:1200px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px}
-    .brand{display:flex; align-items:center; gap:10px}
-    .logo{font-weight:800; letter-spacing:.3px}
-    .badge{font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,0.08); padding:4px 8px; border-radius:999px}
-    .nav{display:flex; align-items:center; gap:14px}
-    .nav a{font-weight:600; color:var(--fg); opacity:.9}
-    .nav a:hover{opacity:1}
-    .toggle{border:1px solid rgba(255,255,255,0.12); background:transparent; color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-weight:600}
-
-    .wrap{max-width:1200px; margin:0 auto; padding:20px}
-    .panel{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; padding:12px; margin-bottom:12px}
-    .controls{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
-    input, select{background:rgba(255,255,255,0.04); color:var(--fg); border:1px solid var(--card); border-radius:10px; padding:8px 10px}
-    .grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px}
-    .card{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; overflow:hidden}
-    .img{width:100%; height:160px; object-fit:cover}
-    .pad{padding:12px}
-    .meta{display:flex; gap:8px; flex-wrap:wrap; color:var(--muted); font-size:12px}
-    .badge-img{height:22px; opacity:.9}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
+    header{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px}
+    .logo{font-weight:800}
+    .sub{color:var(--muted); font-size:12px}
+    .badge{display:inline-block; padding:6px 10px; border:1px solid #23324a; border-radius:999px; color:var(--muted); font-size:12px}
+    .panel{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; padding:14px}
+    .toolbar{display:grid; grid-template-columns:1.4fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
+    @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
+    input[type="search"], select{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--card);
+      background:#0b0f17; color:var(--fg); font:inherit
+    }
+    .btn{
+      padding:10px 12px; border-radius:10px; border:1px solid var(--card);
+      background:#0b0f17; color:var(--fg); cursor:pointer; font:inherit
+    }
+    .btn-primary{ background:#6aa1ff; color:#fff; border:none; font-weight:600 }
+    .row{display:flex; justify-content:space-between; align-items:center; gap:12px; margin:12px 0 10px}
+    .muted{color:var(--muted)}
+    .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}
+    .card{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
+    .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
+    .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
+    .content{padding:14px}
+    .addr{font-weight:800; line-height:1.25}
+    .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
+    .broker{font-size:12px; color:var(--muted)}
+    .actions{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding:12px 14px; border-top:1px solid var(--card)}
+    .pbr{display:flex; align-items:center; gap:8px}
+    .pbr img{width:24px; height:24px; object-fit:contain}
+    .price{font-weight:900}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
+    .back{font-size:12px; margin-top:18px}
   </style>
 </head>
 <body>
-  <!-- Canonical top bar -->
-  <div class="topbar">
-    <div class="topbar-inner">
-      <div class="brand">
-        <div class="logo">Findr™</div>
-        <div class="badge">AI-first real estate search</div>
-      </div>
-      <div class="nav">
-        <a href="/">Home</a>
-        <a href="/listings.html">Listings</a>
-        <a href="/map.html">Map</a>
-        <button id="themeToggle" class="toggle" aria-label="Toggle theme">🌙</button>
-      </div>
-    </div>
-  </div>
-
   <div class="wrap">
+    <header>
+      <div>
+        <div class="logo">Findr™</div>
+        <div class="sub">Preview listings — mock data (for layout & UX)</div>
+      </div>
+      <div class="badge">AI-first real estate search</div>
+    </header>
+
+    <!-- Controls -->
     <div class="panel">
-      <div class="controls">
-        <input id="q" type="search" placeholder="Search address, city…" />
-        <select id="type">
-          <option value="">All types</option>
-          <option value="condo">Condo</option>
-          <option value="house">House</option>
-          <option value="townhouse">Townhouse</option>
+      <div class="toolbar" role="region" aria-label="Search and filters">
+        <input id="q" type="search" placeholder='Try: "quiet street near SkyTrain, 2 bed, south light"' aria-label="Search" />
+        <select id="beds" aria-label="Minimum bedrooms">
+          <option value="">Beds (any)</option>
+          <option value="1">1+ bed</option>
+          <option value="2">2+ bed</option>
+          <option value="3">3+ bed</option>
+          <option value="4">4+ bed</option>
         </select>
-        <select id="sort">
+        <select id="baths" aria-label="Minimum bathrooms">
+          <option value="">Baths (any)</option>
+          <option value="1">1+ bath</option>
+          <option value="2">2+ bath</option>
+          <option value="3">3+ bath</option>
+        </select>
+        <select id="minp" aria-label="Min price">
+          <option value="">Min price</option>
+          <option value="400000">$400k</option>
+          <option value="600000">$600k</option>
+          <option value="800000">$800k</option>
+          <option value="1000000">$1M</option>
+        </select>
+        <select id="maxp" aria-label="Max price">
+          <option value="">Max price</option>
+          <option value="700000">$700k</option>
+          <option value="900000">$900k</option>
+          <option value="1200000">$1.2M</option>
+          <option value="1500000">$1.5M</option>
+        </select>
+        <select id="sort" aria-label="Sort">
+          <option value="relevance">Sort: Relevance</option>
           <option value="price-asc">Price ↑</option>
           <option value="price-desc">Price ↓</option>
-          <option value="newest">Newest</option>
+          <option value="beds-desc">Beds ↓</option>
+          <option value="baths-desc">Baths ↓</option>
         </select>
+      </div>
+
+      <div class="row">
+        <div class="muted" id="count">Loading…</div>
+        <div class="chips" id="chips" aria-live="polite"></div>
       </div>
     </div>
 
-    <div id="grid" class="grid" aria-live="polite"></div>
+    <!-- Results -->
+    <section id="grid" class="grid" aria-live="polite" style="margin-top:14px"></section>
 
-    <div style="margin-top:14px;">
-      <img class="badge-img" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
-    </div>
+    <p class="back"><a href="/">← Back to Home</a></p>
   </div>
 
   <script>
-    // theme persistence (canonical)
-    (function(){
-      const root = document.documentElement;
-      const btn = document.getElementById('themeToggle');
-      const saved = localStorage.getItem('findr_theme');
-      if (saved) root.setAttribute('data-theme', saved);
-      const isLight = () => root.getAttribute('data-theme') === 'light';
-      const sync = () => btn && (btn.textContent = isLight() ? '☀️' : '🌙');
-      sync();
-      btn && btn.addEventListener('click', () => {
-        root.setAttribute('data-theme', isLight() ? 'dark' : 'light');
-        localStorage.setItem('findr_theme', root.getAttribute('data-theme'));
-        sync();
-      });
-    })();
+    const $ = (id) => document.getElementById(id);
+    const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
 
-    // mock listings loader (unchanged spirit)
-    async function load() {
-      const res = await fetch('data/listings.json');
-      const all = await res.json();
+    let DATA = [];
+    let VIEW = [];
 
-      const q = document.getElementById('q').value.trim().toLowerCase();
-      const type = document.getElementById('type').value;
-      const sort = document.getElementById('sort').value;
-
-      let rows = all.filter(x => {
-        const matchesQ = !q || (x.address + ' ' + x.city + ' ' + x.title).toLowerCase().includes(q);
-        const matchesType = !type || x.type === type;
-        return matchesQ && matchesType;
-      });
-
-      if (sort === 'price-asc') rows.sort((a,b) => a.price - b.price);
-      if (sort === 'price-desc') rows.sort((a,b) => b.price - a.price);
-      if (sort === 'newest') rows.sort((a,b) => (b.id || 0) - (a.id || 0));
-
-      const grid = document.getElementById('grid');
-      grid.innerHTML = rows.map(x => `
-        <article class="card">
-          <img class="img" src="${x.photo}" alt="${x.title}">
-          <div class="pad">
-            <h3 style="margin:0 0 6px; font-size:16px;">${x.title}</h3>
-            <div class="meta">
-              <span>$${x.price.toLocaleString()}</span>
-              <span>•</span>
-              <span>${x.beds} bd / ${x.baths} ba</span>
-              <span>•</span>
-              <span>${x.sqft.toLocaleString()} sqft</span>
-            </div>
-            <p class="meta" style="margin:8px 0 0;">${x.address}, ${x.city}</p>
-            <p class="meta">Brokerage: ${x.brokerage}</p>
-          </div>
-        </article>
-      `).join('');
+    function renderCount() {
+      $('count').textContent = `${VIEW.length} result${VIEW.length === 1 ? '' : 's'}`;
     }
 
-    document.getElementById('q').addEventListener('input', load);
-    document.getElementById('type').addEventListener('change', load);
-    document.getElementById('sort').addEventListener('change', load);
-    load();
+    function renderChips() {
+      const chips = $('chips');
+      const active = [];
+
+      const q = $('q').value.trim();
+      if (q) active.push({label:`Search: “${q}”`, id:'q'});
+
+      const beds = $('beds').value;
+      if (beds) active.push({label:`${beds}+ bed`, id:'beds'});
+
+      const baths = $('baths').value;
+      if (baths) active.push({label:`${baths}+ bath`, id:'baths'});
+
+      const minp = $('minp').value, maxp = $('maxp').value;
+      if (minp || maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
+
+      const sort = $('sort').value;
+      if (sort && sort !== 'relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
+
+      chips.innerHTML = active.map(c => `<button class="chip" data-id="${c.id}" title="Clear">${c.label} ✕</button>`).join('');
+      chips.querySelectorAll('.chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (id === 'q') $('q').value = '';
+          if (id === 'beds') $('beds').value = '';
+          if (id === 'baths') $('baths').value = '';
+          if (id === 'price') { $('minp').value=''; $('maxp').value=''; }
+          if (id === 'sort') $('sort').value = 'relevance';
+          apply();
+        });
+      });
+    }
+
+    function renderGrid() {
+      const grid = $('grid');
+      grid.innerHTML = '';
+      VIEW.forEach(item => {
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <img class="img" src="${item.photo}" alt="Photo of ${item.address}, ${item.city}">
+          <div class="content">
+            <div class="row">
+              <div class="addr">${item.address}</div>
+              <div class="price">${fmtPrice(item.price)}</div>
+            </div>
+            <div class="meta">
+              <span>${item.city}</span><span>•</span>
+              <span>${item.beds} bd</span><span>•</span>
+              <span>${item.baths} ba</span>
+            </div>
+            <div class="broker">Listing Brokerage: <strong>${item.brokerage}</strong></div>
+          </div>
+          <div class="actions">
+            <a class="pbr" href="${item.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" />
+              <span class="muted">View on REALTOR.ca</span>
+            </a>
+            <a href="${item.realtorca_url}" target="_blank" rel="noopener">Details →</a>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+    }
+
+    function apply() {
+      const q = $('q').value.trim().toLowerCase();
+      const minBeds = +($('beds').value || 0);
+      const minBaths = +($('baths').value || 0);
+      const minPrice = +($('minp').value || 0);
+      const maxPrice = +($('maxp').value || Number.MAX_SAFE_INTEGER);
+      const sort = $('sort').value;
+
+      VIEW = DATA.filter(it => {
+        if (minBeds && it.beds < minBeds) return false;
+        if (minBaths && it.baths < minBaths) return false;
+        if (it.price < minPrice || it.price > maxPrice) return false;
+        if (q) {
+          const blob = `${it.address} ${it.city} ${it.beds}bd ${it.baths}ba ${it.brokerage}`.toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+        return true;
+      });
+
+      switch (sort) {
+        case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
+        case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
+        case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
+        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
+        default: /* relevance = leave as-is */ break;
+      }
+
+      renderCount();
+      renderChips();
+      renderGrid();
+    }
+
+    function debounce(fn, ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); } }
+
+    async function boot() {
+      try {
+        const res = await fetch('data/listings.json', {cache:'no-store'});
+        DATA = await res.json();
+        VIEW = DATA.slice();
+        apply();
+      } catch (e) {
+        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists.</p>';
+        console.error(e);
+      }
+
+      $('q').addEventListener('input', debounce(apply, 200));
+      ['beds','baths','minp','maxp','sort'].forEach(id => $(id).addEventListener('change', apply));
+    }
+
+    boot();
   </script>
 </body>
 </html>
