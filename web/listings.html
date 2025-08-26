@@ -188,7 +188,6 @@
       const minp=$('minp').value, maxp=$('maxp').value;
       if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
       const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
-      // utility chips
       active.push({label:'Copy link', id:'copy'});
       active.push({label:'Clear all', id:'clear'});
 
@@ -225,7 +224,6 @@
 
     function apply(){
       const sort=$('sort').value;
-      // deterministic, shared filters
       VIEW = FILTERS.applyFilters(DATA, {
         q: $('q').value, beds: $('beds').value, baths: $('baths').value,
         minp: $('minp').value, maxp: $('maxp').value
@@ -284,12 +282,14 @@
         if (spec.baths_min) $('baths').value = String(spec.baths_min);
         if (spec.min_price) nearestOption('minp', spec.min_price);
         if (spec.max_price) nearestOption('maxp', spec.max_price);
-        if (Array.isArray(spec.areas) && spec.areas.length){
-          const t = $('q').value.trim();
-          if (!t.toLowerCase().includes(spec.areas[0].toLowerCase())) {
-            $('q').value = `${t ? t+' ' : ''}${spec.areas[0]}`.trim();
-          }
+
+        // ✅ Keep only the city token (if parsed) or clear the text filter to avoid 0 results
+        if (Array.isArray(spec.areas) && spec.areas.length) {
+          $('q').value = spec.areas[0];
+        } else {
+          $('q').value = '';
         }
+
         if (spec.sort) $('sort').value = spec.sort;
         apply();
         $('why').open = true;
