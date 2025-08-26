@@ -251,7 +251,7 @@
       throw new Error('Could not load listings.json from expected paths.');
     }
 
-    // Smart button → NL → filters (intent only; compliant)
+    // Server-first Smart → filters; fallback to demo parser
     function nearestOption(selectId, value){
       if (!value) return;
       const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
@@ -262,8 +262,24 @@
 
     async function smartFromText(){
       const text = $('q').value || '';
+      let spec = null;
+
+      try {
+        const res = await fetch('/.netlify/functions/intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        if (res.ok) spec = await res.json();
+      } catch (e) {
+        console.debug('Intent API not available, falling back to demo:', e);
+      }
+
+      if (!spec) {
+        spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
+      }
+
       try{
-        const spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
         if (spec.beds_min) $('beds').value = String(spec.beds_min);
         if (spec.baths_min) $('baths').value = String(spec.baths_min);
         if (spec.min_price) nearestOption('minp', spec.min_price);
@@ -278,7 +294,7 @@
         apply();
         $('why').open = true;
       }catch(err){
-        console.debug('Smart parse failed:', err);
+        console.debug('Smart parse apply failed:', err);
       }
     }
 
