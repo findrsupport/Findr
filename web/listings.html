@@ -6,12 +6,20 @@
   <title>Findr™ — Listings (Preview)</title>
   <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
   <style>
-    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; --chip:#1a2335; --chip-border:#2a3c5a; }
-    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; --chip:#f1f4f8; --chip-border:#e5ecf5; }
+    :root {
+      --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624;
+      --chip:#1a2335; --chip-border:#2a3c5a;
+    }
+    :root[data-theme="light"]{
+      --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff;
+      --chip:#f1f4f8; --chip-border:#e5ecf5;
+    }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
     a{color:var(--brand); text-decoration:none}
     .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
+
+    /* Nav */
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:900}
@@ -19,10 +27,13 @@
     .navlinks a{padding:8px 10px; border-radius:10px}
     .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
+
     .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
-    .toolbar{display:grid; grid-template-columns:1.4fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
+    .toolbar{display:grid; grid-template-columns:1.6fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
     @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
+    .searchbox{display:flex; gap:8px}
     input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
+    .smart{white-space:nowrap; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--card); color:var(--fg); cursor:pointer}
     .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
     .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
     .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
@@ -40,12 +51,17 @@
     .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
     .back{font-size:12px; margin-top:18px; color:var(--muted)}
     .muted{color:var(--muted)}
+    details#why{margin-top:10px}
+    details#why summary{cursor:pointer; color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
+    <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="brand"><div class="logo" aria-label="Findr home">Findr™</div></div>
+      <div class="brand">
+        <div class="logo" aria-label="Findr home">Findr™</div>
+      </div>
       <div class="navlinks">
         <a href="/">Home</a>
         <a href="listings.html" class="active" aria-current="page">Listings</a>
@@ -54,9 +70,13 @@
       </div>
     </nav>
 
+    <!-- Controls -->
     <div class="panel">
       <div class="toolbar" role="region" aria-label="Search and filters">
-        <input id="q" type="search" placeholder='Try: "quiet street near SkyTrain, 2 bed, south light"' aria-label="Search" />
+        <div class="searchbox">
+          <input id="q" type="search" placeholder='Try: "2 bed condo near SkyTrain under 900k"' aria-label="Search or describe your needs" />
+          <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
+        </div>
         <select id="beds" aria-label="Minimum bedrooms">
           <option value="">Beds (any)</option><option value="1">1+ bed</option><option value="2">2+ bed</option><option value="3">3+ bed</option><option value="4">4+ bed</option>
         </select>
@@ -77,17 +97,24 @@
         <div class="muted" id="count" aria-live="polite">Loading…</div>
         <div class="chips" id="chips" aria-live="polite"></div>
       </div>
+      <details id="why">
+        <summary>Why these results?</summary>
+        <div id="why-body" class="muted" style="margin-top:6px;"></div>
+      </details>
     </div>
 
     <section id="grid" class="grid" aria-live="polite"></section>
     <p class="back"><a href="/">← Back to Home</a></p>
   </div>
 
-  <!-- NEW: compliance scaffolding -->
+  <!-- Compliance scaffolding -->
   <script src="config.js"></script>
   <script src="js/ai-guard.js"></script>
+  <!-- Demo-only NL→filters stub (intent only; never touches listing payloads) -->
+  <script src="js/ai-demo.js"></script>
 
   <script>
+    // Theme toggle
     (function(){
       const root = document.documentElement;
       const saved = localStorage.getItem('theme');
@@ -105,11 +132,51 @@
       render();
     })();
 
+    // Helpers
     const $ = (id) => document.getElementById(id);
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
 
+    // URL param sync
+    function getParams(){
+      const p = new URLSearchParams(location.search);
+      return {
+        q: p.get('q') || '',
+        beds: p.get('beds') || '',
+        baths: p.get('baths') || '',
+        minp: p.get('minp') || '',
+        maxp: p.get('maxp') || '',
+        sort: p.get('sort') || 'relevance'
+      };
+    }
+    function setParams(){
+      const p = new URLSearchParams();
+      if($('q').value) p.set('q',$('q').value);
+      if($('beds').value) p.set('beds',$('beds').value);
+      if($('baths').value) p.set('baths',$('baths').value);
+      if($('minp').value) p.set('minp',$('minp').value);
+      if($('maxp').value) p.set('maxp',$('maxp').value);
+      if($('sort').value && $('sort').value!=='relevance') p.set('sort',$('sort').value);
+      const newUrl = `${location.pathname}?${p.toString()}`;
+      history.replaceState(null,'',newUrl);
+    }
+
     function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
+
+    function renderWhy(){
+      const parts=[];
+      const q=$('q').value.trim(); if(q) parts.push(`Text: “${q}”`);
+      if($('beds').value) parts.push(`${$('beds').value}+ bed`);
+      if($('baths').value) parts.push(`${$('baths').value}+ bath`);
+      const minp=$('minp').value, maxp=$('maxp').value;
+      if(minp||maxp){
+        const left=minp?fmtPrice(+minp):'Any', right=maxp?fmtPrice(+maxp):'Any';
+        parts.push(`Price: ${left}–${right}`);
+      }
+      const s = $('sort').selectedOptions[0].text;
+      if($('sort').value!=='relevance') parts.push(`Sort: ${s}`);
+      $('why-body').textContent = parts.length ? parts.join(' · ') : 'No active filters (all listings).';
+    }
 
     function renderChips(){
       const chips = $('chips'); const active=[];
@@ -164,13 +231,15 @@
         case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
         case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
         case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
-        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a-baths); break;
+        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break; /* fixed bug */
       }
-      renderCount(); renderChips(); renderGrid();
+      setParams();
+      renderCount(); renderChips(); renderGrid(); renderWhy();
     }
 
     function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
+    // Resilient loader
     async function loadData(){
       const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
       for (const url of candidates){
@@ -179,15 +248,54 @@
       throw new Error('Could not load listings.json from expected paths.');
     }
 
+    // Smart button → NL → filters (intent only; compliant)
+    function nearestOption(selectId, value){
+      if (!value) return;
+      const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
+      if (!opts.length) return;
+      // choose the smallest option >= value; if none, choose largest
+      let chosen = opts.find(v=>v>=value) ?? opts[opts.length-1];
+      sel.value = String(chosen);
+    }
+
+    async function smartFromText(){
+      const text = $('q').value || '';
+      try{
+        const spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
+        if (spec.beds_min) $('beds').value = String(spec.beds_min);
+        if (spec.baths_min) $('baths').value = String(spec.baths_min);
+        if (spec.min_price) nearestOption('minp', spec.min_price);
+        if (spec.max_price) nearestOption('maxp', spec.max_price);
+        // If areas present, lightly bias with text search (keeps UI simple)
+        if (Array.isArray(spec.areas) && spec.areas.length){
+          const t = $('q').value.trim();
+          if (!t.toLowerCase().includes(spec.areas[0].toLowerCase())) {
+            $('q').value = `${t ? t+' ' : ''}${spec.areas[0]}`.trim();
+          }
+        }
+        // Sorting preference from spec
+        if (spec.sort) $('sort').value = spec.sort;
+        apply();
+        $('why').open = true;
+      }catch(err){
+        console.debug('Smart parse failed:', err);
+      }
+    }
+
     async function boot(){
       try{
-        DATA = await loadData(); VIEW = DATA.slice(); apply();
+        DATA = await loadData(); VIEW = DATA.slice();
+        // Restore from URL
+        const p = getParams();
+        $('q').value=p.q; $('beds').value=p.beds; $('baths').value=p.baths; $('minp').value=p.minp; $('maxp').value=p.maxp; $('sort').value=p.sort;
+        apply();
       }catch(e){
         console.error(e);
         $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
       }
       $('q').addEventListener('input',debounce(apply,200));
       ['beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
+      $('smart-btn').addEventListener('click', smartFromText);
     }
     boot();
   </script>
