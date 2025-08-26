@@ -1,20 +1,33 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Coming Soon</title>
   <style>
     :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    [data-theme="light"] { --bg:#ffffff; --fg:#0b0f17; --muted:#5b6a84; --accent:#355cde; }
+
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
     .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
+
+    /* NEW: site-wide top nav (minimal) */
+    .topnav{display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px}
+    .topnav .brand{font-weight:800; letter-spacing:0.5px}
+    .topnav nav{display:flex; gap:12px}
+    .topnav a{color:var(--muted); text-decoration:none; font-size:14px}
+    .topnav a:hover{color:var(--fg)}
+    .toggle{border:1px solid #23324a; background:transparent; color:var(--muted); padding:6px 10px; border-radius:10px; cursor:pointer; font:inherit}
+
     header{display:flex; align-items:center; justify-content:space-between; gap:16px}
     .logo{font-weight:800; letter-spacing:0.5px}
     .badge{display:inline-block; padding:6px 10px; border:1px solid #23324a; border-radius:999px; color:var(--muted); font-size:12px}
+
     .hero{padding:72px 0 32px}
     .hero h1{font-size:clamp(32px, 6vw, 56px); margin:0 0 12px; line-height:1.05}
     .hero p{color:var(--muted); font-size:18px; max-width:60ch}
+
     .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px}
     .grid{display:grid; gap:16px}
     @media (min-width: 800px){ .grid{grid-template-columns:1.2fr 1fr} }
@@ -29,16 +42,23 @@
     .muted{color:var(--muted)}
     .footer{margin-top:48px; font-size:12px; color:var(--muted); text-align:center;}
     .footer a{color:var(--accent); text-decoration:none; margin:0 6px;}
-    /* Footer CTA button */
-    .footer-cta {
-      display:inline-block; margin:0 6px;
-      padding:8px 12px; border-radius:10px; font-weight:600;
-      background:var(--accent); color:#0b0f17 !important; border:0;
-    }
+    .footer-cta { display:inline-block; margin:0 6px; padding:8px 12px; border-radius:10px; font-weight:600; background:var(--accent); color:#0b0f17 !important; border:0; }
   </style>
 </head>
 <body>
   <div class="wrap">
+    <!-- NEW: Minimal, consistent nav -->
+    <div class="topnav" role="navigation" aria-label="Site">
+      <div class="brand">Findr™</div>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="map.html">Map</a>
+      </nav>
+      <button id="themeToggle" class="toggle" aria-label="Toggle theme">🌙</button>
+    </div>
+
+    <!-- Existing header kept intact -->
     <header>
       <div class="logo">Findr™</div>
       <span class="badge">AI-first real estate search</span>
@@ -77,16 +97,10 @@
       </div>
     </section>
 
-    <!-- Waitlist (honeypot + thank-you redirect intact) -->
     <section class="card" style="margin-top:32px;">
       <h2>Join the Waitlist</h2>
       <p class="small">Be the first to try Findr™ when our private beta launches.</p>
-      <form name="waitlist"
-            method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
-            action="thank-you.html"
-            style="margin-top:12px;">
+      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="thank-you.html" style="margin-top:12px;">
         <input type="hidden" name="form-name" value="waitlist" />
         <p style="display:none">
           <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
@@ -102,19 +116,26 @@
       </form>
     </section>
 
-    <!-- Footer with button-highlighted Map link -->
     <section class="footer">
       <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
       <p>
         <a href="terms.html">Terms of Use</a> · 
         <a href="privacy.html">Privacy Policy</a> · 
         <a href="listings.html">Preview Listings</a>
-        <!-- button-style CTA for the map -->
         <a href="map.html">Map Preview</a>
       </p>
     </section>
-
-    <!-- deploy test -->
   </div>
+
+  <!-- NEW: theme toggle script -->
+  <script>
+    (function() {
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      function set(t){ root.setAttribute('data-theme', t); localStorage.setItem('theme', t); btn.textContent = t==='light' ? '☀️' : '🌙'; }
+      set(localStorage.getItem('theme') || 'dark');
+      btn.addEventListener('click', ()=> set(root.getAttribute('data-theme')==='dark' ? 'light' : 'dark'));
+    })();
+  </script>
 </body>
 </html>
