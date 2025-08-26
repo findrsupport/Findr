@@ -74,7 +74,7 @@
     <div class="panel">
       <div class="toolbar" role="region" aria-label="Search and filters">
         <div class="searchbox">
-          <input id="q" type="search" placeholder='Try: "2 bed condo near SkyTrain under 900k"' aria-label="Search or describe your needs" />
+          <input id="q" type="search" placeholder='Describe your needs, then press Enter or click “Smart” (e.g., "2 bed condo near SkyTrain under 900k")' aria-label="Search or describe your needs" />
           <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
         </div>
         <select id="beds" aria-label="Minimum bedrooms">
@@ -163,16 +163,6 @@
       history.replaceState(null,'',newUrl);
     }
 
-    function toParamsFromControls(){
-      return {
-        q: $('q').value,
-        beds: $('beds').value,
-        baths: $('baths').value,
-        minp: $('minp').value,
-        maxp: $('maxp').value
-      };
-    }
-
     function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
 
     function renderWhy(){
@@ -198,8 +188,7 @@
       const minp=$('minp').value, maxp=$('maxp').value;
       if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
       const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
-
-      // Action chips (non-filter): Copy link & Clear all
+      // utility chips
       active.push({label:'Copy link', id:'copy'});
       active.push({label:'Clear all', id:'clear'});
 
@@ -208,12 +197,8 @@
         const id=b.getAttribute('data-id');
         if(id==='copy'){ copyLink(b); return; }
         if(id==='clear'){ clearAll(); return; }
-        if(id==='q') $('q').value='';
-        if(id==='beds') $('beds').value='';
-        if(id==='baths') $('baths').value='';
-        if(id==='price'){ $('minp').value=''; $('maxp').value=''; }
-        if(id==='sort') $('sort').value='relevance';
-        apply();
+        if(id==='q') $('q').value=''; if(id==='beds') $('beds').value=''; if(id==='baths') $('baths').value='';
+        if(id==='price'){ $('minp').value=''; $('maxp').value=''; } if(id==='sort') $('sort').value='relevance'; apply();
       }));
     }
 
@@ -239,9 +224,12 @@
     }
 
     function apply(){
-      // Deterministic filters (shared util)
-      VIEW = FILTERS.applyFilters(DATA, toParamsFromControls());
       const sort=$('sort').value;
+      // deterministic, shared filters
+      VIEW = FILTERS.applyFilters(DATA, {
+        q: $('q').value, beds: $('beds').value, baths: $('baths').value,
+        minp: $('minp').value, maxp: $('maxp').value
+      });
       switch(sort){
         case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
         case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
@@ -320,6 +308,7 @@
         $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
       }
       $('q').addEventListener('input',debounce(apply,200));
+      $('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); smartFromText(); }});
       ['beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
       $('smart-btn').addEventListener('click', smartFromText);
     }
