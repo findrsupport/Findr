@@ -1,120 +1,204 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Coming Soon</title>
+  <title>Findr™ — Home</title>
+  <meta name="description" content="Findr — an AI-first, map-centric real estate search with modern UX." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Ccircle cx='48' cy='48' r='46' fill='%2300c2a8'/%3E%3Ctext x='50%25' y='57%25' text-anchor='middle' font-family='Arial' font-size='44' fill='white'%3EF%3C/text%3E%3C/svg%3E" />
   <style>
-    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
-    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
-    header{display:flex; align-items:center; justify-content:space-between; gap:16px}
-    .logo{font-weight:800; letter-spacing:0.5px}
-    .badge{display:inline-block; padding:6px 10px; border:1px solid #23324a; border-radius:999px; color:var(--muted); font-size:12px}
-    .hero{padding:72px 0 32px}
-    .hero h1{font-size:clamp(32px, 6vw, 56px); margin:0 0 12px; line-height:1.05}
-    .hero p{color:var(--muted); font-size:18px; max-width:60ch}
-    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px}
-    .grid{display:grid; gap:16px}
-    @media (min-width: 800px){ .grid{grid-template-columns:1.2fr 1fr} }
-    h2{font-size:18px; margin:0 0 8px}
-    .divider{height:1px; background:#1b263a; margin:16px 0}
-    a{color:var(--accent); text-decoration:none}
-    .owner{font-weight:600}
-    .small{font-size:12px; color:var(--muted)}
-    .powered{display:flex; align-items:center; gap:12px; margin-top:8px}
-    .powered img{width:90px; height:90px; object-fit:contain}
-    .stack{display:flex; flex-direction:column; gap:6px}
-    .muted{color:var(--muted)}
-    .footer{margin-top:48px; font-size:12px; color:var(--muted); text-align:center;}
-    .footer a{color:var(--accent); text-decoration:none; margin:0 6px;}
-    /* Footer CTA button */
-    .footer-cta {
-      display:inline-block; margin:0 6px;
-      padding:8px 12px; border-radius:10px; font-weight:600;
-      background:var(--accent); color:#0b0f17 !important; border:0;
+    /* Brand tokens */
+    :root {
+      --brand: #00c2a8;
+      --bg: #0b0f14;
+      --fg: #e8eef4;
+      --muted: #9fb0bf;
+      --card: #121821;
+      --stroke: #1f2a37;
+      --surface: #0e141b;
     }
+    [data-theme="light"] {
+      --bg: #f7fafc;
+      --fg: #0c1320;
+      --muted: #445466;
+      --card: #ffffff;
+      --stroke: #e6ecf2;
+      --surface: #f1f5f9;
+    }
+
+    /* Base */
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+      line-height: 1.5;
+    }
+    * { box-sizing: border-box; }
+    a { color: var(--brand); text-decoration: none; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--brand);
+      outline-offset: 2px;
+      border-radius: 6px;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+
+    /* Header / Nav */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(0deg, rgba(0,0,0,0) 0%, var(--surface) 100%);
+      border-bottom: 1px solid var(--stroke);
+      backdrop-filter: saturate(120%) blur(6px);
+    }
+    .nav {
+      display: flex; align-items: center; gap: 1rem; justify-content: space-between;
+    }
+    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; }
+    .brand-badge {
+      width: 28px; height: 28px; display: inline-grid; place-items: center;
+      background: var(--brand); color: #00110e; border-radius: 8px; font-weight: 800;
+    }
+    nav a {
+      display: inline-block; padding: .5rem .75rem; border-radius: .75rem; color: var(--fg);
+    }
+    nav a[aria-current="page"] { background: var(--card); border: 1px solid var(--stroke); }
+    .spacer { flex: 1; }
+    .theme-toggle {
+      border: 1px solid var(--stroke); background: var(--card); color: var(--fg);
+      border-radius: .75rem; padding: .5rem .75rem; cursor: pointer;
+    }
+
+    /* Hero */
+    .hero {
+      padding: 3rem 1rem 2rem;
+      display: grid; gap: 1.25rem;
+      background: radial-gradient(1200px 500px at 10% -10%, rgba(0,194,168,.08), transparent 60%);
+      border-bottom: 1px solid var(--stroke);
+    }
+    .kicker { color: var(--muted); text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
+    .title { font-size: clamp(2rem, 3.8vw, 3rem); margin: 0; }
+    .subtitle { color: var(--muted); max-width: 65ch; }
+
+    /* Card */
+    .card {
+      background: var(--card);
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 1rem;
+      box-shadow: 0 1px 0 rgba(0,0,0,.25), 0 12px 32px rgba(0,0,0,.18);
+    }
+
+    /* Form */
+    form {
+      display: grid; gap: .75rem; max-width: 600px;
+    }
+    label { font-weight: 600; }
+    input, select, textarea {
+      width: 100%; padding: .7rem .85rem; border-radius: .6rem;
+      background: var(--surface); color: var(--fg);
+      border: 1px solid var(--stroke);
+    }
+    .row { display: grid; gap: .75rem; grid-template-columns: 1fr; }
+    @media (min-width: 640px) { .row { grid-template-columns: 1fr 1fr; } }
+    .btn {
+      background: var(--brand); color: #00110e; border: none; padding: .8rem 1rem;
+      border-radius: .7rem; font-weight: 700; cursor: pointer;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--stroke);
+      margin-top: 2rem; padding: 1rem; color: var(--muted);
+    }
+    .fineprint { font-size: .85rem; color: var(--muted); }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <div class="logo">Findr™</div>
-      <span class="badge">AI-first real estate search</span>
-    </header>
+  <a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <span class="brand-badge" aria-hidden="true">F</span>
+        <a href="index.html" aria-current="page">Findr™</a>
+      </div>
+      <nav>
+        <a href="index.html" aria-current="page">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="map.html">Map</a>
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+      <div class="spacer" aria-hidden="true"></div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle color theme">🌙</button>
+    </div>
+  </header>
 
+  <main id="main" class="container">
     <section class="hero">
-      <h1>Real estate search, reimagined.</h1>
-      <p>We’re building an AI-first, map-centric search that turns plain-language requests (like “quiet street near SkyTrain, dog-friendly strata, south light”) into precise results. Private alpha coming soon.</p>
+      <div class="kicker">AI-first real estate search</div>
+      <h1 class="title">Find homes the way you speak.</h1>
+      <p class="subtitle">Findr™ is a modern, map-centric search with plain-language queries and best-in-class UX for consumers and REALTORS®. We’re polishing our demo and preparing for CREA DDF® integration.</p>
     </section>
 
-    <section class="grid">
-      <div class="card">
-        <h2>Contact</h2>
-        <div class="stack">
-          <div class="owner">Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty</div>
-          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></div>
-          <div class="small">Site owner & operator (Participant responsible for this Website).</div>
-        </div>
-        <div class="divider"></div>
-        <h2>Compliance</h2>
-        <div class="powered">
-          <a href="#" aria-label="Powered by REALTOR.ca">
-            <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" width="90" height="90" />
-          </a>
-        </div>
-        <p class="small">Each listing will also display the <strong>Listing Brokerage name</strong> adjacent to the property details.</p>
-      </div>
-
-      <div class="card">
-        <h2>Trademark & Legal Statements</h2>
-        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks that are owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). These certification marks identify real estate professionals who are members of CREA and who must abide by CREA’s By-Laws, Rules, and the REALTOR® Code.</p>
-        <p class="small">The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
-        <p class="small">The trademark DDF® is owned by The Canadian Real Estate Association (CREA) and identifies CREA’s Data Distribution Facility (DDF®).</p>
-        <div class="divider"></div>
-        <p class="small">© 2025 Findr™. All rights reserved.</p>
-      </div>
-    </section>
-
-    <!-- Waitlist (honeypot + thank-you redirect intact) -->
-    <section class="card" style="margin-top:32px;">
-      <h2>Join the Waitlist</h2>
-      <p class="small">Be the first to try Findr™ when our private beta launches.</p>
-      <form name="waitlist"
-            method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
-            action="thank-you.html"
-            style="margin-top:12px;">
+    <section aria-labelledby="waitlist-heading" class="card" style="margin-top:1.25rem">
+      <h2 id="waitlist-heading" style="margin:0 0 .5rem 0;">Join the early access list</h2>
+      <p class="fineprint" id="waitlist-desc">We’ll only email you about Findr™ updates. Unsubscribe anytime.</p>
+      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="thank-you.html" aria-describedby="waitlist-desc">
         <input type="hidden" name="form-name" value="waitlist" />
-        <p style="display:none">
-          <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+        <p style="display:none;">
+          <label>Don’t fill this out: <input name="bot-field" /></label>
         </p>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <input type="email" name="email" placeholder="Your email address" required
-                 style="flex:1; padding:10px; border-radius:6px; border:1px solid #223148; background:#0b0f17; color:#e8eef7;" />
-          <button type="submit"
-                  style="padding:10px 16px; border:none; border-radius:6px; background:#6aa1ff; color:#fff; font-weight:600; cursor:pointer;">
-            Join
-          </button>
+        <div class="row">
+          <p>
+            <label for="name">Your name</label>
+            <input id="name" name="name" autocomplete="name" required />
+          </p>
+          <p>
+            <label for="email">Email address</label>
+            <input id="email" name="email" type="email" autocomplete="email" required />
+          </p>
         </div>
+        <p>
+          <label for="role">I’m a…</label>
+          <select id="role" name="role" aria-label="Audience role">
+            <option value="buyer">Home Buyer</option>
+            <option value="seller">Home Seller</option>
+            <option value="realtor">REALTOR®</option>
+            <option value="other">Other</option>
+          </select>
+        </p>
+        <p>
+          <button class="btn" type="submit">Request Invite</button>
+        </p>
       </form>
     </section>
 
-    <!-- Footer with button-highlighted Map link -->
-    <section class="footer">
-      <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
-      <p>
-        <a href="terms.html">Terms of Use</a> · 
-        <a href="privacy.html">Privacy Policy</a> · 
-        <a href="listings.html">Preview Listings</a>
-        <!-- button-style CTA for the map -->
-        <a href="map.html">Map Preview</a>
-      </p>
-    </section>
+    <footer class="container">
+      <p class="fineprint">© <span id="year"></span> Findr™. Demo site for illustration. Listings and data shown on other pages are mock data until CREA DDF® integration is complete.</p>
+    </footer>
+  </main>
 
-    <!-- deploy test -->
-  </div>
+  <script>
+    (function themeInit(){
+      const saved = localStorage.getItem('theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const theme = saved || (prefersDark ? 'dark' : 'dark'); // default dark
+      document.documentElement.setAttribute('data-theme', theme);
+      const btn = document.getElementById('themeToggle');
+      const isDark = theme === 'dark';
+      btn.setAttribute('aria-pressed', String(isDark));
+      btn.textContent = isDark ? '🌙' : '☀️';
+      btn.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'dark' ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-theme', next);
+        localStorage.setItem('theme', next);
+        btn.setAttribute('aria-pressed', String(next === 'dark'));
+        btn.textContent = next === 'dark' ? '🌙' : '☀️';
+      });
+    })();
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
