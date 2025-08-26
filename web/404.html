@@ -1,11 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — 404 Not Found</title>
-  <meta name="description" content="Page not found." />
-  <link rel="icon" type="image/png" href="assets/favicon.png">
   <style>
     :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; --card:#223148; }
     [data-theme="light"] { --bg:#ffffff; --fg:#101826; --muted:#516078; --accent:#0b6bff; --card:#eef3fb; }
@@ -13,8 +11,9 @@
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
     a{color:var(--accent); text-decoration:none}
     .wrap{max-width:960px; margin:0 auto; padding:24px 20px 56px}
-    /* Top bar */
-    .topbar{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:color-mix(in srgb, var(--bg) 86%, transparent); border-bottom:1px solid rgba(255,255,255,0.06)}
+
+    /* Top bar (match /terms) */
+    .topbar{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:rgba(11,15,23,.86); border-bottom:1px solid rgba(255,255,255,0.06)}
     .topbar-inner{max-width:960px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:800; letter-spacing:.3px}
@@ -23,6 +22,7 @@
     .nav a{font-weight:600; color:var(--fg); opacity:.9}
     .nav a:hover{opacity:1}
     .toggle{border:1px solid rgba(255,255,255,0.12); background:transparent; color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-weight:600}
+
     /* Page */
     .card{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; padding:24px; margin-top:28px}
     h1{font-size:clamp(28px,4.5vw,42px); margin:4px 0 6px}
