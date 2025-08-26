@@ -3,202 +3,188 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Home</title>
-  <meta name="description" content="Findr — an AI-first, map-centric real estate search with modern UX." />
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='96' height='96'%3E%3Ccircle cx='48' cy='48' r='46' fill='%2300c2a8'/%3E%3Ctext x='50%25' y='57%25' text-anchor='middle' font-family='Arial' font-size='44' fill='white'%3EF%3C/text%3E%3C/svg%3E" />
+  <title>Findr™ — AI-first Real Estate Search</title>
+  <meta name="description" content="Findr™ is an AI-first, map-centric real estate search with modern UX for consumers and realtors." />
+  <script>
+    // Theme boot: default dark, restore saved preference early to avoid FOUC.
+    (function () {
+      const saved = localStorage.getItem('theme');
+      document.documentElement.dataset.theme = saved || 'dark';
+    })();
+  </script>
   <style>
-    /* Brand tokens */
     :root {
-      --brand: #00c2a8;
-      --bg: #0b0f14;
-      --fg: #e8eef4;
-      --muted: #9fb0bf;
-      --card: #121821;
-      --stroke: #1f2a37;
-      --surface: #0e141b;
+      /* Brand palette (dark default) */
+      --brand: #7dd3fc;
+      --bg: #0b1020;
+      --fg: #e6edf3;
+      --muted: #a0aab8;
+      --card: #11172a;
+      --stroke: #24324a;
+      --surface: #0f1628;
+
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.25);
+      --focus: 0 0 0 3px rgba(125, 211, 252, 0.45);
+      color-scheme: dark;
     }
     [data-theme="light"] {
-      --bg: #f7fafc;
-      --fg: #0c1320;
-      --muted: #445466;
+      --brand: #0ea5e9;
+      --bg: #f6f8fb;
+      --fg: #0b1020;
+      --muted: #4b5563;
       --card: #ffffff;
-      --stroke: #e6ecf2;
-      --surface: #f1f5f9;
-    }
-
-    /* Base */
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--fg);
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
-      line-height: 1.5;
+      --stroke: #d6dde7;
+      --surface: #eef2f7;
+      color-scheme: light;
     }
     * { box-sizing: border-box; }
-    a { color: var(--brand); text-decoration: none; }
-    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 2px;
-      border-radius: 6px;
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
     }
-    .container { max-width: 1100px; margin: 0 auto; padding: 1rem; }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { max-width: 1100px; margin: 0 auto; padding: 24px; }
+    .skip-link {
+      position: absolute; left: -10000px; top: auto; width: 1px; height: 1px; overflow: hidden;
+    }
+    .skip-link:focus { position: static; width: auto; height: auto; padding: 8px 12px; background: var(--surface); border-radius: 8px; }
 
     /* Header / Nav */
-    header {
-      position: sticky; top: 0; z-index: 50;
-      background: linear-gradient(0deg, rgba(0,0,0,0) 0%, var(--surface) 100%);
-      border-bottom: 1px solid var(--stroke);
-      backdrop-filter: saturate(120%) blur(6px);
+    header { border-bottom: 1px solid var(--stroke); background: linear-gradient(0deg, transparent, rgba(255,255,255,0.02)); }
+    .nav { display: flex; align-items: center; gap: 12px; justify-content: space-between; }
+    .nav-left, .nav-right { display: flex; align-items: center; gap: 12px; }
+    .logo {
+      display: inline-flex; align-items: center; gap: 10px;
+      font-weight: 700; letter-spacing: 0.3px; color: var(--fg); text-decoration: none;
     }
-    .nav {
-      display: flex; align-items: center; gap: 1rem; justify-content: space-between;
+    .logo-badge {
+      display: inline-grid; place-items: center; width: 28px; height: 28px;
+      border-radius: 9px; background: var(--brand); color: #031019; font-weight: 800;
     }
-    .brand { display: flex; align-items: center; gap: .6rem; font-weight: 700; }
-    .brand-badge {
-      width: 28px; height: 28px; display: inline-grid; place-items: center;
-      background: var(--brand); color: #00110e; border-radius: 8px; font-weight: 800;
+    .nav a.link {
+      padding: 10px 12px; border-radius: 10px; color: var(--fg);
     }
-    nav a {
-      display: inline-block; padding: .5rem .75rem; border-radius: .75rem; color: var(--fg);
-    }
-    nav a[aria-current="page"] { background: var(--card); border: 1px solid var(--stroke); }
-    .spacer { flex: 1; }
+    .nav a.link:hover { background: var(--surface); text-decoration: none; }
     .theme-toggle {
       border: 1px solid var(--stroke); background: var(--card); color: var(--fg);
-      border-radius: .75rem; padding: .5rem .75rem; cursor: pointer;
+      border-radius: 999px; padding: 8px 12px; cursor: pointer; box-shadow: var(--shadow);
     }
+    .theme-toggle:focus-visible { outline: none; box-shadow: var(--focus); }
 
     /* Hero */
     .hero {
-      padding: 3rem 1rem 2rem;
-      display: grid; gap: 1.25rem;
-      background: radial-gradient(1200px 500px at 10% -10%, rgba(0,194,168,.08), transparent 60%);
-      border-bottom: 1px solid var(--stroke);
+      padding: clamp(32px, 6vw, 64px) 0;
+      display: grid; gap: 28px;
+      grid-template-columns: 1fr;
     }
-    .kicker { color: var(--muted); text-transform: uppercase; letter-spacing: .12em; font-size: .8rem; }
-    .title { font-size: clamp(2rem, 3.8vw, 3rem); margin: 0; }
-    .subtitle { color: var(--muted); max-width: 65ch; }
-
-    /* Card */
-    .card {
-      background: var(--card);
+    .hero-card {
+      background: radial-gradient(1200px 600px at 20% -10%, rgba(125,211,252,0.15), transparent 60%),
+                  radial-gradient(800px 400px at 90% 20%, rgba(125,211,252,0.08), transparent 60%),
+                  var(--card);
       border: 1px solid var(--stroke);
-      border-radius: 16px;
-      padding: 1rem;
-      box-shadow: 0 1px 0 rgba(0,0,0,.25), 0 12px 32px rgba(0,0,0,.18);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: clamp(24px, 3vw, 36px);
     }
-
-    /* Form */
-    form {
-      display: grid; gap: .75rem; max-width: 600px;
+    h1 { font-size: clamp(28px, 4.5vw, 44px); margin: 0 0 8px; }
+    .lead { color: var(--muted); font-size: clamp(16px, 2vw, 18px); margin: 0 0 18px; }
+    .cta { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; }
+    .input {
+      width: min(480px, 100%); background: var(--surface); border: 1px solid var(--stroke); color: var(--fg);
+      border-radius: 12px; padding: 12px 14px;
     }
-    label { font-weight: 600; }
-    input, select, textarea {
-      width: 100%; padding: .7rem .85rem; border-radius: .6rem;
-      background: var(--surface); color: var(--fg);
-      border: 1px solid var(--stroke);
-    }
-    .row { display: grid; gap: .75rem; grid-template-columns: 1fr; }
-    @media (min-width: 640px) { .row { grid-template-columns: 1fr 1fr; } }
     .btn {
-      background: var(--brand); color: #00110e; border: none; padding: .8rem 1rem;
-      border-radius: .7rem; font-weight: 700; cursor: pointer;
+      appearance: none; border: 1px solid transparent; border-radius: 12px;
+      background: var(--brand); color: #031019; padding: 12px 16px; font-weight: 700; cursor: pointer;
+    }
+    .btn:hover { filter: brightness(0.95); }
+    .btn:focus-visible, .input:focus-visible { outline: none; box-shadow: var(--focus); }
+
+    .note {
+      margin-top: 8px; color: var(--muted); font-size: 14px;
     }
 
-    /* Footer */
-    footer {
-      border-top: 1px solid var(--stroke);
-      margin-top: 2rem; padding: 1rem; color: var(--muted);
-    }
-    .fineprint { font-size: .85rem; color: var(--muted); }
+    footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--stroke); color: var(--muted); }
+    .footer-links { display: flex; gap: 18px; flex-wrap: wrap; margin: 8px 0 0; }
+    .badge { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--stroke); background:var(--surface); padding:6px 10px; border-radius: 10px; }
   </style>
 </head>
 <body>
-  <a href="#main" class="skip" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+  <a href="#main" class="skip-link">Skip to content</a>
   <header>
     <div class="container nav" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <span class="brand-badge" aria-hidden="true">F</span>
-        <a href="index.html" aria-current="page">Findr™</a>
+      <div class="nav-left">
+        <a class="logo" href="index.html" aria-label="Findr Home">
+          <span class="logo-badge" aria-hidden="true">F</span> Findr™
+        </a>
+        <a class="link" href="listings.html">Listings</a>
+        <a class="link" href="map.html">Map</a>
       </div>
-      <nav>
-        <a href="index.html" aria-current="page">Home</a>
-        <a href="listings.html">Listings</a>
-        <a href="map.html">Map</a>
-        <a href="terms.html">Terms</a>
-        <a href="privacy.html">Privacy</a>
-      </nav>
-      <div class="spacer" aria-hidden="true"></div>
-      <button id="themeToggle" class="theme-toggle" type="button" aria-pressed="false" aria-label="Toggle color theme">🌙</button>
+      <div class="nav-right">
+        <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">☀️</button>
+      </div>
     </div>
   </header>
 
   <main id="main" class="container">
     <section class="hero">
-      <div class="kicker">AI-first real estate search</div>
-      <h1 class="title">Find homes the way you speak.</h1>
-      <p class="subtitle">Findr™ is a modern, map-centric search with plain-language queries and best-in-class UX for consumers and REALTORS®. We’re polishing our demo and preparing for CREA DDF® integration.</p>
+      <div class="hero-card" aria-labelledby="coming-title">
+        <h1 id="coming-title">Findr™ — AI-first, map-centric real estate search</h1>
+        <p class="lead">
+          Modern search, plain-language queries, beautiful maps. Built for consumers and realtors with best-in-class UX.
+        </p>
+        <form name="waitlist" method="POST" data-netlify="true" action="thank-you.html" netlify-honeypot="bot-field" aria-describedby="smallprint">
+          <input type="hidden" name="form-name" value="waitlist" />
+          <p style="position:absolute; left:-10000px; height:0; overflow:hidden;">
+            <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+          </p>
+          <div class="cta">
+            <label for="email" class="visually-hidden" style="position:absolute; left:-10000px;">Email</label>
+            <input id="email" name="email" type="email" required class="input" placeholder="Your email to join the waitlist" autocomplete="email" />
+            <button class="btn" type="submit">Join Waitlist</button>
+          </div>
+          <p id="smallprint" class="note">By joining, you agree to our <a href="terms.html">Terms</a> and <a href="privacy.html">Privacy</a>.</p>
+        </form>
+        <p class="note">
+          Netlify + GitHub CI/CD is live. CREA DDF® integration and plain-language search are coming soon.
+        </p>
+      </div>
     </section>
 
-    <section aria-labelledby="waitlist-heading" class="card" style="margin-top:1.25rem">
-      <h2 id="waitlist-heading" style="margin:0 0 .5rem 0;">Join the early access list</h2>
-      <p class="fineprint" id="waitlist-desc">We’ll only email you about Findr™ updates. Unsubscribe anytime.</p>
-      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="thank-you.html" aria-describedby="waitlist-desc">
-        <input type="hidden" name="form-name" value="waitlist" />
-        <p style="display:none;">
-          <label>Don’t fill this out: <input name="bot-field" /></label>
-        </p>
-        <div class="row">
-          <p>
-            <label for="name">Your name</label>
-            <input id="name" name="name" autocomplete="name" required />
-          </p>
-          <p>
-            <label for="email">Email address</label>
-            <input id="email" name="email" type="email" autocomplete="email" required />
-          </p>
-        </div>
-        <p>
-          <label for="role">I’m a…</label>
-          <select id="role" name="role" aria-label="Audience role">
-            <option value="buyer">Home Buyer</option>
-            <option value="seller">Home Seller</option>
-            <option value="realtor">REALTOR®</option>
-            <option value="other">Other</option>
-          </select>
-        </p>
-        <p>
-          <button class="btn" type="submit">Request Invite</button>
-        </p>
-      </form>
-    </section>
-
-    <footer class="container">
-      <p class="fineprint">© <span id="year"></span> Findr™. Demo site for illustration. Listings and data shown on other pages are mock data until CREA DDF® integration is complete.</p>
+    <footer>
+      <div class="badge" aria-label="Powered by REALTOR.ca">
+        <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" height="18" />
+        <span>Display demo only — real data via CREA DDF® coming soon.</span>
+      </div>
+      <div class="footer-links">
+        <a href="terms.html">Terms</a>
+        <a href="privacy.html">Privacy</a>
+      </div>
     </footer>
   </main>
 
   <script>
-    (function themeInit(){
-      const saved = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      const theme = saved || (prefersDark ? 'dark' : 'dark'); // default dark
-      document.documentElement.setAttribute('data-theme', theme);
-      const btn = document.getElementById('themeToggle');
-      const isDark = theme === 'dark';
-      btn.setAttribute('aria-pressed', String(isDark));
-      btn.textContent = isDark ? '🌙' : '☀️';
+    (function () {
+      const btn = document.getElementById('theme-toggle');
+      function update() {
+        const theme = document.documentElement.dataset.theme || 'dark';
+        btn.setAttribute('aria-pressed', theme === 'light' ? 'true' : 'false');
+        btn.textContent = theme === 'dark' ? '☀️' : '🌙';
+        btn.title = theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme';
+      }
       btn.addEventListener('click', () => {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem('theme', next);
-        btn.setAttribute('aria-pressed', String(next === 'dark'));
-        btn.textContent = next === 'dark' ? '🌙' : '☀️';
+        const now = document.documentElement.dataset.theme === 'light' ? 'dark' : 'light';
+        document.documentElement.dataset.theme = now;
+        localStorage.setItem('theme', now);
+        update();
       });
+      update();
     })();
-    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
