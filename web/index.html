@@ -13,7 +13,7 @@
       --fg: #f1f1f1;           /* main text */
       --muted: #9aa4b2;        /* secondary text */
       --card: #2a323b;         /* elevated card background */
-      --link: #fac241;         /* links in accent */
+      --link: #fac241;         /* links (accent) */
       --border: #3a4149;       /* borders */
       --maxw: 1100px;          /* layout width */
       --radius: 16px;
@@ -40,11 +40,11 @@
     a:hover { text-decoration: underline; }
     .container { width: min(var(--maxw), 92%); margin-inline: auto; }
 
-    /* ===== Nav (sticky + translucent, like the earlier version) ===== */
+    /* ===== Nav (sticky + translucent) ===== */
     .nav {
       position: sticky; top: 0; z-index: 50;
       backdrop-filter: saturate(180%) blur(8px);
-      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      background: color-mix(in oklab, var(--bg) 82%, transparent);
       border-bottom: 1px solid var(--border);
     }
     .nav-inner {
@@ -54,23 +54,20 @@
     .brand a { color: var(--fg); font-weight: 800; letter-spacing: 0.2px; }
     .nav-links { display: flex; gap: 20px; }
     .nav-links a { color: var(--fg); opacity: 0.9; }
+    .nav-links a.active { color: var(--brand); font-weight: 600; }
     .theme-btn {
       border: 1px solid var(--border); background: var(--card); color: var(--fg);
       padding: 6px 10px; border-radius: 10px; cursor: pointer; font-size: 14px;
     }
 
-    /* ===== Hero (restores previous roomy, centered feel) ===== */
+    /* ===== Hero ===== */
     main { flex: 1; display: grid; place-items: center; }
     .hero {
       width: min(var(--maxw), 92%);
       text-align: center;
       padding: clamp(40px, 8vw, 100px) 0;
     }
-    h1 {
-      font-size: clamp(30px, 5.6vw, 56px);
-      line-height: 1.1; margin: 0 0 12px;
-      letter-spacing: 0.2px;
-    }
+    h1 { font-size: clamp(30px, 5.6vw, 56px); line-height: 1.1; margin: 0 0 12px; letter-spacing: 0.2px; }
     .sub { color: var(--muted); margin: 0 auto; max-width: 60ch; }
     .pill {
       display: inline-flex; align-items: center; gap: 8px;
@@ -88,7 +85,6 @@
     .badge { height: 22px; opacity: 0.9; }
     .foot-legal { margin-top: 8px; }
 
-    /* ===== Prefers-reduced-motion ===== */
     @media (prefers-reduced-motion: no-preference) {
       .hero { animation: fadeUp .6s ease both; }
       @keyframes fadeUp { from {opacity: 0; transform: translateY(6px);} to {opacity: 1; transform: translateY(0);} }
@@ -101,7 +97,7 @@
     <div class="container nav-inner">
       <div class="brand"><a href="index.html" aria-label="Findr Home">Findr™</a></div>
       <div class="nav-links" role="navigation" aria-label="Primary">
-        <a href="index.html">Home</a>
+        <a href="index.html" class="active">Home</a>
         <a href="listings.html">Listings</a>
         <a href="map.html">Map</a>
       </div>
@@ -143,7 +139,6 @@
       localStorage.setItem('theme', next);
       btn.textContent = next === 'dark' ? '🌙' : '☀️';
     });
-
     // Footer year
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>

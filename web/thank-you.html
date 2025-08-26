@@ -1,29 +1,78 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Thank You</title>
+  <title>Thanks — Findr™</title>
+  <meta name="description" content="Thanks for joining the Findr™ waitlist.">
   <style>
-    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
-    .wrap{max-width:720px; margin:0 auto; padding:64px 20px}
-    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:24px}
-    h1{font-size:clamp(28px, 5vw, 40px); margin:0 0 12px}
-    p{color:var(--muted); margin:0 0 12px}
-    a{color:var(--accent); text-decoration:none}
-    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:#6aa1ff; color:#fff; font-weight:600}
+    :root { --brand:#fac241; --bg:#1f262d; --fg:#f1f1f1; --muted:#9aa4b2; --card:#2a323b; --link:#fac241; --border:#3a4149; --maxw:1100px; }
+    [data-theme="light"] { --bg:#ffffff; --fg:#111111; --muted:#666666; --card:#f8f9fa; --link:#fac241; --border:#e0e0e0; }
+    html, body { height:100%; }
+    body { margin:0; background:var(--bg); color:var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial; line-height:1.6; display:flex; flex-direction:column; }
+    a { color:var(--link); text-decoration:none; } a:hover { text-decoration:underline; }
+    .container { width:min(var(--maxw),92%); margin-inline:auto; }
+
+    .nav { position:sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(8px); background: color-mix(in oklab, var(--bg) 82%, transparent); border-bottom:1px solid var(--border); }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
+    .brand a { color:var(--fg); font-weight:800; }
+    .nav-links { display:flex; gap:20px; } .nav-links a { color:var(--fg); opacity:.9; }
+    .theme-btn { border:1px solid var(--border); background:var(--card); color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-size:14px; }
+
+    main { flex:1; display:grid; place-items:center; }
+    .wrap { text-align:center; padding: clamp(36px, 6vw, 80px) 0; }
+    h1 { font-size: clamp(28px, 4.8vw, 48px); margin:0 0 6px; }
+    .sub { color: var(--muted); margin:0; }
+
+    footer { border-top:1px solid var(--border); padding:18px 0; font-size:13px; color:var(--muted); }
+    .footer-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .badge { height:22px; opacity:.9; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <h1>Thanks for joining the Findr™ waitlist!</h1>
-      <p>We’ll email you when private beta invites go out. In the meantime, keep an eye on this page for updates.</p>
-      <a class="btn" href="/">Return to Home</a>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand"><a href="index.html">Findr™</a></div>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="map.html">Map</a>
+      </div>
+      <button id="themeToggle" class="theme-btn">🌙</button>
     </div>
-    <p style="margin-top:16px; font-size:12px; color:var(--muted);">© 2025 Findr™. All rights reserved.</p>
-  </div>
+  </nav>
+
+  <main class="container">
+    <div class="wrap">
+      <h1>Thank you!</h1>
+      <p class="sub">You’re on the Findr™ waitlist. We’ll be in touch soon.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <img class="badge" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
+      <span>Brokerage (for demo): RE/MAX All Points Realty • © <span id="year"></span> Findr™</span>
+    </div>
+    <div class="container">
+      REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA.
+      MLS®, Multiple Listing Service®, and the associated logos are owned by CREA. Demo content only.
+    </div>
+  </footer>
+
+  <script>
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme') || 'dark';
+    root.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+    btn.addEventListener('click', () => {
+      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', cur);
+      localStorage.setItem('theme', cur);
+      btn.textContent = cur === 'dark' ? '🌙' : '☀️';
+    });
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>

@@ -3,188 +3,206 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Listings (Preview)</title>
-  <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
+  <title>Listings — Findr™</title>
+  <meta name="description" content="Browse mock listings in the Findr™ demo with filters and sorting.">
   <style>
     :root {
-      --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624;
-      --chip:#1a2335; --chip-border:#2a3c5a;
+      --brand: #fac241;
+      --bg: #1f262d;
+      --fg: #f1f1f1;
+      --muted: #9aa4b2;
+      --card: #2a323b;
+      --link: #fac241;
+      --border: #3a4149;
+      --maxw: 1200px;
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
     }
-    :root[data-theme="light"]{
-      --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff;
-      --chip:#f1f4f8; --chip-border:#e5ecf5;
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --card: #f8f9fa;
+      --link: #fac241;
+      --border: #e0e0e0;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
     }
-    *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
-    a{color:var(--brand); text-decoration:none}
-    .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
+    html, body { height: 100%; }
+    body { margin:0; background: var(--bg); color: var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial; line-height: 1.6; display:flex; flex-direction:column; }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { width: min(var(--maxw), 94%); margin-inline: auto; }
+    .nav { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(180%) blur(8px); background: color-mix(in oklab, var(--bg) 82%, transparent); border-bottom: 1px solid var(--border); }
+    .nav-inner { display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
+    .brand a { color: var(--fg); font-weight:800; }
+    .nav-links { display:flex; gap:20px; }
+    .nav-links a { color: var(--fg); opacity: .9; }
+    .nav-links a.active { color: var(--brand); font-weight:600; }
+    .theme-btn { border:1px solid var(--border); background:var(--card); color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-size:14px; }
 
-    /* Nav */
-    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
-    .logo{font-weight:900}
-    .navlinks{display:flex; align-items:center; gap:14px}
-    .navlinks a{padding:8px 10px; border-radius:10px}
-    .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
-    .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
+    main { flex: 1; padding: 28px 0 40px; }
+    h1 { font-size: clamp(26px, 4.2vw, 40px); margin: 0 0 6px; }
+    .sub { color: var(--muted); margin: 0 0 18px; }
 
-    .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
-    .toolbar{display:grid; grid-template-columns:1.4fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
-    @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
-    input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
-    .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
-    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
-    .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
-    .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
-    .content{padding:14px}
-    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
-    .addr{font-weight:800; line-height:1.25}
-    .price{font-weight:900}
-    .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
-    .broker{font-size:12px; color:var(--muted)}
-    .actions{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding:12px 14px; border-top:1px solid var(--stroke)}
-    .pbr{display:flex; align-items:center; gap:8px}
-    .pbr img{width:24px; height:24px; object-fit:contain}
-    .chips{display:flex; gap:8px; flex-wrap:wrap}
-    .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
-    .back{font-size:12px; margin-top:18px; color:var(--muted)}
+    .controls {
+      display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+      background: var(--card); border:1px solid var(--border); border-radius: 12px; padding:12px;
+    }
+    .input, .select, .chip {
+      background: transparent; color: var(--fg); border:1px solid var(--border); border-radius: 10px; padding: 8px 10px;
+    }
+    .chip { cursor: pointer; }
+    .chip.active { border-color: var(--brand); box-shadow: 0 0 0 2px color-mix(in oklab, var(--brand) 35%, transparent); }
+    .grid {
+      margin-top: 16px;
+      display:grid; gap:16px;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+    .card {
+      background: var(--card); border:1px solid var(--border); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow);
+      display:flex; flex-direction:column;
+    }
+    .card img { width:100%; height:200px; object-fit: cover; display:block; }
+    .card-body { padding: 12px 14px 14px; display:flex; flex-direction:column; gap:6px; }
+    .price { font-weight: 800; color: var(--brand); }
+    .meta { color: var(--muted); font-size: 14px; }
+    .card-foot { display:flex; align-items:center; justify-content:space-between; margin-top: 8px; color: var(--muted); font-size: 13px; }
+
+    footer { border-top:1px solid var(--border); padding:18px 0; font-size:13px; color:var(--muted); }
+    .footer-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+    .badge { height:22px; opacity:.9; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- Nav -->
-    <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="logo">Findr™</div>
-      <div class="navlinks">
-        <a href="/">Home</a>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <div class="brand"><a href="index.html">Findr™</a></div>
+      <div class="nav-links" role="navigation" aria-label="Primary">
+        <a href="index.html">Home</a>
         <a href="listings.html" class="active">Listings</a>
         <a href="map.html">Map</a>
-        <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
       </div>
-    </nav>
-
-    <!-- Controls -->
-    <div class="panel">
-      <div class="toolbar" role="region" aria-label="Search and filters">
-        <input id="q" type="search" placeholder='Try: "quiet street near SkyTrain, 2 bed, south light"' aria-label="Search" />
-        <select id="beds" aria-label="Minimum bedrooms">
-          <option value="">Beds (any)</option><option value="1">1+ bed</option><option value="2">2+ bed</option><option value="3">3+ bed</option><option value="4">4+ bed</option>
-        </select>
-        <select id="baths" aria-label="Minimum bathrooms">
-          <option value="">Baths (any)</option><option value="1">1+ bath</option><option value="2">2+ bath</option><option value="3">3+ bath</option>
-        </select>
-        <select id="minp" aria-label="Min price">
-          <option value="">Min price</option><option value="400000">$400k</option><option value="600000">$600k</option><option value="800000">$800k</option><option value="1000000">$1M</option>
-        </select>
-        <select id="maxp" aria-label="Max price">
-          <option value="">Max price</option><option value="700000">$700k</option><option value="900000">$900k</option><option value="1200000">$1.2M</option><option value="1500000">$1.5M</option>
-        </select>
-        <select id="sort" aria-label="Sort">
-          <option value="relevance">Sort: Relevance</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option><option value="beds-desc">Beds ↓</option><option value="baths-desc">Baths ↓</option>
-        </select>
-      </div>
-      <div class="row" style="margin:12px 0 10px">
-        <div class="muted" id="count">Loading…</div>
-        <div class="chips" id="chips" aria-live="polite"></div>
-      </div>
+      <button id="themeToggle" class="theme-btn" aria-label="Toggle theme">🌙</button>
     </div>
+  </nav>
+
+  <main class="container">
+    <header>
+      <h1>Browse Listings</h1>
+      <p class="sub">Mock data for UI/UX preview. Filters and sorting are simulated.</p>
+    </header>
+
+    <section class="controls" aria-label="Filters and sorting">
+      <input id="q" class="input" type="search" placeholder="Search by city, address, MLS®…" />
+      <select id="type" class="select">
+        <option value="">Any Type</option>
+        <option>House</option>
+        <option>Condo</option>
+        <option>Townhouse</option>
+      </select>
+      <select id="sort" class="select">
+        <option value="price-desc">Price: High → Low</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="beds-desc">Beds: Most → Fewest</option>
+      </select>
+      <button class="chip" data-chip="hasPhotos">📷 Photos</button>
+      <button class="chip" data-chip="new">🆕 New</button>
+      <button class="chip" data-chip="openHouse">🗓️ Open House</button>
+    </section>
 
     <section id="grid" class="grid" aria-live="polite"></section>
-    <p class="back"><a href="/">← Back to Home</a></p>
-  </div>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <img class="badge" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
+      <span>Brokerage (for demo): RE/MAX All Points Realty • © <span id="year"></span> Findr™</span>
+    </div>
+    <div class="container">
+      REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA.
+      MLS®, Multiple Listing Service®, and the associated logos are owned by CREA. Demo content only.
+    </div>
+  </footer>
 
   <script>
-    // Theme toggle
-    (function(){
-      const root = document.documentElement;
-      const saved = localStorage.getItem('theme');
-      if (saved) root.setAttribute('data-theme', saved);
-      const btn = document.getElementById('theme-toggle');
-      const isDark = () => root.getAttribute('data-theme') !== 'light';
-      const render = () => { btn.textContent = isDark() ? '🌙' : '☀️'; };
-      btn.addEventListener('click', () => {
-        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
-        localStorage.setItem('theme', root.getAttribute('data-theme'));
-        render();
-      });
+    // Theme
+    const root = document.documentElement;
+    const btn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme') || 'dark';
+    root.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+    btn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      btn.textContent = next === 'dark' ? '🌙' : '☀️';
+    });
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Data + UI
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('q');
+    const type = document.getElementById('type');
+    const sort = document.getElementById('sort');
+    const chips = [...document.querySelectorAll('.chip')];
+
+    let data = [];
+    let flags = { hasPhotos:false, new:false, openHouse:false };
+
+    chips.forEach(ch => ch.addEventListener('click', () => {
+      const k = ch.dataset.chip;
+      flags[k] = !flags[k];
+      ch.classList.toggle('active', flags[k]);
       render();
-    })();
+    }));
 
-    // Listings logic (unchanged behavior, polished UI)
-    const $ = (id) => document.getElementById(id);
-    const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
-    let DATA=[], VIEW=[];
+    [q, type, sort].forEach(el => el.addEventListener('input', render));
 
-    function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
+    fetch('data/listings.json')
+      .then(r => r.json())
+      .then(json => { data = json; render(); })
+      .catch(() => { grid.innerHTML = '<p class="sub">Could not load listings.json</p>'; });
 
-    function renderChips(){
-      const chips = $('chips'); const active=[];
-      const q=$('q').value.trim(); if(q) active.push({label:`Search: “${q}”`, id:'q'});
-      const beds=$('beds').value; if(beds) active.push({label:`${beds}+ bed`, id:'beds'});
-      const baths=$('baths').value; if(baths) active.push({label:`${baths}+ bath`, id:'baths'});
-      const minp=$('minp').value, maxp=$('maxp').value;
-      if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
-      const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
-      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" title="Clear">${c.label} ✕</button>`).join('');
-      chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
-        const id=b.getAttribute('data-id');
-        if(id==='q') $('q').value=''; if(id==='beds') $('beds').value=''; if(id==='baths') $('baths').value='';
-        if(id==='price'){ $('minp').value=''; $('maxp').value=''; } if(id==='sort') $('sort').value='relevance'; apply();
-      }));
+    function render() {
+      const query = q.value.trim().toLowerCase();
+      let items = data.filter(it => {
+        const matchesQuery = !query || (it.city + ' ' + it.address + ' ' + (it.mls||'') ).toLowerCase().includes(query);
+        const matchesType = !type.value || it.type === type.value;
+        const matchesFlags = (!flags.hasPhotos || it.photos?.length) &&
+                             (!flags.new || it.tags?.includes('new')) &&
+                             (!flags.openHouse || it.tags?.includes('openHouse'));
+        return matchesQuery && matchesType && matchesFlags;
+      });
+
+      const [key, dir] = sort.value.split('-');
+      items.sort((a,b) => {
+        const vA = key === 'price' ? a.price : key === 'beds' ? a.beds : 0;
+        const vB = key === 'price' ? b.price : key === 'beds' ? b.beds : 0;
+        return dir === 'asc' ? vA - vB : vB - vA;
+      });
+
+      grid.innerHTML = items.map(card).join('');
     }
 
-    function renderGrid(){
-      const grid=$('grid'); grid.innerHTML='';
-      VIEW.forEach(it=>{
-        const el=document.createElement('article'); el.className='card';
-        el.innerHTML=`
-          <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
-          <div class="content">
-            <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
-            <div class="meta"><span>${it.city}</span><span>•</span><span>${it.beds} bd</span><span>•</span><span>${it.baths} ba</span></div>
-            <div class="broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
+    function card(it) {
+      const price = new Intl.NumberFormat('en-CA', {style:'currency', currency:'CAD', maximumFractionDigits:0}).format(it.price);
+      const photo = (it.photos && it.photos[0]) || 'https://images.unsplash.com/photo-1501183638710-841dd1904471?q=80&w=1200&auto=format&fit=crop';
+      return `
+      <article class="card" aria-label="${it.address}, ${it.city}">
+        <img src="${photo}" alt="${it.address} photo">
+        <div class="card-body">
+          <div class="price">${price}</div>
+          <div>${it.address}</div>
+          <div class="meta">${it.city} • ${it.type} • ${it.beds} bd • ${it.baths} ba • ${it.sqft.toLocaleString()} sqft</div>
+          <div class="card-foot">
+            <span>${it.brokerage || 'Demo Brokerage'}</span>
+            <span>MLS® ${it.mls || '—'}</span>
           </div>
-          <div class="actions">
-            <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
-              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" /><span style="color:var(--muted)">View on REALTOR.ca</span>
-            </a>
-            <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
-          </div>`;
-        grid.appendChild(el);
-      });
+        </div>
+      </article>`;
     }
-
-    function apply(){
-      const q=$('q').value.trim().toLowerCase();
-      const minBeds=+($('beds').value||0), minBaths=+($('baths').value||0);
-      const minPrice=+($('minp').value||0), maxPrice=+($('maxp').value||Number.MAX_SAFE_INTEGER);
-      const sort=$('sort').value;
-      VIEW = DATA.filter(it=>{
-        if(minBeds && it.beds<minBeds) return false;
-        if(minBaths && it.baths<minBaths) return false;
-        if(it.price<minPrice || it.price>maxPrice) return false;
-        if(q){ const blob=`${it.address} ${it.city} ${it.beds}bd ${it.baths}ba ${it.brokerage}`.toLowerCase(); if(!blob.includes(q)) return false; }
-        return true;
-      });
-      switch(sort){
-        case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
-        case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
-        case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
-        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
-      }
-      renderCount(); renderChips(); renderGrid();
-    }
-
-    function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
-
-    async function boot(){
-      try{
-        const res=await fetch('data/listings.json',{cache:'no-store'});
-        DATA=await res.json(); VIEW=DATA.slice(); apply();
-      }catch(e){ $('grid').innerHTML='<p style="color:var(--muted)">Could not load mock data. Ensure <code>web/data/listings.json</code> exists.</p>'; console.error(e); }
-      $('q').addEventListener('input',debounce(apply,200));
-      ['beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
-    }
-    boot();
   </script>
 </body>
 </html>
