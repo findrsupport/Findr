@@ -1,41 +1,41 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Coming Soon</title>
-  <meta name="description" content="Findr™ is an AI-first real estate search. Private alpha coming soon.">
-  <link rel="icon" type="image/png" href="assets/favicon.png">
   <style>
     :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
-    * { box-sizing: border-box }
-    body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg); }
-    a { color: var(--accent); text-decoration: none }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
 
-    /* === Top bar (canonical) === */
+    /* (kept) original page styles */
+    .hero{padding:72px 0 32px}
+    .hero h1{font-size:clamp(32px, 6vw, 56px); margin:0 0 12px; line-height:1.05}
+    .hero p{color:var(--muted); font-size:18px; max-width:60ch}
+    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px}
+    .grid{display:grid; gap:16px}
+    @media (min-width: 800px){ .grid{grid-template-columns:1.2fr 1fr} }
+    h2{font-size:18px; margin:0 0 8px}
+    .small{font-size:12px; color:var(--muted)}
+    .divider{height:1px; background:#223148; margin:16px 0}
+
+    /* Top bar (canonical from Terms) */
     .topbar{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:rgba(11,15,23,.86); border-bottom:1px solid rgba(255,255,255,0.06)}
     .topbar-inner{max-width:960px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:800; letter-spacing:.3px}
     .badge{font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,0.08); padding:4px 8px; border-radius:999px}
     .nav{display:flex; align-items:center; gap:14px}
-    .nav a{font-weight:600; color:var(--fg); opacity:.9}
+    .nav a{font-weight:600; color:var(--fg); opacity:.9; text-decoration:none}
     .nav a:hover{opacity:1}
     .toggle{border:1px solid rgba(255,255,255,0.12); background:transparent; color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-weight:600}
-
-    /* === Page content styles (unchanged spirit) === */
-    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
-    .hero{padding:72px 0 32px}
-    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:24px}
-    h1{font-size:clamp(28px, 5vw, 40px); margin:0 0 12px}
-    p{color:var(--muted); margin:0 0 12px}
-    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:#6aa1ff; color:#fff; font-weight:600}
-    .small{font-size:12px; color:var(--muted)}
-    .divider{height:1px; background:#223148; margin:16px 0}
+    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:var(--accent); color:#fff; font-weight:700; text-decoration:none}
   </style>
 </head>
 <body>
-  <!-- Canonical top bar -->
+  <!-- sticky top bar (matches /terms) -->
   <div class="topbar">
     <div class="topbar-inner">
       <div class="brand">
@@ -60,7 +60,7 @@
 
     <!-- Compliance block -->
     <section class="card">
-      <h2 style="margin:0 0 8px; font-size:20px;">Compliance & Trademarks</h2>
+      <h2 style="margin:0 0 8px;">Compliance & Trademarks</h2>
       <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are controlled by the Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA and must abide by CREA’s By-Laws, Rules, and the REALTOR® Code.</p>
       <p class="small">The trademarks MLS®, Multiple Listing Service® and the associated logos identify professional services rendered by real estate professionals who are members of CREA.</p>
       <p class="small">The trademark DDF® is owned by The Canadian Real Estate Association (CREA) and identifies CREA’s Data Distribution Facility (DDF®).</p>
@@ -68,19 +68,13 @@
       <p class="small">© 2025 Findr™. All rights reserved.</p>
     </section>
 
-    <!-- Waitlist (honeypot + thank-you redirect intact) -->
+    <!-- Waitlist (honeypot + redirect) -->
     <section class="card" style="margin-top:32px;">
       <h2>Join the Waitlist</h2>
       <p class="small">Be the first to try Findr™ when our private beta launches.</p>
-      <form name="waitlist"
-            method="POST"
-            data-netlify="true"
-            data-netlify-honeypot="bot-field"
-            action="/thank-you.html">
+      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="/thank-you.html">
         <input type="hidden" name="form-name" value="waitlist" />
-        <p style="display:none">
-          <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
-        </p>
+        <p style="display:none"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
         <div style="display:flex; gap:10px; flex-wrap:wrap">
           <input type="email" name="email" required placeholder="you@example.com"
                  style="flex:1; min-width:220px; padding:10px 12px; border-radius:10px; border:1px solid #223148; background:rgba(255,255,255,0.04); color:var(--fg)">
@@ -90,6 +84,17 @@
       <div style="margin-top:16px;">
         <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" style="height:22px; opacity:.9">
       </div>
+    </section>
+
+    <!-- Links section preserved -->
+    <section class="card" style="margin-top:16px;">
+      <p><strong>Note:</strong> This page is a placeholder. Listings will appear once DDF® data access is fully configured and compliance is confirmed.</p>
+      <p>
+        <a href="terms.html">Terms of Use</a> · 
+        <a href="privacy.html">Privacy Policy</a> · 
+        <a href="listings.html">Preview Listings</a> · 
+        <a href="map.html">Map Preview</a>
+      </p>
     </section>
   </div>
 
