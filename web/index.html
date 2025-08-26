@@ -8,13 +8,16 @@
   <style>
     /* ===== Brandable design tokens ===== */
     :root {
-      --brand: #fac241;
-      --bg: #1f262d;
-      --fg: #f1f1f1;
-      --muted: #9aa4b2;
-      --card: #2a323b;
-      --link: #fac241;
-      --border: #3a4149;
+      --brand: #fac241;        /* accent */
+      --bg: #1f262d;           /* gunmetal background */
+      --fg: #f1f1f1;           /* main text */
+      --muted: #9aa4b2;        /* secondary text */
+      --card: #2a323b;         /* elevated card background */
+      --link: #fac241;         /* links in accent */
+      --border: #3a4149;       /* borders */
+      --maxw: 1100px;          /* layout width */
+      --radius: 16px;
+      --shadow: 0 10px 30px rgba(0,0,0,.25);
     }
     [data-theme="light"] {
       --bg: #ffffff;
@@ -23,75 +26,126 @@
       --card: #f8f9fa;
       --link: #fac241;
       --border: #e0e0e0;
+      --shadow: 0 10px 30px rgba(0,0,0,.08);
     }
+
+    /* ===== Base ===== */
+    html, body { height: 100%; }
     body {
       margin: 0; background: var(--bg); color: var(--fg);
-      font-family: system-ui, sans-serif; display: flex; flex-direction: column; min-height: 100vh;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial;
+      line-height: 1.6; display: flex; flex-direction: column;
     }
     a { color: var(--link); text-decoration: none; }
     a:hover { text-decoration: underline; }
-    .container { width: min(1000px, 92%); margin-inline: auto; }
-    /* Nav */
-    .nav { border-bottom: 1px solid var(--border); background: var(--card); }
-    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+    .container { width: min(var(--maxw), 92%); margin-inline: auto; }
+
+    /* ===== Nav (sticky + translucent, like the earlier version) ===== */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      backdrop-filter: saturate(180%) blur(8px);
+      background: color-mix(in oklab, var(--bg) 80%, transparent);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 0;
+    }
+    .brand a { color: var(--fg); font-weight: 800; letter-spacing: 0.2px; }
     .nav-links { display: flex; gap: 20px; }
-    .theme-btn { border: 1px solid var(--border); background: var(--card); color: var(--fg);
-      padding: 6px 10px; border-radius: 8px; cursor: pointer; }
-    /* Hero */
-    main { flex: 1; display: flex; align-items: center; justify-content: center; }
-    .hero { text-align: center; padding: 60px 20px; }
-    h1 { font-size: clamp(28px, 4vw, 42px); margin-bottom: 10px; }
-    p { color: var(--muted); }
-    /* Footer */
-    footer { border-top: 1px solid var(--border); padding: 16px 0; font-size: 13px; color: var(--muted); }
+    .nav-links a { color: var(--fg); opacity: 0.9; }
+    .theme-btn {
+      border: 1px solid var(--border); background: var(--card); color: var(--fg);
+      padding: 6px 10px; border-radius: 10px; cursor: pointer; font-size: 14px;
+    }
+
+    /* ===== Hero (restores previous roomy, centered feel) ===== */
+    main { flex: 1; display: grid; place-items: center; }
+    .hero {
+      width: min(var(--maxw), 92%);
+      text-align: center;
+      padding: clamp(40px, 8vw, 100px) 0;
+    }
+    h1 {
+      font-size: clamp(30px, 5.6vw, 56px);
+      line-height: 1.1; margin: 0 0 12px;
+      letter-spacing: 0.2px;
+    }
+    .sub { color: var(--muted); margin: 0 auto; max-width: 60ch; }
+    .pill {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--card); border: 1px solid var(--border); border-radius: 999px;
+      padding: 8px 14px; margin-top: 18px; box-shadow: var(--shadow);
+    }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); display: inline-block; }
+
+    /* ===== Footer ===== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 18px 0; font-size: 13px; color: var(--muted);
+    }
     .footer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-    .badge { height: 22px; }
+    .badge { height: 22px; opacity: 0.9; }
+    .foot-legal { margin-top: 8px; }
+
+    /* ===== Prefers-reduced-motion ===== */
+    @media (prefers-reduced-motion: no-preference) {
+      .hero { animation: fadeUp .6s ease both; }
+      @keyframes fadeUp { from {opacity: 0; transform: translateY(6px);} to {opacity: 1; transform: translateY(0);} }
+    }
   </style>
 </head>
 <body>
+  <!-- Nav -->
   <nav class="nav">
     <div class="container nav-inner">
-      <a href="index.html"><strong>Findr™</strong></a>
-      <div class="nav-links">
+      <div class="brand"><a href="index.html" aria-label="Findr Home">Findr™</a></div>
+      <div class="nav-links" role="navigation" aria-label="Primary">
         <a href="index.html">Home</a>
         <a href="listings.html">Listings</a>
         <a href="map.html">Map</a>
       </div>
-      <button id="themeToggle" class="theme-btn">🌙</button>
+      <button class="theme-btn" id="themeToggle" aria-label="Toggle theme">🌙</button>
     </div>
   </nav>
 
+  <!-- Hero -->
   <main>
-    <div class="hero">
+    <section class="hero">
       <h1>Findr™ — Coming Soon</h1>
-      <p>AI-first real estate search. Private alpha launching soon.</p>
-    </div>
+      <p class="sub">AI-first real estate search. Private alpha launching soon.</p>
+      <span class="pill"><span class="dot" aria-hidden="true"></span> Demo environment • Compliance-first</span>
+    </section>
   </main>
 
+  <!-- Footer with REALTOR.ca badge + legal -->
   <footer>
     <div class="container footer-row">
       <img class="badge" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
       <span>Brokerage (for demo): RE/MAX All Points Realty • © <span id="year"></span> Findr™</span>
     </div>
-    <div class="container">
+    <div class="container foot-legal">
       REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA.
       MLS®, Multiple Listing Service®, and the associated logos are owned by CREA. Demo content only.
     </div>
   </footer>
 
   <script>
+    // Theme toggle persists across pages
     const root = document.documentElement;
-    const btn = document.getElementById("themeToggle");
-    const saved = localStorage.getItem("theme") || "dark";
-    root.setAttribute("data-theme", saved);
-    btn.textContent = saved === "dark" ? "🌙" : "☀️";
-    btn.addEventListener("click", () => {
-      const cur = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
-      root.setAttribute("data-theme", cur);
-      localStorage.setItem("theme", cur);
-      btn.textContent = cur === "dark" ? "🌙" : "☀️";
+    const btn = document.getElementById('themeToggle');
+    const saved = localStorage.getItem('theme') || 'dark';
+    root.setAttribute('data-theme', saved);
+    btn.textContent = saved === 'dark' ? '🌙' : '☀️';
+    btn.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      btn.textContent = next === 'dark' ? '🌙' : '☀️';
     });
-    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // Footer year
+    document.getElementById('year').textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
