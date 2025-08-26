@@ -1,18 +1,29 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Thank You</title>
   <style>
-    body{margin:0; font-family:Arial, sans-serif; padding:20px; background:#0b0f17; color:#e8eef7; text-align:center;}
-    a{color:#5ea1ff;}
-    h1{font-size:26px;}
+    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    .wrap{max-width:720px; margin:0 auto; padding:64px 20px}
+    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:24px}
+    h1{font-size:clamp(28px, 5vw, 40px); margin:0 0 12px}
+    p{color:var(--muted); margin:0 0 12px}
+    a{color:var(--accent); text-decoration:none}
+    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:#6aa1ff; color:#fff; font-weight:600}
   </style>
 </head>
 <body>
-  <h1>Thank You!</h1>
-  <p>You’ve been added to the Findr™ waitlist. We’ll reach out when the beta is ready.</p>
-  <p><a href="/">← Back Home</a></p>
+  <div class="wrap">
+    <div class="card">
+      <h1>Thanks for joining the Findr™ waitlist!</h1>
+      <p>We’ll email you when private beta invites go out. In the meantime, keep an eye on this page for updates.</p>
+      <a class="btn" href="/">Return to Home</a>
+    </div>
+    <p style="margin-top:16px; font-size:12px; color:var(--muted);">© 2025 Findr™. All rights reserved.</p>
+  </div>
 </body>
 </html>

@@ -1,18 +1,74 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Privacy Policy</title>
   <style>
-    body{margin:0; font-family:Arial, sans-serif; padding:20px; background:#0b0f17; color:#e8eef7;}
-    a{color:#5ea1ff;}
-    h1{font-size:24px;}
+    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
+    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px; margin-top:20px}
+    h1{font-size:clamp(28px,4.5vw,42px); margin:0 0 8px}
+    h2{font-size:18px; margin:0 0 8px}
+    p, li{color:var(--muted)}
+    a{color:var(--accent); text-decoration:none}
+    .muted{color:var(--muted); font-size:12px}
   </style>
 </head>
 <body>
-  <h1>Privacy Policy</h1>
-  <p>Findr™ respects your privacy. Any data collected (e.g., waitlist email sign-ups) will only be used for beta invitations and updates. No personal information will be sold or shared.</p>
-  <p><a href="/">← Back Home</a></p>
+  <div class="wrap">
+    <h1>Privacy Policy</h1>
+    <p class="muted">Last updated: August 2025</p>
+
+    <div class="card">
+      <h2>1. Overview</h2>
+      <p>Findr™ collects minimal personal information necessary to operate the site and deliver early-access communications.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. What we collect</h2>
+      <ul>
+        <li><strong>Email address</strong> (when you join the waitlist).</li>
+        <li><strong>Basic usage data</strong> (aggregated analytics, if enabled).</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>3. How we use your info</h2>
+      <ul>
+        <li>To notify you about Findr™ updates and beta access.</li>
+        <li>To improve the site’s performance and reliability.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>4. Sharing</h2>
+      <p>We do not sell your personal information. We may use third-party services (e.g., hosting, analytics) that process data on our behalf under contract.</p>
+    </div>
+
+    <div class="card">
+      <h2>5. Data retention</h2>
+      <p>We keep waitlist emails until you unsubscribe or request deletion.</p>
+    </div>
+
+    <div class="card">
+      <h2>6. Your choices</h2>
+      <ul>
+        <li>You may request deletion of your email from the waitlist at any time.</li>
+        <li>You may opt out of emails via unsubscribe links if used.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>7. Contact</h2>
+      <p>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty<br>
+         Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a> · Phone: <a href="tel:+17782149655">778 214 9655</a></p>
+    </div>
+
+    <p class="muted">© 2025 Findr™. All rights reserved.</p>
+    <p><a href="/">← Back to Home</a></p>
+  </div>
 </body>
 </html>

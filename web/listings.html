@@ -1,80 +1,243 @@
-[
-  {
-    "id": "L-1001",
-    "address": "123 Quayside Dr #1204",
-    "city": "New Westminster",
-    "price": 749900,
-    "beds": 2,
-    "baths": 2,
-    "lat": 49.201,
-    "lon": -122.912,
-    "brokerage": "Example Realty",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae"
-  },
-  {
-    "id": "L-1002",
-    "address": "88 Smithe St #2107",
-    "city": "Vancouver",
-    "price": 899000,
-    "beds": 2,
-    "baths": 2,
-    "lat": 49.274,
-    "lon": -123.121,
-    "brokerage": "Downtown Realty",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1493809842364-78817add7ffb"
-  },
-  {
-    "id": "L-1003",
-    "address": "39 Sixth St #506",
-    "city": "New Westminster",
-    "price": 599000,
-    "beds": 1,
-    "baths": 1,
-    "lat": 49.204,
-    "lon": -122.908,
-    "brokerage": "Quay Realty",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1523217582562-09d0def993a6"
-  },
-  {
-    "id": "L-1004",
-    "address": "3050 Mountain Hwy",
-    "city": "North Vancouver",
-    "price": 1399000,
-    "beds": 3,
-    "baths": 3,
-    "lat": 49.337,
-    "lon": -123.034,
-    "brokerage": "North Shore Realty",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1599423300746-b62533397364"
-  },
-  {
-    "id": "L-1005",
-    "address": "5570 Ross Rd",
-    "city": "Abbotsford",
-    "price": 1195000,
-    "beds": 4,
-    "baths": 3,
-    "lat": 49.042,
-    "lon": -122.309,
-    "brokerage": "Valley Homes",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
-  },
-  {
-    "id": "L-1006",
-    "address": "2468 W 4th Ave",
-    "city": "Vancouver",
-    "price": 995000,
-    "beds": 2,
-    "baths": 2,
-    "lat": 49.268,
-    "lon": -123.167,
-    "brokerage": "Kits Point Realty",
-    "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1570129477492-45c003edd2be"
-  }
-]
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Findr™ — Listings (Preview)</title>
+  <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <style>
+    :root {
+      --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; --card:#223148; --ink:#101826;
+      --chip:#1a2335; --chip-border:#2a3c5a;
+    }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    a{color:var(--accent); text-decoration:none}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
+    header{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:16px}
+    .logo{font-weight:800}
+    .sub{color:var(--muted); font-size:12px}
+    .badge{display:inline-block; padding:6px 10px; border:1px solid #23324a; border-radius:999px; color:var(--muted); font-size:12px}
+    .panel{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; padding:14px}
+    .toolbar{display:grid; grid-template-columns:1.4fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
+    @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
+    input[type="search"], select{
+      width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--card);
+      background:#0b0f17; color:var(--fg); font:inherit
+    }
+    .btn{
+      padding:10px 12px; border-radius:10px; border:1px solid var(--card);
+      background:#0b0f17; color:var(--fg); cursor:pointer; font:inherit
+    }
+    .btn-primary{ background:#6aa1ff; color:#fff; border:none; font-weight:600 }
+    .row{display:flex; justify-content:space-between; align-items:center; gap:12px; margin:12px 0 10px}
+    .muted{color:var(--muted)}
+    .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr))}
+    .card{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
+    .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
+    .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
+    .content{padding:14px}
+    .addr{font-weight:800; line-height:1.25}
+    .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
+    .broker{font-size:12px; color:var(--muted)}
+    .actions{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding:12px 14px; border-top:1px solid var(--card)}
+    .pbr{display:flex; align-items:center; gap:8px}
+    .pbr img{width:24px; height:24px; object-fit:contain}
+    .price{font-weight:900}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
+    .back{font-size:12px; margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div>
+        <div class="logo">Findr™</div>
+        <div class="sub">Preview listings — mock data (for layout & UX)</div>
+      </div>
+      <div class="badge">AI-first real estate search</div>
+    </header>
+
+    <!-- Controls -->
+    <div class="panel">
+      <div class="toolbar" role="region" aria-label="Search and filters">
+        <input id="q" type="search" placeholder='Try: "quiet street near SkyTrain, 2 bed, south light"' aria-label="Search" />
+        <select id="beds" aria-label="Minimum bedrooms">
+          <option value="">Beds (any)</option>
+          <option value="1">1+ bed</option>
+          <option value="2">2+ bed</option>
+          <option value="3">3+ bed</option>
+          <option value="4">4+ bed</option>
+        </select>
+        <select id="baths" aria-label="Minimum bathrooms">
+          <option value="">Baths (any)</option>
+          <option value="1">1+ bath</option>
+          <option value="2">2+ bath</option>
+          <option value="3">3+ bath</option>
+        </select>
+        <select id="minp" aria-label="Min price">
+          <option value="">Min price</option>
+          <option value="400000">$400k</option>
+          <option value="600000">$600k</option>
+          <option value="800000">$800k</option>
+          <option value="1000000">$1M</option>
+        </select>
+        <select id="maxp" aria-label="Max price">
+          <option value="">Max price</option>
+          <option value="700000">$700k</option>
+          <option value="900000">$900k</option>
+          <option value="1200000">$1.2M</option>
+          <option value="1500000">$1.5M</option>
+        </select>
+        <select id="sort" aria-label="Sort">
+          <option value="relevance">Sort: Relevance</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-desc">Price ↓</option>
+          <option value="beds-desc">Beds ↓</option>
+          <option value="baths-desc">Baths ↓</option>
+        </select>
+      </div>
+
+      <div class="row">
+        <div class="muted" id="count">Loading…</div>
+        <div class="chips" id="chips" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <section id="grid" class="grid" aria-live="polite" style="margin-top:14px"></section>
+
+    <p class="back"><a href="/">← Back to Home</a></p>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
+
+    let DATA = [];
+    let VIEW = [];
+
+    function renderCount() {
+      $('count').textContent = `${VIEW.length} result${VIEW.length === 1 ? '' : 's'}`;
+    }
+
+    function renderChips() {
+      const chips = $('chips');
+      const active = [];
+
+      const q = $('q').value.trim();
+      if (q) active.push({label:`Search: “${q}”`, id:'q'});
+
+      const beds = $('beds').value;
+      if (beds) active.push({label:`${beds}+ bed`, id:'beds'});
+
+      const baths = $('baths').value;
+      if (baths) active.push({label:`${baths}+ bath`, id:'baths'});
+
+      const minp = $('minp').value, maxp = $('maxp').value;
+      if (minp || maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
+
+      const sort = $('sort').value;
+      if (sort && sort !== 'relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
+
+      chips.innerHTML = active.map(c => `<button class="chip" data-id="${c.id}" title="Clear">${c.label} ✕</button>`).join('');
+      chips.querySelectorAll('.chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const id = btn.getAttribute('data-id');
+          if (id === 'q') $('q').value = '';
+          if (id === 'beds') $('beds').value = '';
+          if (id === 'baths') $('baths').value = '';
+          if (id === 'price') { $('minp').value=''; $('maxp').value=''; }
+          if (id === 'sort') $('sort').value = 'relevance';
+          apply();
+        });
+      });
+    }
+
+    function renderGrid() {
+      const grid = $('grid');
+      grid.innerHTML = '';
+      VIEW.forEach(item => {
+        const el = document.createElement('article');
+        el.className = 'card';
+        el.innerHTML = `
+          <img class="img" src="${item.photo}" alt="Photo of ${item.address}, ${item.city}">
+          <div class="content">
+            <div class="row">
+              <div class="addr">${item.address}</div>
+              <div class="price">${fmtPrice(item.price)}</div>
+            </div>
+            <div class="meta">
+              <span>${item.city}</span><span>•</span>
+              <span>${item.beds} bd</span><span>•</span>
+              <span>${item.baths} ba</span>
+            </div>
+            <div class="broker">Listing Brokerage: <strong>${item.brokerage}</strong></div>
+          </div>
+          <div class="actions">
+            <a class="pbr" href="${item.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" />
+              <span class="muted">View on REALTOR.ca</span>
+            </a>
+            <a href="${item.realtorca_url}" target="_blank" rel="noopener">Details →</a>
+          </div>
+        `;
+        grid.appendChild(el);
+      });
+    }
+
+    function apply() {
+      const q = $('q').value.trim().toLowerCase();
+      const minBeds = +($('beds').value || 0);
+      const minBaths = +($('baths').value || 0);
+      const minPrice = +($('minp').value || 0);
+      const maxPrice = +($('maxp').value || Number.MAX_SAFE_INTEGER);
+      const sort = $('sort').value;
+
+      VIEW = DATA.filter(it => {
+        if (minBeds && it.beds < minBeds) return false;
+        if (minBaths && it.baths < minBaths) return false;
+        if (it.price < minPrice || it.price > maxPrice) return false;
+        if (q) {
+          const blob = `${it.address} ${it.city} ${it.beds}bd ${it.baths}ba ${it.brokerage}`.toLowerCase();
+          if (!blob.includes(q)) return false;
+        }
+        return true;
+      });
+
+      switch (sort) {
+        case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
+        case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
+        case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
+        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
+        default: /* relevance = leave as-is */ break;
+      }
+
+      renderCount();
+      renderChips();
+      renderGrid();
+    }
+
+    function debounce(fn, ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args), ms); } }
+
+    async function boot() {
+      try {
+        const res = await fetch('data/listings.json', {cache:'no-store'});
+        DATA = await res.json();
+        VIEW = DATA.slice();
+        apply();
+      } catch (e) {
+        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists.</p>';
+        console.error(e);
+      }
+
+      $('q').addEventListener('input', debounce(apply, 200));
+      ['beds','baths','minp','maxp','sort'].forEach(id => $(id).addEventListener('change', apply));
+    }
+
+    boot();
+  </script>
+</body>
+</html>

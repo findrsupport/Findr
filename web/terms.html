@@ -1,18 +1,62 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Terms of Use</title>
+  <title>Findrr — Terms of Use</title>
   <style>
-    body{margin:0; font-family:Arial, sans-serif; padding:20px; background:#0b0f17; color:#e8eef7;}
-    a{color:#5ea1ff;}
-    h1{font-size:24px;}
+    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
+    h1{font-size:clamp(28px,4.5vw,42px); margin:0 0 8px}
+    .muted{color:var(--muted)}
+    a{color:var(--accent); text-decoration:none}
+    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px; margin-top:20px}
+    h2{font-size:18px; margin:0 0 8px}
+    ul{margin:8px 0 0 18px}
+    .footer{margin-top:32px; font-size:12px; color:var(--muted)}
   </style>
 </head>
 <body>
-  <h1>Terms of Use</h1>
-  <p>These Terms govern the use of the Findr™ demo site. Listing content, when present, will be sourced from CREA’s DDF® and is subject to all applicable trademark and compliance requirements.</p>
-  <p><a href="/">← Back Home</a></p>
+  <div class="wrap">
+    <h1>Terms of Use</h1>
+    <p class="muted">Last updated: Aug 22, 2025</p>
+
+    <div class="card">
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing or using this website, you agree to these Terms of Use and our Privacy Policy. If you do not agree, do not use the site.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Listing Data & Attribution</h2>
+      <p>Listing data is provided under license via CREA’s Data Distribution Facility (DDF®) and/or participating boards/MLS® systems. Display of this data is subject to applicable rules, including attribution to the listing brokerage and the display of the Powered by REALTOR.ca badge linking to the corresponding listing on REALTOR.ca.</p>
+    </div>
+
+    <div class="card">
+      <h2>3. Accuracy & Availability</h2>
+      <p>Information is deemed reliable but is not guaranteed and should be independently verified. Content and features may change or be unavailable at any time.</p>
+    </div>
+
+    <div class="card">
+      <h2>4. Permitted Use</h2>
+      <p>You may view listings for personal, non‑commercial purposes. Any scraping, bulk downloading, or redistribution of listing data or media is prohibited.</p>
+    </div>
+
+    <div class="card">
+      <h2>5. Intellectual Property & Trademarks</h2>
+      <p>© 2025 Findrr. All rights reserved. REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). MLS®, Multiple Listing Service® and the associated logos are owned by CREA. DDF® is a trademark of CREA.</p>
+    </div>
+
+    <div class="card">
+      <h2>6. Contact</h2>
+      <p>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty<br/>
+         Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty">marcusr@lariviererealty</a></p>
+    </div>
+
+    <div class="footer">
+      <p><a href="/">← Back to Home</a></p>
+    </div>
+  </div>
 </body>
 </html>
