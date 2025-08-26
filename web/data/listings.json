@@ -6,9 +6,11 @@
     "price": 749900,
     "beds": 2,
     "baths": 2,
+    "lat": 49.201,
+    "lon": -122.912,
     "brokerage": "Example Realty",
     "realtorca_url": "https://www.realtor.ca/",
-    "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae" 
+    "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae"
   },
   {
     "id": "L-1002",
@@ -17,6 +19,8 @@
     "price": 899000,
     "beds": 2,
     "baths": 2,
+    "lat": 49.274,
+    "lon": -123.121,
     "brokerage": "Downtown Realty",
     "realtorca_url": "https://www.realtor.ca/",
     "photo": "https://images.unsplash.com/photo-1493809842364-78817add7ffb"
@@ -28,6 +32,8 @@
     "price": 599000,
     "beds": 1,
     "baths": 1,
+    "lat": 49.204,
+    "lon": -122.908,
     "brokerage": "Quay Realty",
     "realtorca_url": "https://www.realtor.ca/",
     "photo": "https://images.unsplash.com/photo-1523217582562-09d0def993a6"
@@ -39,6 +45,8 @@
     "price": 1399000,
     "beds": 3,
     "baths": 3,
+    "lat": 49.337,
+    "lon": -123.034,
     "brokerage": "North Shore Realty",
     "realtorca_url": "https://www.realtor.ca/",
     "photo": "https://images.unsplash.com/photo-1599423300746-b62533397364"
@@ -50,6 +58,8 @@
     "price": 1195000,
     "beds": 4,
     "baths": 3,
+    "lat": 49.042,
+    "lon": -122.309,
     "brokerage": "Valley Homes",
     "realtorca_url": "https://www.realtor.ca/",
     "photo": "https://images.unsplash.com/photo-1568605114967-8130f3a36994"
@@ -61,6 +71,8 @@
     "price": 995000,
     "beds": 2,
     "baths": 2,
+    "lat": 49.268,
+    "lon": -123.167,
     "brokerage": "Kits Point Realty",
     "realtorca_url": "https://www.realtor.ca/",
     "photo": "https://images.unsplash.com/photo-1570129477492-45c003edd2be"
