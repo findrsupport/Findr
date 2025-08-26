@@ -3,60 +3,126 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findrr — Terms of Use</title>
+  <title>Findr™ — Terms of Use</title>
+  <meta name="description" content="Terms of Use for Findr™, an AI-first real estate search demo." />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <style>
-    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; --card:#223148; }
+    [data-theme="light"] { --bg:#ffffff; --fg:#101826; --muted:#516078; --accent:#0b6bff; --card:#eef3fb; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
-    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
-    h1{font-size:clamp(28px,4.5vw,42px); margin:0 0 8px}
-    .muted{color:var(--muted)}
     a{color:var(--accent); text-decoration:none}
-    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px; margin-top:20px}
+    .wrap{max-width:960px; margin:0 auto; padding:24px 20px 56px}
+    /* Top bar */
+    .topbar{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:color-mix(in srgb, var(--bg) 86%, transparent); border-bottom:1px solid rgba(255,255,255,0.06)}
+    .topbar-inner{max-width:960px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{font-weight:800; letter-spacing:.3px}
+    .badge{font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,0.08); padding:4px 8px; border-radius:999px}
+    .nav{display:flex; align-items:center; gap:14px}
+    .nav a{font-weight:600; color:var(--fg); opacity:.9}
+    .nav a:hover{opacity:1}
+    .toggle{border:1px solid rgba(255,255,255,0.12); background:transparent; color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-weight:600}
+    /* Page */
+    h1{font-size:clamp(28px,4.5vw,42px); margin:24px 0 8px}
+    .muted{color:var(--muted)}
+    .card{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; padding:20px; margin-top:20px}
     h2{font-size:18px; margin:0 0 8px}
     ul{margin:8px 0 0 18px}
-    .footer{margin-top:32px; font-size:12px; color:var(--muted)}
+    footer{margin-top:28px; display:flex; flex-direction:column; gap:10px; color:var(--muted)}
+    .legal{font-size:12px; line-height:1.4}
+    .row{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:var(--accent); color:#fff; font-weight:700}
+    .badge-img{height:22px; opacity:.9}
+    @media (max-width:640px){ .nav{gap:10px} }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Terms of Use</h1>
-    <p class="muted">Last updated: Aug 22, 2025</p>
-
-    <div class="card">
-      <h2>1. Acceptance of Terms</h2>
-      <p>By accessing or using this website, you agree to these Terms of Use and our Privacy Policy. If you do not agree, do not use the site.</p>
-    </div>
-
-    <div class="card">
-      <h2>2. Listing Data & Attribution</h2>
-      <p>Listing data is provided under license via CREA’s Data Distribution Facility (DDF®) and/or participating boards/MLS® systems. Display of this data is subject to applicable rules, including attribution to the listing brokerage and the display of the Powered by REALTOR.ca badge linking to the corresponding listing on REALTOR.ca.</p>
-    </div>
-
-    <div class="card">
-      <h2>3. Accuracy & Availability</h2>
-      <p>Information is deemed reliable but is not guaranteed and should be independently verified. Content and features may change or be unavailable at any time.</p>
-    </div>
-
-    <div class="card">
-      <h2>4. Permitted Use</h2>
-      <p>You may view listings for personal, non‑commercial purposes. Any scraping, bulk downloading, or redistribution of listing data or media is prohibited.</p>
-    </div>
-
-    <div class="card">
-      <h2>5. Intellectual Property & Trademarks</h2>
-      <p>© 2025 Findrr. All rights reserved. REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). MLS®, Multiple Listing Service® and the associated logos are owned by CREA. DDF® is a trademark of CREA.</p>
-    </div>
-
-    <div class="card">
-      <h2>6. Contact</h2>
-      <p>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty<br/>
-         Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty">marcusr@lariviererealty</a></p>
-    </div>
-
-    <div class="footer">
-      <p><a href="/">← Back to Home</a></p>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">Findr™</div>
+        <div class="badge">AI-first real estate search</div>
+      </div>
+      <div class="nav">
+        <a href="/">Home</a>
+        <a href="/listings.html">Listings</a>
+        <a href="/map.html">Map</a>
+        <button id="themeToggle" class="toggle" aria-label="Toggle theme">🌙</button>
+      </div>
     </div>
   </div>
+
+  <div class="wrap">
+    <h1>Terms of Use</h1>
+    <p class="muted">Effective: August 25, 2025</p>
+
+    <div class="card">
+      <h2>1) About this site</h2>
+      <p>Findr™ is a demo experience for an AI-first real estate search product. Content may include mock listings and placeholder data. Features are subject to change without notice.</p>
+    </div>
+
+    <div class="card">
+      <h2>2) Intellectual property & trademarks</h2>
+      <p>Findr™ and associated marks are the property of their respective owners. REALTOR®, REALTORS®, and the REALTOR® logo are controlled by the Canadian Real Estate Association (CREA) and identify real estate professionals who are members of CREA.</p>
+    </div>
+
+    <div class="card">
+      <h2>3) Data & IDX reciprocity</h2>
+      <p>Where live listing data is displayed (future phase), it is provided under CREA’s DDF®/IDX reciprocity rules and subject to brokerage and board requirements. Data is provided “as is” and may change or be removed at any time.</p>
+    </div>
+
+    <div class="card">
+      <h2>4) Acceptable use</h2>
+      <ul>
+        <li>No scraping, reverse engineering, or automated harvesting.</li>
+        <li>No misuse, abuse, or attempts to circumvent rate limits or security.</li>
+        <li>Only use the site in compliance with applicable laws and MLS® rules.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>5) Disclaimers & liability</h2>
+      <p>This site is provided “as is,” without warranties of any kind. To the fullest extent permitted by law, Findr™ disclaims all liability arising from your use of the site.</p>
+    </div>
+
+    <div class="card">
+      <h2>6) Changes</h2>
+      <p>We may modify these Terms at any time by updating this page. Continued use after updates constitutes acceptance of the revised Terms.</p>
+    </div>
+
+    <div class="card">
+      <h2>7) Contact</h2>
+      <p>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty<br>
+         Phone: <a href="tel:+17782149655">778-214-9655</a> · Email: <a href="mailto:marcusr@lariviererealty">marcusr@lariviererealty</a></p>
+    </div>
+
+    <footer>
+      <div class="row">
+        <div class="legal">© 2025 Findr™. All rights reserved.</div>
+        <img class="badge-img" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
+      </div>
+      <div class="legal">
+        REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA. Used under license.
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('findr_theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      const isLight = () => root.getAttribute('data-theme') === 'light';
+      const sync = () => btn.textContent = isLight() ? '☀️' : '🌙';
+      sync();
+      btn.addEventListener('click', () => {
+        root.setAttribute('data-theme', isLight() ? 'dark' : 'light');
+        localStorage.setItem('findr_theme', root.getAttribute('data-theme'));
+        sync();
+      });
+    })();
+  </script>
 </body>
 </html>

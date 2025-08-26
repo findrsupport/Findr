@@ -3,27 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Page Not Found</title>
+  <title>Findr™ — 404 Not Found</title>
+  <meta name="description" content="Page not found." />
+  <link rel="icon" type="image/png" href="assets/favicon.png">
   <style>
-    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; --card:#223148; }
+    [data-theme="light"] { --bg:#ffffff; --fg:#101826; --muted:#516078; --accent:#0b6bff; --card:#eef3fb; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
-    .wrap{max-width:720px; margin:0 auto; padding:64px 20px}
-    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:24px}
-    h1{font-size:clamp(28px, 5vw, 40px); margin:0 0 12px}
-    p{color:var(--muted); margin:0 0 12px}
     a{color:var(--accent); text-decoration:none}
-    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:#6aa1ff; color:#fff; font-weight:600}
+    .wrap{max-width:960px; margin:0 auto; padding:24px 20px 56px}
+    /* Top bar */
+    .topbar{position:sticky; top:0; backdrop-filter:saturate(140%) blur(8px); background:color-mix(in srgb, var(--bg) 86%, transparent); border-bottom:1px solid rgba(255,255,255,0.06)}
+    .topbar-inner{max-width:960px; margin:0 auto; padding:12px 20px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{font-weight:800; letter-spacing:.3px}
+    .badge{font-size:12px; color:var(--muted); border:1px solid rgba(255,255,255,0.08); padding:4px 8px; border-radius:999px}
+    .nav{display:flex; align-items:center; gap:14px}
+    .nav a{font-weight:600; color:var(--fg); opacity:.9}
+    .nav a:hover{opacity:1}
+    .toggle{border:1px solid rgba(255,255,255,0.12); background:transparent; color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-weight:600}
+    /* Page */
+    .card{background:rgba(255,255,255,0.04); border:1px solid var(--card); border-radius:16px; padding:24px; margin-top:28px}
+    h1{font-size:clamp(28px,4.5vw,42px); margin:4px 0 6px}
+    p{color:var(--muted)}
+    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:var(--accent); color:#fff; font-weight:700}
+    footer{margin-top:28px; display:flex; flex-direction:column; gap:10px; color:var(--muted)}
+    .legal{font-size:12px; line-height:1.4}
+    .row{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .badge-img{height:22px; opacity:.9}
   </style>
 </head>
 <body>
+  <div class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">
+        <div class="logo">Findr™</div>
+        <div class="badge">AI-first real estate search</div>
+      </div>
+      <div class="nav">
+        <a href="/">Home</a>
+        <a href="/listings.html">Listings</a>
+        <a href="/map.html">Map</a>
+        <button id="themeToggle" class="toggle" aria-label="Toggle theme">🌙</button>
+      </div>
+    </div>
+  </div>
+
   <div class="wrap">
     <div class="card">
       <h1>404 — Not found</h1>
       <p>We couldn’t find that page. Head back to Findr™.</p>
       <a class="btn" href="/">Return to Home</a>
     </div>
-    <p style="margin-top:16px; font-size:12px; color:var(--muted);">© 2025 Findr™. All rights reserved.</p>
+
+    <footer>
+      <div class="row">
+        <div class="legal">© 2025 Findr™. All rights reserved.</div>
+        <img class="badge-img" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
+      </div>
+      <div class="legal">
+        REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA. Used under license.
+      </div>
+    </footer>
   </div>
+
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const saved = localStorage.getItem('findr_theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      const isLight = () => root.getAttribute('data-theme') === 'light';
+      const sync = () => btn.textContent = isLight() ? '☀️' : '🌙';
+      sync();
+      btn.addEventListener('click', () => {
+        root.setAttribute('data-theme', isLight() ? 'dark' : 'light');
+        localStorage.setItem('findr_theme', root.getAttribute('data-theme'));
+        sync();
+      });
+    })();
+  </script>
 </body>
 </html>
