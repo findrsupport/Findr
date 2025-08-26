@@ -1,78 +1,138 @@
 # Findr™ — Project Notes (Source of Truth)
 
-_Last updated: {{update this date when you edit}}_
+_Last updated: 2025-08-25_
 
 ## What we’re building
-Findr™ is an AI-first real estate search engine (web now; mobile later). Goal: modern, map-centric search with plain-language queries and best-in-class UX for consumers and realtors.
+Findr™ is an AI-first real estate search engine (web first; iOS/Android/Windows later). Goal: a modern, map-centric search that accepts plain-language queries and serves consumers + REALTORS® with better discovery, lead gen, and compliant display.
 
 ## Hosting & Repo
-- Hosting: **Netlify** (CD from GitHub)
+- Hosting: **Netlify** (continuous deploy from GitHub)
 - Repo: **findrsupport/Findr**
-- Publish dir: `web/` (static site)
-- Domain: `findrr.ca` (temporary until `findr.ca`/`.com` secured)
+- Publish directory: `web/` (static site)
+- Domain: `findrr.ca` (temporary while `findr.ca/.com` are unavailable)
 
 ## Compliance (must keep)
-- Show **Listing Brokerage name** with each property.
-- Display **“Powered by REALTOR.ca”** badge (link to the listing on REALTOR.ca).
+- Show **Listing Brokerage name** with each listing.
+- Display **“Powered by REALTOR.ca”** badge and **link it to the listing on REALTOR.ca**.
 - Include CREA trademark statements (REALTOR®, MLS®, DDF®).
-- Respect board rules (GVR IDX access in progress; FVREB deferred to GVR).
+- Respect board rules (GVR IDX access pending; FVREB referred us to GVR).
 - Maintain Terms/Privacy pages.
 
-## Current UI/UX
-- Dark theme default with **light/dark toggle** (stored in `localStorage`).
-- Site-wide **nav** on primary pages: Home · Listings · Map + 🌙/☀️ toggle.
-- Brand tokens (CSS variables): `--brand`, `--bg`, `--fg`, `--muted`, `--card`, `--stroke`, `--surface`.
+## Current UI/UX (status)
+- **Theme:** Dark default with **light/dark toggle** (persists via `localStorage`, toggles `data-theme` on `<html>`).
+- **Nav bar:** **NOT YET ADDED** (next step: consistent top nav across pages).
+- **Aesthetic:** Clean, minimal, professional; CSS variables for brand tokens.
+
+### Brand tokens (CSS variables)
+`--brand`, `--bg`, `--fg`, `--muted`, `--card`, `--stroke`, `--surface`  
+(Adjust these to change the color scheme demo-wide.)
 
 ## Files (web/)
 web/
-index.html # Home / Coming Soon + Waitlist (Netlify form + honeypot)
-listings.html # Mock listings grid + filters/sort + compliance
-map.html # Leaflet map with photo/price popups + compliance
-terms.html # Basic terms page
-privacy.html # Basic privacy page
-thank-you.html # Post-waitlist redirect
+index.html # Home / Coming Soon + waitlist (Netlify form + honeypot + thank-you redirect)
+listings.html # Mock listings grid with filters/sort + REALTOR.ca badge + brokerage name
+map.html # Leaflet map; pins w/ photo, price, beds/baths, brokerage, badge/link
+terms.html # Terms (simple)
+privacy.html # Privacy (simple)
+thank-you.html # Waitlist confirmation
 404.html # Not found
 assets/
 powered-by-realtor.svg
 data/
-listings.json # 6 demo listings (3 condos, 3 houses) with stable Unsplash CDN links + lat/lon
+listings.json # 6 demo listings (3 condos, 3 houses) w/ stable Unsplash CDN URLs + lat/lon
 
-## Tech decisions
-- **Static first**: everything runs without a backend.
-- **Mock data** now; later swap to **CREA DDF** JSON feed/API.
-- **Leaflet** for maps; **OpenStreetMap tiles**.
-- Minimal, accessible, mobile-friendly UI.
+## Data contract (mock)
+Each listing object:
+```json
+{
+  "id": "L-1001",
+  "address": "123 Quayside Dr #1204",
+  "city": "New Westminster",
+  "price": 749900,
+  "beds": 2,
+  "baths": 2,
+  "lat": 49.201,
+  "lon": -122.912,
+  "brokerage": "Example Realty",
+  "realtorca_url": "https://www.realtor.ca/",
+  "photo": "https://images.unsplash.com/photo-1507089947368-19c1da9775ae"
+  }
+lat/lon required for map pins.
 
-## Done ✅
-- Netlify + GitHub CI/CD pipeline
-- Home page + compliance boilerplate
-- Waitlist form (honeypot + thank-you)
-- Security headers (Netlify `_headers` already configured previously)
-- Listings grid (filters, sort, badge)
-- Map with pins + photos + popups (badge)
-- Theme toggle + site-wide nav on primary pages
-- Stable demo photo links (Unsplash CDN base IDs)
+photo must be a direct CDN image URL (stable Unsplash ID, no params).
 
-## Next ⏭️
-- Apply **nav + theme toggle** to **all** minor pages (terms/privacy/404/thank-you) for total consistency.
-- Finalize **brand palette** (update CSS variables).
-- Optional: brokerage logos in cards/popups (`brokerage_logo` field).
-- Optional: share state between listings ↔ map (URL params).
-- Prepare **API scaffold** for CREA DDF.
-- Prototype **plain-language search** (keyword/embedding) on mock data.
+Do not rename keys without updating all pages that consume them.
 
-## Style & Workflow Rules (for assistants)
-- Always provide **full paste-ready HTML files** (not snippets).
-- Always include **git commands** to deploy.
-- Keep **compliance text/badges** with any listing UI.
-- Default to **dark theme**, keep light toggle working.
-- Use **CSS variables** for brand colors.
-- Maintain accessibility (labels, alt text, aria where appropriate).
+Tech decisions
+Static first (no backend required to demo).
 
-## Deploy
-```bash
+Leaflet + OpenStreetMap for the map.
+
+Minimal dependencies; no frameworks.
+
+Accessibility: alt text, sensible aria, readable contrast.
+
+Done ✅
+Netlify + GitHub CI/CD connected and deploying.
+
+Domain wired; SSL working.
+
+index.html with compliance boilerplate and waitlist (honeypot + redirect).
+
+listings.html grid with filters/sort; brokerage + badge shown.
+
+map.html with pins + rich popups (photo, price, beds/baths, brokerage, badge).
+
+data/listings.json with 6 mock listings (3 condos, 3 houses) + stable photos + lat/lon.
+
+Light/dark toggle implemented (persisted).
+
+Netlify _headers for security previously configured.
+
+Next ⏭️ (priority ordered)
+Add site-wide top nav (Home · Listings · Map + theme toggle) consistently to all pages.
+
+Apply/refine Findr™ brand palette via CSS variables (keep contrast/compliance).
+
+Optional polish:
+
+Brokerage logos (brokerage_logo optional field; display in cards/popups).
+
+Keep listings ↔ map filters in sync (URL params).
+
+Small motion/hover polish; mobile spacing audit.
+
+Integration prep:
+
+API scaffold to ingest CREA DDF (JSON endpoint to replace data/listings.json).
+
+Compliance checks with GVR once IDX access is granted.
+
+AI prototype:
+
+Plain-language query simulation against mock data (keywords/embeddings).
+
+Workflow rules (for assistants)
+Always deliver full paste-ready HTML files for any page you touch (no snippets).
+
+Always include the git deploy block after code.
+
+Do not rewrite the UI from scratch or change the file structure unless requested.
+
+Keep compliance elements intact (brokerage + badge + trademarks).
+
+Use CSS variables; dark default; maintain the theme toggle behavior.
+
+Deploy
+bash
+Copy
+Edit
 cd ~/desktop/findr
 git add .
 git commit -m "Update all project files"
 git push
+Troubleshooting
+Netlify didn’t redeploy → Netlify Deploys → Trigger deploy; verify repo/branch is findrsupport/Findr on main, publish dir web/.
+
+Map empty → ensure lat/lon present and numeric.
 
