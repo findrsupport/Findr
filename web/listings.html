@@ -48,6 +48,7 @@
     .chips{display:flex; gap:8px; flex-wrap:wrap}
     .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
     .back{font-size:12px; margin-top:18px; color:var(--muted)}
+    .muted{color:var(--muted)} /* small fix: class used by count */
   </style>
 </head>
 <body>
@@ -86,7 +87,7 @@
         </select>
       </div>
       <div class="row" style="margin:12px 0 10px">
-        <div class="muted" id="count">Loading…</div>
+        <div class="muted" id="count" aria-live="polite">Loading…</div>
         <div class="chips" id="chips" aria-live="polite"></div>
       </div>
     </div>
@@ -114,7 +115,7 @@
       render();
     })();
 
-    // Listings logic (unchanged behavior)
+    // DOM helpers
     const $ = (id) => document.getElementById(id);
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
@@ -142,17 +143,17 @@
       VIEW.forEach(it=>{
         const el=document.createElement('article'); el.className='card';
         el.innerHTML=`
-          <img class="img" src="\${it.photo}" alt="Photo of \${it.address}, \${it.city}">
+          <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
           <div class="content">
-            <div class="row"><div class="addr">\${it.address}</div><div class="price">\${fmtPrice(it.price)}</div></div>
-            <div class="meta"><span>\${it.city}</span><span>•</span><span>\${it.beds} bd</span><span>•</span><span>\${it.baths} ba</span></div>
-            <div class="broker">Listing Brokerage: <strong>\${it.brokerage}</strong></div>
+            <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
+            <div class="meta"><span>${it.city}</span><span>•</span><span>${it.beds} bd</span><span>•</span><span>${it.baths} ba</span></div>
+            <div class="broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
           </div>
           <div class="actions">
-            <a class="pbr" href="\${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+            <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
               <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" /><span style="color:var(--muted)">View on REALTOR.ca</span>
             </a>
-            <a href="\${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
+            <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
           </div>`;
         grid.appendChild(el);
       });
@@ -167,7 +168,7 @@
         if(minBeds && it.beds<minBeds) return false;
         if(minBaths && it.baths<minBaths) return false;
         if(it.price<minPrice || it.price>maxPrice) return false;
-        if(q){ const blob=`\${it.address} \${it.city} \${it.beds}bd \${it.baths}ba \${it.brokerage}`.toLowerCase(); if(!blob.includes(q)) return false; }
+        if(q){ const blob=`${it.address} ${it.city} ${it.beds}bd ${it.baths}ba ${it.brokerage}`.toLowerCase(); if(!blob.includes(q)) return false; }
         return true;
       });
       switch(sort){
@@ -181,11 +182,30 @@
 
     function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
+    // NEW: resilient loader — tries /data/listings.json first, then root
+    async function loadData(){
+      const candidates = [
+        '/data/listings.json',
+        'data/listings.json',
+        '/listings.json',
+        'listings.json'
+      ];
+      for (const url of candidates){
+        try{
+          const res = await fetch(url, { cache:'no-store' });
+          if (res.ok) return await res.json();
+        }catch(_e){}
+      }
+      throw new Error('Could not load listings.json from expected paths.');
+    }
+
     async function boot(){
       try{
-        const res=await fetch('data/listings.json',{cache:'no-store'});
-        DATA=await res.json(); VIEW=DATA.slice(); apply();
-      }catch(e){ $('grid').innerHTML='<p style="color:var(--muted)">Could not load mock data. Ensure <code>web/data/listings.json</code> exists.</p>'; console.error(e); }
+        DATA = await loadData(); VIEW = DATA.slice(); apply();
+      }catch(e){
+        console.error(e);
+        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code> in the site root.</p>';
+      }
       $('q').addEventListener('input',debounce(apply,200));
       ['beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
     }
