@@ -1,23 +1,54 @@
 // Netlify Function: intent → filters (COMPLIANT)
 // Processes ONLY user text, never listing payloads.
-// Reads OPENAI_API_KEY from Netlify env vars (Functions scope).
+
+function demoParse(text) {
+  text = String(text || "");
+
+  const wantCondo = /\b(condo|apartment|flat)\b/i.test(text);
+  const wantHouse = /\b(house|detached|laneway)\b/i.test(text);
+
+  let maxPrice = null, minPrice = null;
+  const between = /\bbetween\s*\$?\s*([\d,]+)\s*[kK]\s*and\s*\$?\s*([\d,]+)\s*[kK]\b/i.exec(text);
+  const underK  = /(?:under|below)\s*\$?\s*([\d,]+)\s*[kK]\b/i.exec(text);
+  const underM  = /(?:under|below)\s*\$?\s*([\d.]+)\s*[mM]\b/i.exec(text);
+  if (between) {
+    minPrice = Number(between[1].replace(/,/g,'')) * 1000;
+    maxPrice = Number(between[2].replace(/,/g,'')) * 1000;
+  } else if (underK) {
+    maxPrice = Number(underK[1].replace(/,/g,'')) * 1000;
+  } else if (underM) {
+    maxPrice = Math.round(Number(underM[1]) * 1_000_000);
+  }
+
+  const beds  = /(\d+)\s*(?:bed|br)\b/i.exec(text);
+  const baths = /(\d+)\s*(?:bath|ba)\b/i.exec(text);
+
+  const cities = ['Vancouver','Burnaby','Coquitlam','Port Coquitlam','Port Moody','Maple Ridge','Langley','Surrey','New Westminster','Richmond'];
+  const areas = cities.filter(c => new RegExp(`\\b${c}\\b`, 'i').test(text));
+
+  const sort = /\bcheapest|lowest price|asc(ending)?\b/i.test(text) ? 'price-asc'
+             : /\bexpensive|highest price|desc(ending)?\b/i.test(text) ? 'price-desc'
+             : 'relevance';
+
+  return {
+    min_price: minPrice,
+    max_price: maxPrice,
+    beds_min: beds ? Number(beds[1]) : null,
+    baths_min: baths ? Number(baths[1]) : null,
+    property_types: wantCondo ? ['Condo'] : wantHouse ? ['House'] : null,
+    areas: areas.length ? areas : null,
+    nearby: null,
+    must_have: null,
+    polygon: null,
+    sort
+  };
+}
 
 /** @type {(event: { httpMethod:string, body?:string }) => Promise<{statusCode:number, headers:any, body:string}>} */
 exports.handler = async (event) => {
-  const headers = {
-    "Content-Type": "application/json",
-    "Cache-Control": "no-store"
-    // (Optional CORS if you ever call cross-origin)
-    // "Access-Control-Allow-Origin": "*"
-  };
-
+  const headers = { "Content-Type": "application/json", "Cache-Control": "no-store" };
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, headers, body: JSON.stringify({ error: "Method not allowed" }) };
-  }
-
-  const key = process.env.OPENAI_API_KEY;
-  if (!key) {
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "Missing OPENAI_API_KEY" }) };
   }
 
   let text = "";
@@ -27,35 +58,41 @@ exports.handler = async (event) => {
   } catch {
     return { statusCode: 400, headers, body: JSON.stringify({ error: "Bad JSON" }) };
   }
-  if (!text.trim()) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: "text is required" }) };
+  if (!text.trim()) return { statusCode: 400, headers, body: JSON.stringify({ error: "text is required" }) };
+
+  const key = process.env.OPENAI_API_KEY;
+
+  // If no key, immediately return deterministic fallback (keeps Smart usable)
+  if (!key) {
+    const spec = demoParse(text);
+    console.log("[INTENT:FALLBACK:NO_KEY]", text.slice(0,120), spec);
+    return { statusCode: 200, headers, body: JSON.stringify(spec) };
   }
 
-  const tools = [
-    {
-      type: "function",
-      function: {
-        name: "set_filters",
-        description: "Convert plain-English real estate intent into structured filters (CAD). Use null for unspecified fields.",
-        parameters: {
-          type: "object",
-          additionalProperties: false,
-          properties: {
-            min_price: { anyOf: [{ type: "number" }, { type: "null" }] },
-            max_price: { anyOf: [{ type: "number" }, { type: "null" }] },
-            beds_min:  { anyOf: [{ type: "number" }, { type: "null" }] },
-            baths_min: { anyOf: [{ type: "number" }, { type: "null" }] },
-            property_types: { anyOf: [{ type: "array", items: { type: "string" } }, { type: "null" }] },
-            areas:          { anyOf: [{ type: "array", items: { type: "string" } }, { type: "null" }] },
-            nearby:         { anyOf: [{ type: "array", items: { type: "object" } }, { type: "null" }] },
-            must_have:      { anyOf: [{ type: "array", items: { type: "string" } }, { type: "null" }] },
-            polygon:        { anyOf: [{ type: "object" }, { type: "null" }] },
-            sort: { type: "string", enum: ["relevance","price-asc","price-desc","beds-desc","baths-desc"] }
-          }
+  // OpenAI function-calling payload (same as before)
+  const tools = [{
+    type: "function",
+    function: {
+      name: "set_filters",
+      description: "Convert plain-English real estate intent into structured filters (CAD). Use null for unspecified fields.",
+      parameters: {
+        type: "object",
+        additionalProperties: false,
+        properties: {
+          min_price: { anyOf: [{ type: "number" }, { type: "null" }] },
+          max_price: { anyOf: [{ type: "number" }, { type: "null" }] },
+          beds_min:  { anyOf: [{ type: "number" }, { type: "null" }] },
+          baths_min: { anyOf: [{ type: "number" }, { type: "null" }] },
+          property_types: { anyOf: [{ type: "array", items: { type: "string" } }, { type: "null" }] },
+          areas:          { anyOf: [{ type: "array", items: { type: "string" } }, { type: "null" }] },
+          nearby:         { anyOf: [{ type: "array", items: { type: "object" } }, { type: "null" }] },
+          must_have:      { anyOf: [{ type: "array", items: { type: "string" } }, { type: "null" }] },
+          polygon:        { anyOf: [{ type: "object" }, { type: "null" }] },
+          sort: { type: "string", enum: ["relevance","price-asc","price-desc","beds-desc","baths-desc"] }
         }
       }
     }
-  ];
+  }];
 
   const system = [
     "You are a precise intent parser for Canadian real estate search.",
@@ -87,22 +124,20 @@ exports.handler = async (event) => {
 
     if (!resp.ok) {
       const errTxt = await resp.text();
-      console.error("OpenAI error:", resp.status, errTxt);
-      return { statusCode: 502, headers, body: JSON.stringify({ error: "Upstream error", detail: errTxt.slice(0, 200) }) };
+      console.error("OpenAI error:", resp.status, errTxt.slice(0,180));
+      // graceful fallback so UX still works
+      const spec = demoParse(text);
+      return { statusCode: 200, headers, body: JSON.stringify(spec) };
     }
 
     const data = await resp.json();
     const toolCall = data?.choices?.[0]?.message?.tool_calls?.[0];
-    let spec = {
-      min_price: null, max_price: null, beds_min: null, baths_min: null,
-      property_types: null, areas: null, nearby: null, must_have: null, polygon: null,
-      sort: "relevance"
-    };
+    let spec = demoParse(text); // default, then overlay
 
     if (toolCall?.function?.arguments) {
       try {
         const args = JSON.parse(toolCall.function.arguments);
-        spec = Object.assign(spec, args || {});
+        Object.assign(spec, args || {});
       } catch (e) {
         console.warn("Tool args parse error:", e);
       }
@@ -112,6 +147,8 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: JSON.stringify(spec) };
   } catch (e) {
     console.error("Handler error:", e);
-    return { statusCode: 500, headers, body: JSON.stringify({ error: "Server error" }) };
+    // final fallback
+    const spec = demoParse(text);
+    return { statusCode: 200, headers, body: JSON.stringify(spec) };
   }
 };
