@@ -8,150 +8,90 @@
   <style>
     /* ===== Brandable design tokens ===== */
     :root {
-      --brand:#5ea1ff;        /* accent color */
-      --bg:#0b0f17;           /* background */
-      --fg:#e8eef7;           /* foreground text */
-      --muted:#9fb0c9;        /* secondary text */
-      --card:rgba(255,255,255,0.04);
-      --stroke:#223148;
-      --surface:#0f1624;
+      --brand: #fac241;
+      --bg: #1f262d;
+      --fg: #f1f1f1;
+      --muted: #9aa4b2;
+      --card: #2a323b;
+      --link: #fac241;
+      --border: #3a4149;
     }
-    /* Light theme overrides */
-    :root[data-theme="light"] {
-      --bg:#f7f9fc;
-      --fg:#0e1420;
-      --muted:#5a6c85;
-      --card:#ffffff;
-      --stroke:#e5ecf5;
-      --surface:#ffffff;
+    [data-theme="light"] {
+      --bg: #ffffff;
+      --fg: #111111;
+      --muted: #666666;
+      --card: #f8f9fa;
+      --link: #fac241;
+      --border: #e0e0e0;
     }
-
-    *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
-
-    /* ===== Layout ===== */
-    .wrap{max-width:1080px; margin:0 auto; padding:28px 20px}
-    a{color:var(--brand); text-decoration:none}
-
-    /* ===== Nav ===== */
-    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
-    .brand{display:flex; align-items:center; gap:10px}
-    .logo{font-weight:900; letter-spacing:.2px}
-    .navlinks{display:flex; align-items:center; gap:14px}
-    .navlinks a{padding:8px 10px; border-radius:10px}
-    .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
-    .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
-
-    /* ===== Content ===== */
-    .hero{padding:56px 0 24px}
-    .hero h1{font-size:clamp(32px,6vw,56px); margin:0 0 12px; line-height:1.05}
-    .hero p{color:var(--muted); font-size:18px; max-width:60ch}
-
-    .grid{display:grid; gap:16px}
-    @media(min-width:900px){ .grid{grid-template-columns:1.2fr 1fr} }
-
-    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:20px}
-    h2{font-size:18px; margin:0 0 8px}
-    .stack{display:flex; flex-direction:column; gap:6px}
-    .divider{height:1px; background:var(--stroke); margin:16px 0}
-    .small{font-size:12px; color:var(--muted)}
-    .powered{display:flex; align-items:center; gap:12px; margin-top:8px}
-    .powered img{width:90px; height:90px; object-fit:contain}
-
-    /* Waitlist */
-    .btn{padding:10px 16px; border:none; border-radius:10px; background:var(--brand); color:#fff; font-weight:700; cursor:pointer}
-    input[type="email"]{flex:1; padding:10px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg)}
-
+    body {
+      margin: 0; background: var(--bg); color: var(--fg);
+      font-family: system-ui, sans-serif; display: flex; flex-direction: column; min-height: 100vh;
+    }
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .container { width: min(1000px, 92%); margin-inline: auto; }
+    /* Nav */
+    .nav { border-bottom: 1px solid var(--border); background: var(--card); }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; }
+    .nav-links { display: flex; gap: 20px; }
+    .theme-btn { border: 1px solid var(--border); background: var(--card); color: var(--fg);
+      padding: 6px 10px; border-radius: 8px; cursor: pointer; }
+    /* Hero */
+    main { flex: 1; display: flex; align-items: center; justify-content: center; }
+    .hero { text-align: center; padding: 60px 20px; }
+    h1 { font-size: clamp(28px, 4vw, 42px); margin-bottom: 10px; }
+    p { color: var(--muted); }
     /* Footer */
-    .footer{margin-top:36px; font-size:12px; color:var(--muted); text-align:center}
-    .footer a{color:var(--brand); margin:0 6px}
+    footer { border-top: 1px solid var(--border); padding: 16px 0; font-size: 13px; color: var(--muted); }
+    .footer-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .badge { height: 22px; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- ===== Nav (shared across pages) ===== -->
-    <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <div class="logo">Findr™</div>
-      </div>
-      <div class="navlinks">
-        <a href="/" class="active">Home</a>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="index.html"><strong>Findr™</strong></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
         <a href="listings.html">Listings</a>
         <a href="map.html">Map</a>
-        <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
       </div>
-    </nav>
+      <button id="themeToggle" class="theme-btn">🌙</button>
+    </div>
+  </nav>
 
-    <section class="hero">
-      <h1>Real estate search, reimagined.</h1>
-      <p>We’re building an AI-first, map-centric search that turns plain-language requests (like “quiet street near SkyTrain, dog-friendly strata, south light”) into precise results. Private alpha coming soon.</p>
-    </section>
+  <main>
+    <div class="hero">
+      <h1>Findr™ — Coming Soon</h1>
+      <p>AI-first real estate search. Private alpha launching soon.</p>
+    </div>
+  </main>
 
-    <section class="grid">
-      <div class="card">
-        <h2>Contact</h2>
-        <div class="stack">
-          <div><strong>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty</strong></div>
-          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></div>
-          <div class="small">Site owner & operator (Participant responsible for this Website).</div>
-        </div>
-        <div class="divider"></div>
-        <h2>Compliance</h2>
-        <div class="powered">
-          <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" />
-        </div>
-        <p class="small">Each listing will display the <strong>Listing Brokerage name</strong> adjacent to the property details and include the “Powered by REALTOR.ca” badge linking to the listing.</p>
-      </div>
+  <footer>
+    <div class="container footer-row">
+      <img class="badge" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
+      <span>Brokerage (for demo): RE/MAX All Points Realty • © <span id="year"></span> Findr™</span>
+    </div>
+    <div class="container">
+      REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA.
+      MLS®, Multiple Listing Service®, and the associated logos are owned by CREA. Demo content only.
+    </div>
+  </footer>
 
-      <div class="card">
-        <h2>Trademark & Legal Statements</h2>
-        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to CREA. The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA. The trademark DDF® is owned by CREA.</p>
-        <div class="divider"></div>
-        <p class="small">© 2025 Findr™. All rights reserved.</p>
-      </div>
-    </section>
-
-    <!-- Waitlist -->
-    <section class="card" style="margin-top:24px;">
-      <h2>Join the Waitlist</h2>
-      <p class="small">Be the first to try Findr™ when our private beta launches.</p>
-      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="thank-you.html" style="margin-top:12px;">
-        <input type="hidden" name="form-name" value="waitlist" />
-        <p style="display:none"><label>Don’t fill this out if you’re human: <input name="bot-field" /></label></p>
-        <div style="display:flex; gap:8px; flex-wrap:wrap;">
-          <input type="email" name="email" placeholder="Your email address" required />
-          <button type="submit" class="btn">Join</button>
-        </div>
-      </form>
-    </section>
-
-    <section class="footer">
-      <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
-      <p>
-        <a href="terms.html">Terms of Use</a> ·
-        <a href="privacy.html">Privacy Policy</a> ·
-        <a href="listings.html">Preview Listings</a> ·
-        <a href="map.html">Map Preview</a>
-      </p>
-    </section>
-  </div>
-
-  <!-- Theme script (shared pattern for all pages) -->
   <script>
-    (function(){
-      const root = document.documentElement;
-      const saved = localStorage.getItem('theme');
-      if (saved) root.setAttribute('data-theme', saved);
-      const btn = document.getElementById('theme-toggle');
-      const isDark = () => root.getAttribute('data-theme') !== 'light';
-      const render = () => { btn.textContent = isDark() ? '🌙' : '☀️'; };
-      btn.addEventListener('click', () => {
-        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
-        localStorage.setItem('theme', root.getAttribute('data-theme'));
-        render();
-      });
-      render();
-    })();
+    const root = document.documentElement;
+    const btn = document.getElementById("themeToggle");
+    const saved = localStorage.getItem("theme") || "dark";
+    root.setAttribute("data-theme", saved);
+    btn.textContent = saved === "dark" ? "🌙" : "☀️";
+    btn.addEventListener("click", () => {
+      const cur = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", cur);
+      localStorage.setItem("theme", cur);
+      btn.textContent = cur === "dark" ? "🌙" : "☀️";
+    });
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
