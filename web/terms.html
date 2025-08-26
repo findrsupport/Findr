@@ -3,108 +3,16 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Terms of Use — Findr™</title>
-  <meta name="description" content="Terms of Use for Findr™, an AI-first real estate search demo." />
+  <title>Findr™ — Terms of Use</title>
   <style>
-    :root {
-      --brand: #fac241; --bg: #1f262d; --fg: #f1f1f1; --muted: #9aa4b2;
-      --card: #2a323b; --link: #fac241; --border: #3a4149; --maxw: 1100px;
-    }
-    [data-theme="light"] {
-      --bg: #ffffff; --fg: #111111; --muted: #666666; --card: #f8f9fa; --link: #fac241; --border: #e0e0e0;
-    }
-    html, body { height: 100%; }
-    body { margin:0; background:var(--bg); color:var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial; line-height:1.6; display:flex; flex-direction:column; }
-    a { color: var(--link); text-decoration: none; } a:hover { text-decoration: underline; }
-    .container { width: min(var(--maxw), 92%); margin-inline:auto; }
-
-    .nav { position: sticky; top:0; z-index:50; backdrop-filter:saturate(180%) blur(8px); background: color-mix(in oklab, var(--bg) 82%, transparent); border-bottom:1px solid var(--border); }
-    .nav-inner { display:flex; align-items:center; justify-content:space-between; padding:12px 0; }
-    .brand a { color: var(--fg); font-weight:800; }
-    .nav-links { display:flex; gap:20px; }
-    .nav-links a { color: var(--fg); opacity:.9; }
-    .theme-btn { border:1px solid var(--border); background:var(--card); color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer; font-size:14px; }
-
-    main { flex:1; }
-    .hero { padding: 36px 0 8px; }
-    h1 { font-size: clamp(28px, 4.6vw, 44px); margin:0 0 6px; }
-    .sub { color: var(--muted); margin:0; }
-    .card { background:var(--card); border:1px solid var(--border); border-radius:16px; padding:24px; margin: 22px 0 42px; }
-    h2 { font-size: 20px; margin-top: 22px; }
-
-    footer { border-top:1px solid var(--border); padding:18px 0; font-size:13px; color:var(--muted); }
-    .footer-row { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
-    .badge { height:22px; opacity:.9; }
+    body{margin:0; font-family:Arial, sans-serif; padding:20px; background:#0b0f17; color:#e8eef7;}
+    a{color:#5ea1ff;}
+    h1{font-size:24px;}
   </style>
 </head>
 <body>
-  <nav class="nav">
-    <div class="container nav-inner">
-      <div class="brand"><a href="index.html">Findr™</a></div>
-      <div class="nav-links">
-        <a href="index.html">Home</a>
-        <a href="listings.html">Listings</a>
-        <a href="map.html">Map</a>
-      </div>
-      <button id="themeToggle" class="theme-btn">🌙</button>
-    </div>
-  </nav>
-
-  <main class="container">
-    <section class="hero">
-      <h1>Terms of Use</h1>
-      <p class="sub">Effective date: August 25, 2025 • Demo environment</p>
-    </section>
-
-    <section class="card">
-      <h2>1. Demo Only</h2>
-      <p>Findr™ is currently a demonstration environment. Content, listings, and media may be simulated for UI/UX preview. No offer to sell, lease, or provide brokerage services is made on this site.</p>
-
-      <h2>2. No Reliance</h2>
-      <p>All information is provided “as is” and for illustrative purposes. Do not rely on this demo for real estate decisions. Always verify information with your licensed real estate professional and applicable boards.</p>
-
-      <h2>3. Intellectual Property</h2>
-      <p>Findr™ brand and associated assets are protected. REALTOR®, REALTORS®, and the REALTOR® logo are controlled by The Canadian Real Estate Association (CREA). MLS®, Multiple Listing Service®, and the associated logos are owned by CREA.</p>
-
-      <h2>4. Acceptable Use</h2>
-      <ul>
-        <li>Do not scrape, reverse engineer, or misuse the site or its data.</li>
-        <li>Do not attempt to access non-public systems or APIs.</li>
-        <li>Do not upload malicious code, spam, or content that violates law or third-party rights.</li>
-      </ul>
-
-      <h2>5. Changes</h2>
-      <p>These Terms may be updated as the demo evolves. Continued use after updates constitutes acceptance.</p>
-
-      <h2>6. Contact</h2>
-      <p>Questions? Email <a href="mailto:support@findrr.ca">support@findrr.ca</a>.</p>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container footer-row">
-      <img class="badge" src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
-      <span>Brokerage (for demo): RE/MAX All Points Realty • © <span id="year"></span> Findr™</span>
-    </div>
-    <div class="container">
-      REALTOR®, REALTORS®, and the REALTOR® logo are controlled by CREA and identify real estate professionals who are members of CREA.
-      MLS®, Multiple Listing Service®, and the associated logos are owned by CREA. Demo content only.
-    </div>
-  </footer>
-
-  <script>
-    const root = document.documentElement;
-    const btn = document.getElementById('themeToggle');
-    const saved = localStorage.getItem('theme') || 'dark';
-    root.setAttribute('data-theme', saved);
-    btn.textContent = saved === 'dark' ? '🌙' : '☀️';
-    btn.addEventListener('click', () => {
-      const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', cur);
-      localStorage.setItem('theme', cur);
-      btn.textContent = cur === 'dark' ? '🌙' : '☀️';
-    });
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
+  <h1>Terms of Use</h1>
+  <p>These Terms govern the use of the Findr™ demo site. Listing content, when present, will be sourced from CREA’s DDF® and is subject to all applicable trademark and compliance requirements.</p>
+  <p><a href="/">← Back Home</a></p>
 </body>
 </html>
