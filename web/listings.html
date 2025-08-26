@@ -29,7 +29,8 @@
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
 
     .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
-    .toolbar{display:grid; grid-template-columns:1.6fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
+    /* ⬇️ add one more column for City */
+    .toolbar{display:grid; grid-template-columns:1.6fr repeat(5, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
     @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
     .searchbox{display:flex; gap:8px}
     input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
@@ -77,6 +78,14 @@
           <input id="q" type="search" placeholder='Describe your needs, then press Enter or click “Smart” (e.g., "2 bed condo near SkyTrain under 900k")' aria-label="Search or describe your needs" />
           <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
         </div>
+        <!-- ⬇️ New City select -->
+        <select id="city" aria-label="City">
+          <option value="">City (any)</option>
+          <option>Vancouver</option><option>Burnaby</option><option>Richmond</option>
+          <option>Surrey</option><option>Coquitlam</option><option>Port Moody</option>
+          <option>Port Coquitlam</option><option>New Westminster</option>
+          <option>Langley</option><option>Maple Ridge</option>
+        </select>
         <select id="beds" aria-label="Minimum bedrooms">
           <option value="">Beds (any)</option><option value="1">1+ bed</option><option value="2">2+ bed</option><option value="3">3+ bed</option><option value="4">4+ bed</option>
         </select>
@@ -144,6 +153,7 @@
       const p = new URLSearchParams(location.search);
       return {
         q: p.get('q') || '',
+        city: p.get('city') || '',
         beds: p.get('beds') || '',
         baths: p.get('baths') || '',
         minp: p.get('minp') || '',
@@ -154,6 +164,7 @@
     function setParams(){
       const p = new URLSearchParams();
       if($('q').value) p.set('q',$('q').value);
+      if($('city').value) p.set('city',$('city').value);
       if($('beds').value) p.set('beds',$('beds').value);
       if($('baths').value) p.set('baths',$('baths').value);
       if($('minp').value) p.set('minp',$('minp').value);
@@ -168,6 +179,7 @@
     function renderWhy(){
       const parts=[];
       const q=$('q').value.trim(); if(q) parts.push(`Text: “${q}”`);
+      if($('city').value) parts.push($('city').value);
       if($('beds').value) parts.push(`${$('beds').value}+ bed`);
       if($('baths').value) parts.push(`${$('baths').value}+ bath`);
       const minp=$('minp').value, maxp=$('maxp').value;
@@ -183,6 +195,7 @@
     function renderChips(){
       const chips = $('chips'); const active=[];
       const q=$('q').value.trim(); if(q) active.push({label:`Search: “${q}”`, id:'q'});
+      const city=$('city').value; if(city) active.push({label:city, id:'city'});
       const beds=$('beds').value; if(beds) active.push({label:`${beds}+ bed`, id:'beds'});
       const baths=$('baths').value; if(baths) active.push({label:`${baths}+ bath`, id:'baths'});
       const minp=$('minp').value, maxp=$('maxp').value;
@@ -196,8 +209,13 @@
         const id=b.getAttribute('data-id');
         if(id==='copy'){ copyLink(b); return; }
         if(id==='clear'){ clearAll(); return; }
-        if(id==='q') $('q').value=''; if(id==='beds') $('beds').value=''; if(id==='baths') $('baths').value='';
-        if(id==='price'){ $('minp').value=''; $('maxp').value=''; } if(id==='sort') $('sort').value='relevance'; apply();
+        if(id==='q') $('q').value='';
+        if(id==='city') $('city').value='';
+        if(id==='beds') $('beds').value='';
+        if(id==='baths') $('baths').value='';
+        if(id==='price'){ $('minp').value=''; $('maxp').value=''; }
+        if(id==='sort') $('sort').value='relevance';
+        apply();
       }));
     }
 
@@ -225,7 +243,8 @@
     function apply(){
       const sort=$('sort').value;
       VIEW = FILTERS.applyFilters(DATA, {
-        q: $('q').value, beds: $('beds').value, baths: $('baths').value,
+        q: $('q').value, city: $('city').value,
+        beds: $('beds').value, baths: $('baths').value,
         minp: $('minp').value, maxp: $('maxp').value
       });
       switch(sort){
@@ -249,7 +268,7 @@
       throw new Error('Could not load listings.json from expected paths.');
     }
 
-    // Server-first Smart → filters; fallback to demo parser
+    // Smart → server first; clear free-text and set City control
     function nearestOption(selectId, value){
       if (!value) return;
       const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
@@ -283,12 +302,11 @@
         if (spec.min_price) nearestOption('minp', spec.min_price);
         if (spec.max_price) nearestOption('maxp', spec.max_price);
 
-        // ✅ Keep only the city token (if parsed) or clear the text filter to avoid 0 results
+        // Set City control if parsed; then clear free-text
         if (Array.isArray(spec.areas) && spec.areas.length) {
-          $('q').value = spec.areas[0];
-        } else {
-          $('q').value = '';
+          $('city').value = spec.areas[0];
         }
+        $('q').value = '';
 
         if (spec.sort) $('sort').value = spec.sort;
         apply();
@@ -299,7 +317,8 @@
     }
 
     function clearAll(){
-      $('q').value=''; $('beds').value=''; $('baths').value=''; $('minp').value=''; $('maxp').value=''; $('sort').value='relevance';
+      $('q').value=''; $('city').value=''; $('beds').value=''; $('baths').value='';
+      $('minp').value=''; $('maxp').value=''; $('sort').value='relevance';
       apply();
     }
 
@@ -317,7 +336,8 @@
       try{
         DATA = await loadData(); VIEW = DATA.slice();
         const p = getParams();
-        $('q').value=p.q; $('beds').value=p.beds; $('baths').value=p.baths; $('minp').value=p.minp; $('maxp').value=p.maxp; $('sort').value=p.sort;
+        $('q').value=p.q; $('city').value=p.city; $('beds').value=p.beds; $('baths').value=p.baths;
+        $('minp').value=p.minp; $('maxp').value=p.maxp; $('sort').value=p.sort;
         apply();
       }catch(e){
         console.error(e);
@@ -325,7 +345,7 @@
       }
       $('q').addEventListener('input',debounce(apply,200));
       $('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); smartFromText(); }});
-      ['beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
+      ['city','beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
       $('smart-btn').addEventListener('click', smartFromText);
     }
     boot();

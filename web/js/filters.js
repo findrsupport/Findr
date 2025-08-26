@@ -1,9 +1,8 @@
-// Shared deterministic filters for listings + map.
-// No AI. Rules-only. Safe for compliance mode.
 (function (global) {
   function normalizeParams(p) {
     return {
       q: (p?.q || "").toString().trim().toLowerCase(),
+      city: (p?.city || "").toString().trim().toLowerCase(),
       beds: Number(p?.beds || 0),
       baths: Number(p?.baths || 0),
       minp: Number(p?.minp || 0),
@@ -26,6 +25,7 @@
         if (it.price < p.minp) return false;
         if (it.price > p.maxp) return false;
       }
+      if (p.city && String(it.city||"").toLowerCase() !== p.city) return false;
       if (!textMatches(it, p.q)) return false;
       return true;
     });
