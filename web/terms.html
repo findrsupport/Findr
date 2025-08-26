@@ -1,18 +1,28 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findrr — Terms of Use</title>
+  <title>Findr™ — Terms of Use</title>
   <style>
-    :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
+    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; }
+    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
-    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
-    h1{font-size:clamp(28px,4.5vw,42px); margin:0 0 8px}
+    a{color:var(--brand); text-decoration:none}
+    .wrap{max-width:960px; margin:0 auto; padding:28px 20px}
+    /* Nav */
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{font-weight:900}
+    .navlinks{display:flex; align-items:center; gap:14px}
+    .navlinks a{padding:8px 10px; border-radius:10px}
+    .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
+    .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
+    /* Content */
+    h1{font-size:clamp(28px,4.5vw,42px); margin:12px 0 8px}
     .muted{color:var(--muted)}
-    a{color:var(--accent); text-decoration:none}
-    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px; margin-top:20px}
+    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:20px; margin-top:20px}
     h2{font-size:18px; margin:0 0 8px}
     ul{margin:8px 0 0 18px}
     .footer{margin-top:32px; font-size:12px; color:var(--muted)}
@@ -20,6 +30,19 @@
 </head>
 <body>
   <div class="wrap">
+    <!-- Nav -->
+    <nav class="nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <div class="logo" aria-label="Findr home">Findr™</div>
+      </div>
+      <div class="navlinks">
+        <a href="/">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="map.html">Map</a>
+        <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
+      </div>
+    </nav>
+
     <h1>Terms of Use</h1>
     <p class="muted">Last updated: Aug 22, 2025</p>
 
@@ -40,23 +63,45 @@
 
     <div class="card">
       <h2>4. Permitted Use</h2>
-      <p>You may view listings for personal, non‑commercial purposes. Any scraping, bulk downloading, or redistribution of listing data or media is prohibited.</p>
+      <p>You may view listings for personal, non-commercial purposes. Any scraping, bulk downloading, or redistribution of listing data or media is prohibited.</p>
     </div>
 
     <div class="card">
       <h2>5. Intellectual Property & Trademarks</h2>
-      <p>© 2025 Findrr. All rights reserved. REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). MLS®, Multiple Listing Service® and the associated logos are owned by CREA. DDF® is a trademark of CREA.</p>
+      <p>© 2025 Findr™. All rights reserved. REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). MLS®, Multiple Listing Service® and the associated logos are owned by CREA. DDF® is a trademark of CREA.</p>
     </div>
 
     <div class="card">
       <h2>6. Contact</h2>
       <p>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty<br/>
-         Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty">marcusr@lariviererealty</a></p>
+         Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></p>
     </div>
 
     <div class="footer">
       <p><a href="/">← Back to Home</a></p>
     </div>
   </div>
+
+  <!-- Compliance scaffolding -->
+  <script src="config.js"></script>
+  <script src="js/ai-guard.js"></script>
+
+  <!-- Theme toggle -->
+  <script>
+    (function(){
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle');
+      const isDark = () => root.getAttribute('data-theme') !== 'light';
+      const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
+      if (btn) btn.addEventListener('click', () => {
+        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+        localStorage.setItem('theme', root.getAttribute('data-theme'));
+        render();
+      });
+      render();
+    })();
+  </script>
 </body>
 </html>

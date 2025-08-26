@@ -6,20 +6,12 @@
   <title>Findr™ — Listings (Preview)</title>
   <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
   <style>
-    :root {
-      --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624;
-      --chip:#1a2335; --chip-border:#2a3c5a;
-    }
-    :root[data-theme="light"]{
-      --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff;
-      --chip:#f1f4f8; --chip-border:#e5ecf5;
-    }
+    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; --chip:#1a2335; --chip-border:#2a3c5a; }
+    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; --chip:#f1f4f8; --chip-border:#e5ecf5; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
     a{color:var(--brand); text-decoration:none}
     .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
-
-    /* Nav */
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:900}
@@ -27,7 +19,6 @@
     .navlinks a{padding:8px 10px; border-radius:10px}
     .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
-
     .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
     .toolbar{display:grid; grid-template-columns:1.4fr repeat(4, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
     @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
@@ -48,16 +39,13 @@
     .chips{display:flex; gap:8px; flex-wrap:wrap}
     .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
     .back{font-size:12px; margin-top:18px; color:var(--muted)}
-    .muted{color:var(--muted)} /* small fix: class used by count */
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <div class="logo" aria-label="Findr home">Findr™</div>
-      </div>
+      <div class="brand"><div class="logo" aria-label="Findr home">Findr™</div></div>
       <div class="navlinks">
         <a href="/">Home</a>
         <a href="listings.html" class="active" aria-current="page">Listings</a>
@@ -66,7 +54,6 @@
       </div>
     </nav>
 
-    <!-- Controls -->
     <div class="panel">
       <div class="toolbar" role="region" aria-label="Search and filters">
         <input id="q" type="search" placeholder='Try: "quiet street near SkyTrain, 2 bed, south light"' aria-label="Search" />
@@ -96,8 +83,11 @@
     <p class="back"><a href="/">← Back to Home</a></p>
   </div>
 
+  <!-- NEW: compliance scaffolding -->
+  <script src="config.js"></script>
+  <script src="js/ai-guard.js"></script>
+
   <script>
-    // Theme toggle
     (function(){
       const root = document.documentElement;
       const saved = localStorage.getItem('theme');
@@ -115,7 +105,6 @@
       render();
     })();
 
-    // DOM helpers
     const $ = (id) => document.getElementById(id);
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
@@ -175,26 +164,17 @@
         case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
         case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
         case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
-        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
+        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a-baths); break;
       }
       renderCount(); renderChips(); renderGrid();
     }
 
     function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
-    // NEW: resilient loader — tries /data/listings.json first, then root
     async function loadData(){
-      const candidates = [
-        '/data/listings.json',
-        'data/listings.json',
-        '/listings.json',
-        'listings.json'
-      ];
+      const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
       for (const url of candidates){
-        try{
-          const res = await fetch(url, { cache:'no-store' });
-          if (res.ok) return await res.json();
-        }catch(_e){}
+        try{ const res = await fetch(url,{cache:'no-store'}); if(res.ok) return await res.json(); }catch(_e){}
       }
       throw new Error('Could not load listings.json from expected paths.');
     }
@@ -204,7 +184,7 @@
         DATA = await loadData(); VIEW = DATA.slice(); apply();
       }catch(e){
         console.error(e);
-        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code> in the site root.</p>';
+        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
       }
       $('q').addEventListener('input',debounce(apply,200));
       ['beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
