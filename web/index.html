@@ -8,132 +8,113 @@
     :root { --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --accent:#6aa1ff; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
-    .wrap{max-width:960px; margin:0 auto; padding:48px 16px}
-    header{margin:48px 0 16px}
-    h1{font-weight:800; letter-spacing:-0.02em; margin:0 0 12px}
-    p{line-height:1.6; color:var(--muted)}
-    .card{border:1px solid rgba(255,255,255,.08); border-radius:16px; padding:24px; background:rgba(255,255,255,.02)}
+    .wrap{max-width:960px; margin:0 auto; padding:48px 20px}
+    header{display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .logo{font-weight:800; letter-spacing:0.5px}
+    .badge{display:inline-block; padding:6px 10px; border:1px solid #23324a; border-radius:999px; color:var(--muted); font-size:12px}
+    .hero{padding:72px 0 32px}
+    .hero h1{font-size:clamp(32px, 6vw, 56px); margin:0 0 12px; line-height:1.05}
+    .hero p{color:var(--muted); font-size:18px; max-width:60ch}
+    .card{background:rgba(255,255,255,0.04); border:1px solid #223148; border-radius:16px; padding:20px}
     .grid{display:grid; gap:16px}
-    .grid.two{grid-template-columns:repeat(2, minmax(0,1fr));}
-    @media (max-width:720px){ .grid.two{grid-template-columns:1fr} }
-    .badge{display:inline-flex; gap:8px; align-items:center; margin-top:12px; opacity:.9}
-    footer{margin:64px 0 24px; color:var(--muted); font-size:14px}
-    a{color:var(--fg)}
+    @media (min-width: 800px){ .grid{grid-template-columns:1.2fr 1fr} }
+    h2{font-size:18px; margin:0 0 8px}
+    .divider{height:1px; background:#1b263a; margin:16px 0}
+    a{color:var(--accent); text-decoration:none}
+    .owner{font-weight:600}
+    .small{font-size:12px; color:var(--muted)}
+    .powered{display:flex; align-items:center; gap:12px; margin-top:8px}
+    .powered img{width:90px; height:90px; object-fit:contain}
+    .stack{display:flex; flex-direction:column; gap:6px}
     .muted{color:var(--muted)}
-    .btn{display:inline-block; padding:10px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.15); text-decoration:none}
-    .small{font-size:14px}
-    form input, form button{width:100%; padding:12px 14px; border-radius:10px; border:1px solid rgba(255,255,255,.15); background:transparent; color:var(--fg)}
-    form input::placeholder{color:rgba(232,238,247,.6)}
-    form button{cursor:pointer; background:var(--accent); border-color:transparent; color:#061628; font-weight:700}
-  </style>
-  <style>
-    /* Light theme overrides */
-    :root[data-theme="light"] {
-      --bg:#ffffff;
-      --fg:#0b0f17;
-      --muted:#4b5563;
-      --accent:#6aa1ff;
-      --card:#f4f6f8;
-      --chip:#eef2f7;
-      --ink:#101826;
+    .footer{margin-top:48px; font-size:12px; color:var(--muted); text-align:center;}
+    .footer a{color:var(--accent); text-decoration:none; margin:0 6px;}
+    /* Footer CTA button */
+    .footer-cta {
+      display:inline-block; margin:0 6px;
+      padding:8px 12px; border-radius:10px; font-weight:600;
+      background:var(--accent); color:#0b0f17 !important; border:0;
     }
-    /* Minimal top navigation */
-    .topnav{position:sticky; top:0; z-index:1000; background:var(--bg); border-bottom:1px solid rgba(0,0,0,0.1);}
-    .topnav .navwrap{max-width:1100px; margin:0 auto; padding:12px 16px; display:flex; gap:16px; align-items:center; justify-content:space-between;}
-    .topnav a{color:var(--fg); text-decoration:none; opacity:0.9; padding:6px 8px; border-radius:10px}
-    .topnav a:hover{opacity:1; background:rgba(128,128,128,0.12)}
-    .topnav .links{display:flex; gap:8px; align-items:center;}
-    .topnav button#themeToggle{border:1px solid rgba(127,127,127,0.35); background:transparent; color:var(--fg); padding:6px 10px; border-radius:10px; cursor:pointer}
-    .topnav button#themeToggle:hover{background:rgba(128,128,128,0.12)}
   </style>
 </head>
 <body>
-  <nav class="topnav" role="navigation" aria-label="Primary">
-    <div class="navwrap">
-      <div class="links">
-        <a href="index.html">Home</a>
-        <a href="listings.html">Listings</a>
-        <a href="map.html">Map</a>
-      </div>
-      <div class="links">
-        <button id="themeToggle" aria-label="Toggle color theme">🌙</button>
-      </div>
-    </div>
-  </nav>
-
   <div class="wrap">
     <header>
-      <h1>Findr™</h1>
-      <p class="muted">An AI-first real estate search engine and listing provider. Private alpha is in progress.</p>
+      <div class="logo">Findr™</div>
+      <span class="badge">AI-first real estate search</span>
     </header>
 
-    <div class="grid two">
-      <section class="card">
-        <h2>Be first to know</h2>
-        <p>Join the early waitlist. We’ll share updates when the private alpha is ready.</p>
-        <form name="waitlist" method="POST" data-netlify="true" netlify-honeypot="bot-field" action="/thank-you.html">
-          <input type="hidden" name="form-name" value="waitlist">
-          <p class="hidden" style="display:none;">
-            <label>Don’t fill this out: <input name="bot-field" /></label>
-          </p>
-          <div class="grid" style="margin-top:12px; gap:12px;">
-            <input type="text" name="name" placeholder="Full name" required>
-            <input type="email" name="email" placeholder="Email address" required>
-            <button type="submit">Join Waitlist</button>
-          </div>
-          <p class="small muted">We respect your privacy. No spam, ever.</p>
-        </form>
-      </section>
+    <section class="hero">
+      <h1>Real estate search, reimagined.</h1>
+      <p>We’re building an AI-first, map-centric search that turns plain-language requests (like “quiet street near SkyTrain, dog-friendly strata, south light”) into precise results. Private alpha coming soon.</p>
+    </section>
 
-      <section class="card">
-        <h2>Compliance & Attribution</h2>
-        <p class="muted small">All listing data is provided via CREA DDF® under reciprocal/IDX terms. Brokerage name, trademarks, and attributions will be displayed on every listing.</p>
-        <div class="badge">
-          <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" height="28" />
-          <span class="small muted">Powered by REALTOR.ca</span>
+    <section class="grid">
+      <div class="card">
+        <h2>Contact</h2>
+        <div class="stack">
+          <div class="owner">Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty</div>
+          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></div>
+          <div class="small">Site owner & operator (Participant responsible for this Website).</div>
         </div>
-        <p class="small muted" style="margin-top:12px">
-          © 2025 Findr™. Trademarks owned or controlled by The Canadian Real Estate Association (CREA) used under license.
-        </p>
-        <p class="small">
-          <a href="terms.html" class="btn small">Terms</a>
-          &nbsp; <a href="privacy.html" class="btn small">Privacy</a>
-        </p>
-      </section>
-    </div>
+        <div class="divider"></div>
+        <h2>Compliance</h2>
+        <div class="powered">
+          <a href="#" aria-label="Powered by REALTOR.ca">
+            <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" width="90" height="90" />
+          </a>
+        </div>
+        <p class="small">Each listing will also display the <strong>Listing Brokerage name</strong> adjacent to the property details.</p>
+      </div>
 
-    <footer>
-      <p class="small muted">Demo only. Final product will include brokerage details, board-specific compliance, and live data via CREA DDF®.</p>
-    </footer>
+      <div class="card">
+        <h2>Trademark & Legal Statements</h2>
+        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks that are owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). These certification marks identify real estate professionals who are members of CREA and who must abide by CREA’s By-Laws, Rules, and the REALTOR® Code.</p>
+        <p class="small">The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are members of CREA.</p>
+        <p class="small">The trademark DDF® is owned by The Canadian Real Estate Association (CREA) and identifies CREA’s Data Distribution Facility (DDF®).</p>
+        <div class="divider"></div>
+        <p class="small">© 2025 Findr™. All rights reserved.</p>
+      </div>
+    </section>
+
+    <!-- Waitlist (honeypot + thank-you redirect intact) -->
+    <section class="card" style="margin-top:32px;">
+      <h2>Join the Waitlist</h2>
+      <p class="small">Be the first to try Findr™ when our private beta launches.</p>
+      <form name="waitlist"
+            method="POST"
+            data-netlify="true"
+            data-netlify-honeypot="bot-field"
+            action="thank-you.html"
+            style="margin-top:12px;">
+        <input type="hidden" name="form-name" value="waitlist" />
+        <p style="display:none">
+          <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="email" name="email" placeholder="Your email address" required
+                 style="flex:1; padding:10px; border-radius:6px; border:1px solid #223148; background:#0b0f17; color:#e8eef7;" />
+          <button type="submit"
+                  style="padding:10px 16px; border:none; border-radius:6px; background:#6aa1ff; color:#fff; font-weight:600; cursor:pointer;">
+            Join
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Footer with button-highlighted Map link -->
+    <section class="footer">
+      <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
+      <p>
+        <a href="terms.html">Terms of Use</a> · 
+        <a href="privacy.html">Privacy Policy</a> · 
+        <a href="listings.html">Preview Listings</a>
+        <!-- button-style CTA for the map -->
+        <a href="map.html">Map Preview</a>
+      </p>
+    </section>
+
+    <!-- deploy test -->
   </div>
-
-  <script>
-    (function(){
-      var root = document.documentElement;
-      var saved = localStorage.getItem('findr_theme');
-      if(saved === 'light' || saved === 'dark'){
-        root.setAttribute('data-theme', saved);
-      } else {
-        root.setAttribute('data-theme','dark');
-      }
-      function setIcon(){
-        var btn = document.getElementById('themeToggle');
-        if(!btn) return;
-        btn.textContent = (root.getAttribute('data-theme') === 'dark') ? '☀️' : '🌙';
-      }
-      document.addEventListener('DOMContentLoaded', function(){
-        setIcon();
-        var btn = document.getElementById('themeToggle');
-        if(btn){
-          btn.addEventListener('click', function(){
-            var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-            root.setAttribute('data-theme', next);
-            localStorage.setItem('findr_theme', next);
-            setIcon();
-          });
-        }
-      });
-    })();
-  </script>
 </body>
 </html>
