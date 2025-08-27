@@ -1,8 +1,6 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0b0f17">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Coming Soon</title>
@@ -24,11 +22,19 @@
     .hero{padding:56px 0 24px}
     .hero h1{font-size:clamp(32px,6vw,56px); margin:0 0 12px; line-height:1.05}
     .hero p{color:var(--muted); font-size:18px; max-width:60ch}
-    .grid{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:14px}
-    @media (max-width: 900px){ .grid{grid-template-columns:1fr 1fr} }
-    @media (max-width: 600px){ .grid{grid-template-columns:1fr} }
-    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
-    .muted{color:var(--muted)}
+    .grid{display:grid; gap:16px}
+    @media(min-width:900px){ .grid{grid-template-columns:1.2fr 1fr} }
+    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:20px}
+    h2{font-size:18px; margin:0 0 8px}
+    .stack{display:flex; flex-direction:column; gap:6px}
+    .divider{height:1px; background:var(--stroke); margin:16px 0}
+    .small{font-size:12px; color:var(--muted)}
+    .powered{display:flex; align-items:center; gap:12px; margin-top:8px}
+    .powered img{width:90px; height:90px; object-fit:contain}
+    .btn{padding:10px 16px; border:none; border-radius:10px; background:var(--brand); color:#fff; font-weight:700; cursor:pointer}
+    input[type="email"]{flex:1; padding:10px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg)}
+    .footer{margin-top:36px; font-size:12px; color:var(--muted); text-align:center}
+    .footer a{color:var(--brand); margin:0 6px}
   </style>
 </head>
 <body>
@@ -43,35 +49,81 @@
       </div>
     </nav>
 
-    <section class="hero" aria-label="Intro">
-      <h1>Find homes faster.</h1>
-      <p>Findr™ lets you search naturally, then turns your words into precise filters — staying fully compliant.</p>
+    <section class="hero">
+      <h1>Real estate search, reimagined.</h1>
+      <p>We’re building an AI-first, map-centric search that turns plain-language requests (like “quiet street near SkyTrain, dog-friendly strata, south light”) into precise results. Private alpha coming soon.</p>
     </section>
 
-    <div class="grid" role="region" aria-label="Quick links">
-      <div class="card"><strong>Browse</strong><div class="muted">See the mock listings grid with filters.</div><div><a href="listings.html">Open listings →</a></div></div>
-      <div class="card"><strong>Map</strong><div class="muted">View the same results as pins on the map.</div><div><a href="map.html">Open map →</a></div></div>
-      <div class="card"><strong>Compliance</strong><div class="muted">Cards include brokerage & “Powered by REALTOR.ca”.</div><div><a href="listings.html#grid">See example →</a></div></div>
-    </div>
+    <section class="grid">
+      <div class="card">
+        <h2>Contact</h2>
+        <div class="stack">
+          <div><strong>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty</strong></div>
+          <div>Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></div>
+          <div class="small">Site owner & operator (Participant responsible for this Website).</div>
+        </div>
+        <div class="divider"></div>
+        <h2>Compliance</h2>
+        <div class="powered">
+          <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" />
+        </div>
+        <p class="small">Each listing will display the <strong>Listing Brokerage name</strong> adjacent to the property details and include the “Powered by REALTOR.ca” badge linking to the listing.</p>
+      </div>
+
+      <div class="card">
+        <h2>Trademark & Legal Statements</h2>
+        <p class="small">REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to CREA. The trademarks MLS®, Multiple Listing Service® and the associated logos are owned by CREA. The trademark DDF® is owned by CREA.</p>
+        <div class="divider"></div>
+        <p class="small">© 2025 Findr™. All rights reserved.</p>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:24px;">
+      <h2>Join the Waitlist</h2>
+      <p class="small">Be the first to try Findr™ when our private beta launches.</p>
+      <form name="waitlist" method="POST" data-netlify="true" data-netlify-honeypot="bot-field" action="thank-you.html" style="margin-top:12px;">
+        <input type="hidden" name="form-name" value="waitlist" />
+        <p style="display:none"><label>Don’t fill this out if you’re human: <input name="bot-field" aria-label="Do not fill"/></label></p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap;">
+          <input type="email" name="email" placeholder="Your email address" required aria-label="Email address"/>
+          <button type="submit" class="btn">Join</button>
+        </div>
+      </form>
+    </section>
+
+    <section class="footer">
+      <p><strong>Note:</strong> This page is a placeholder. Listing content will appear after data access is fully configured and compliance is confirmed.</p>
+      <p>
+        <a href="terms.html">Terms of Use</a> ·
+        <a href="privacy.html">Privacy Policy</a> ·
+        <a href="listings.html">Preview Listings</a> ·
+        <a href="map.html">Map Preview</a>
+      </p>
+    </section>
   </div>
 
+  <!-- NEW: compliance scaffolding -->
+  <script src="config.js"></script>
+  <script src="js/ai-guard.js"></script>
+
+  <!-- Theme script (existing) -->
   <script>
     (function(){
-      const root=document.documentElement; const saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);
-      const btn=document.getElementById('theme-toggle');
-      const isDark=()=>root.getAttribute('data-theme')!=='light';
-      const render=()=>{ if(btn) btn.textContent=isDark()?'🌙':'☀️'; };
-      if(btn) btn.addEventListener('click',()=>{ root.setAttribute('data-theme', isDark()? 'light':'dark'); localStorage.setItem('theme', root.getAttribute('data-theme')); render(); });
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle');
+      const isDark = () => root.getAttribute('data-theme') !== 'light';
+      const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
+      if (btn) {
+        btn.addEventListener('click', () => {
+          root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+          localStorage.setItem('theme', root.getAttribute('data-theme'));
+          render();
+        });
+      }
       render();
     })();
-  </script>
-
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function(){
-        navigator.serviceWorker.register('/sw.js').catch(()=>{});
-      });
-    }
   </script>
 </body>
 </html>
