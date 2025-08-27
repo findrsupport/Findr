@@ -1,73 +1,45 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0b0f17">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Thank You</title>
+  <title>Findr™ — Thanks</title>
   <style>
     :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; }
     :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; }
     *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
+    .wrap{max-width:800px; margin:0 auto; padding:28px 20px}
     a{color:var(--brand); text-decoration:none}
-    .wrap{max-width:720px; margin:0 auto; padding:28px 20px}
-    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
-    .brand{display:flex; align-items:center; gap:10px}
-    .logo{font-weight:900}
-    .navlinks{display:flex; align-items:center; gap:14px}
-    .navlinks a{padding:8px 10px; border-radius:10px}
-    .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
-    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:24px; margin-top:16px}
-    h1{font-size:clamp(28px, 5vw, 40px); margin:0 0 12px}
-    p{color:var(--muted); margin:0 0 12px}
-    .btn{display:inline-block; margin-top:12px; padding:10px 16px; border-radius:8px; background:var(--brand); color:#fff; font-weight:600}
-    .foot{margin-top:16px; font-size:12px; color:var(--muted);}
+    .muted{color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <!-- Nav -->
-    <nav class="nav" role="navigation" aria-label="Primary">
-      <div class="brand">
-        <div class="logo" aria-label="Findr home">Findr™</div>
-      </div>
-      <div class="navlinks">
-        <a href="/">Home</a>
-        <a href="listings.html">Listings</a>
-        <a href="map.html">Map</a>
-        <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
-      </div>
-    </nav>
-
-    <div class="card">
-      <h1>Thanks for joining the Findr™ waitlist!</h1>
-      <p>We’ll email you when private beta invites go out. In the meantime, keep an eye on this page for updates.</p>
-      <a class="btn" href="/">Return to Home</a>
-    </div>
-    <p class="foot">© 2025 Findr™. All rights reserved.</p>
+    <nav style="display:flex;justify-content:space-between;align-items:center"><div>Findr™</div><button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button></nav>
+    <h1>Thanks!</h1>
+    <p class="muted">We’ll be in touch when the private alpha expands.</p>
+    <p><a href="/">← Back to home</a></p>
   </div>
-
-  <!-- Compliance scaffolding -->
-  <script src="config.js"></script>
-  <script src="js/ai-guard.js"></script>
-
-  <!-- Theme toggle -->
   <script>
     (function(){
-      const root = document.documentElement;
-      const saved = localStorage.getItem('theme');
-      if (saved) root.setAttribute('data-theme', saved);
-      const btn = document.getElementById('theme-toggle');
-      const isDark = () => root.getAttribute('data-theme') !== 'light';
-      const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
-      if (btn) btn.addEventListener('click', () => {
-        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
-        localStorage.setItem('theme', root.getAttribute('data-theme'));
-        render();
-      });
+      const root=document.documentElement; const saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);
+      const btn=document.getElementById('theme-toggle');
+      const isDark=()=>root.getAttribute('data-theme')!=='light';
+      const render=()=>{ if(btn) btn.textContent=isDark()?'🌙':'☀️'; };
+      if(btn) btn.addEventListener('click',()=>{ root.setAttribute('data-theme', isDark()? 'light':'dark'); localStorage.setItem('theme', root.getAttribute('data-theme')); render(); });
       render();
     })();
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function(){
+        navigator.serviceWorker.register('/sw.js').catch(()=>{});
+      });
+    }
   </script>
 </body>
 </html>
