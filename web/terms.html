@@ -1,44 +1,107 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0b0f17">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Terms</title>
+  <title>Findr™ — Terms of Use</title>
   <style>
     :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; }
     :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; }
     *{box-sizing:border-box}
-    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
-    .wrap{max-width:900px; margin:0 auto; padding:28px 20px}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg);}
     a{color:var(--brand); text-decoration:none}
+    .wrap{max-width:960px; margin:0 auto; padding:28px 20px}
+    /* Nav */
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{font-weight:900}
+    .navlinks{display:flex; align-items:center; gap:14px}
+    .navlinks a{padding:8px 10px; border-radius:10px}
+    .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
+    /* Content */
+    h1{font-size:clamp(28px,4.5vw,42px); margin:12px 0 8px}
     .muted{color:var(--muted)}
+    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:20px; margin-top:20px}
+    h2{font-size:18px; margin:0 0 8px}
+    ul{margin:8px 0 0 18px}
+    .footer{margin-top:32px; font-size:12px; color:var(--muted)}
   </style>
 </head>
 <body>
   <div class="wrap">
-    <nav style="display:flex;justify-content:space-between;align-items:center"><div>Findr™</div><button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button></nav>
-    <h1>Terms</h1>
-    <p class="muted">This demo is provided “as is” with mock data; it is not a real real-estate search or brokerage service.</p>
+    <!-- Nav -->
+    <nav class="nav" role="navigation" aria-label="Primary">
+      <div class="brand">
+        <div class="logo" aria-label="Findr home">Findr™</div>
+      </div>
+      <div class="navlinks">
+        <a href="/">Home</a>
+        <a href="listings.html">Listings</a>
+        <a href="map.html">Map</a>
+        <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
+      </div>
+    </nav>
+
+    <h1>Terms of Use</h1>
+    <p class="muted">Last updated: Aug 22, 2025</p>
+
+    <div class="card">
+      <h2>1. Acceptance of Terms</h2>
+      <p>By accessing or using this website, you agree to these Terms of Use and our Privacy Policy. If you do not agree, do not use the site.</p>
+    </div>
+
+    <div class="card">
+      <h2>2. Listing Data & Attribution</h2>
+      <p>Listing data is provided under license via CREA’s Data Distribution Facility (DDF®) and/or participating boards/MLS® systems. Display of this data is subject to applicable rules, including attribution to the listing brokerage and the display of the Powered by REALTOR.ca badge linking to the corresponding listing on REALTOR.ca.</p>
+    </div>
+
+    <div class="card">
+      <h2>3. Accuracy & Availability</h2>
+      <p>Information is deemed reliable but is not guaranteed and should be independently verified. Content and features may change or be unavailable at any time.</p>
+    </div>
+
+    <div class="card">
+      <h2>4. Permitted Use</h2>
+      <p>You may view listings for personal, non-commercial purposes. Any scraping, bulk downloading, or redistribution of listing data or media is prohibited.</p>
+    </div>
+
+    <div class="card">
+      <h2>5. Intellectual Property & Trademarks</h2>
+      <p>© 2025 Findr™. All rights reserved. REALTOR®, REALTORS®, and the REALTOR® logo are certification marks owned by REALTOR® Canada Inc. and licensed exclusively to The Canadian Real Estate Association (CREA). MLS®, Multiple Listing Service® and the associated logos are owned by CREA. DDF® is a trademark of CREA.</p>
+    </div>
+
+    <div class="card">
+      <h2>6. Contact</h2>
+      <p>Marcus Alexander Roth, REALTOR® — RE/MAX All Points Realty<br/>
+         Phone: <a href="tel:+17782149655">778 214 9655</a> · Email: <a href="mailto:marcusr@lariviererealty.com">marcusr@lariviererealty.com</a></p>
+    </div>
+
+    <div class="footer">
+      <p><a href="/">← Back to Home</a></p>
+    </div>
   </div>
+
+  <!-- Compliance scaffolding -->
+  <script src="config.js"></script>
+  <script src="js/ai-guard.js"></script>
+
+  <!-- Theme toggle -->
   <script>
     (function(){
-      const root=document.documentElement; const saved=localStorage.getItem('theme'); if(saved) root.setAttribute('data-theme',saved);
-      const btn=document.getElementById('theme-toggle');
-      const isDark=()=>root.getAttribute('data-theme')!=='light';
-      const render=()=>{ if(btn) btn.textContent=isDark()?'🌙':'☀️'; };
-      if(btn) btn.addEventListener('click',()=>{ root.setAttribute('data-theme', isDark()? 'light':'dark'); localStorage.setItem('theme', root.getAttribute('data-theme')); render(); });
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle');
+      const isDark = () => root.getAttribute('data-theme') !== 'light';
+      const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
+      if (btn) btn.addEventListener('click', () => {
+        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+        localStorage.setItem('theme', root.getAttribute('data-theme'));
+        render();
+      });
       render();
     })();
-  </script>
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', function(){
-        navigator.serviceWorker.register('/sw.js').catch(()=>{});
-      });
-    }
   </script>
 </body>
 </html>
