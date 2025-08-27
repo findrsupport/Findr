@@ -22,14 +22,14 @@
     .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
 
     .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
-    /* +1 column for City */
     .toolbar{display:grid; grid-template-columns:1.6fr repeat(5, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
     @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
     .searchbox{display:flex; gap:8px}
-    input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
-    .smart{white-space:nowrap; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--card); color:var(--fg); cursor:pointer}
+    input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg)}
+    .smart{border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:10px 12px; cursor:pointer}
 
     .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
+
     .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
     .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
     .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
@@ -39,7 +39,7 @@
     .price{font-weight:900}
     .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
     .broker{font-size:12px; color:var(--muted)}
-    .actions{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding:12px 14px; border-top:1px solid var(--stroke)}
+    .actions{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); margin-top:auto; padding:12px 14px; border-top:1px solid var(--stroke)}
     .pbr{display:flex; align-items:center; gap:8px}
     .pbr img{width:24px; height:24px; object-fit:contain}
     .chips{display:flex; gap:8px; flex-wrap:wrap}
@@ -67,7 +67,7 @@
     <div class="panel">
       <div class="toolbar" role="region" aria-label="Search and filters">
         <div class="searchbox">
-          <input id="q" type="search" placeholder='Describe your needs, then press Enter or click “Smart”' aria-label="Search or describe your needs" />
+          <input id="q" type="search" placeholder='Describe your... or click “Smart”' aria-label="Search or describe your needs" />
           <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
         </div>
 
@@ -80,7 +80,7 @@
           <option>Langley</option><option>Maple Ridge</option>
         </select>
 
-        <!-- Beds (now up to 5+) -->
+        <!-- Beds -->
         <select id="beds" aria-label="Minimum bedrooms">
           <option value="">Beds (any)</option>
           <option value="1">1+ bed</option><option value="2">2+ bed</option>
@@ -88,7 +88,7 @@
           <option value="5">5+ bed</option>
         </select>
 
-        <!-- Baths (now up to 5+) -->
+        <!-- Baths -->
         <select id="baths" aria-label="Minimum bathrooms">
           <option value="">Baths (any)</option>
           <option value="1">1+ bath</option><option value="2">2+ bath</option>
@@ -96,32 +96,31 @@
           <option value="5">5+ bath</option>
         </select>
 
-        <!-- Better price ranges -->
+        <!-- Price -->
         <select id="minp" aria-label="Min price">
           <option value="">Min price</option>
-          <option value="300000">$300k</option><option value="400000">$400k</option>
+          <option value="250000">$250k</option><option value="400000">$400k</option>
           <option value="500000">$500k</option><option value="600000">$600k</option>
-          <option value="700000">$700k</option><option value="800000">$800k</option>
-          <option value="900000">$900k</option><option value="1000000">$1.0M</option>
-          <option value="1200000">$1.2M</option><option value="1400000">$1.4M</option>
-          <option value="1600000">$1.6M</option><option value="1800000">$1.8M</option>
+          <option value="750000">$750k</option><option value="1000000">$1.0M</option>
+          <option value="1250000">$1.25M</option><option value="1500000">$1.5M</option>
           <option value="2000000">$2.0M</option>
         </select>
-
         <select id="maxp" aria-label="Max price">
           <option value="">Max price</option>
-          <option value="500000">$500k</option><option value="600000">$600k</option>
-          <option value="700000">$700k</option><option value="800000">$800k</option>
-          <option value="900000">$900k</option><option value="1000000">$1.0M</option>
-          <option value="1200000">$1.2M</option><option value="1400000">$1.4M</option>
-          <option value="1600000">$1.6M</option><option value="1800000">$1.8M</option>
-          <option value="2000000">$2.0M</option><option value="2500000">$2.5M</option>
+          <option value="400000">$400k</option><option value="500000">$500k</option>
+          <option value="600000">$600k</option><option value="750000">$750k</option>
+          <option value="1000000">$1.0M</option><option value="1250000">$1.25M</option>
+          <option value="1500000">$1.5M</option><option value="2000000">$2.0M</option>
+          <option value="3000000">$3.0M</option>
         </select>
 
+        <!-- Sort -->
         <select id="sort" aria-label="Sort">
           <option value="relevance">Sort: Relevance</option>
-          <option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option>
-          <option value="beds-desc">Beds ↓</option><option value="baths-desc">Baths ↓</option>
+          <option value="price-asc">Price ↑</option>
+          <option value="price-desc">Price ↓</option>
+          <option value="beds-desc">Beds ↓</option>
+          <option value="baths-desc">Baths ↓</option>
         </select>
       </div>
 
@@ -195,7 +194,6 @@
     }
 
     function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
-
     function renderWhy(){
       const parts=[];
       const q=$('q').value.trim(); if(q) parts.push(`Text: “${q}”`);
@@ -219,15 +217,16 @@
       const beds=$('beds').value; if(beds) active.push({label:`${beds}+ bed`, id:'beds'});
       const baths=$('baths').value; if(baths) active.push({label:`${baths}+ bath`, id:'baths'});
       const minp=$('minp').value, maxp=$('maxp').value;
-      if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
+      if(minp||maxp){ active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'}); active.push({label:'Reset price', id:'price-reset'}); }
       const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
       active.push({label:'Copy link', id:'copy'}); active.push({label:'Clear all', id:'clear'});
 
-      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" title="${c.id==='copy'?'Copy current URL to clipboard':'Clear filters'}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
+      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" type="button" aria-label="${c.label}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
       chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
         const id=b.getAttribute('data-id');
         if(id==='copy'){ copyLink(b); return; }
         if(id==='clear'){ clearAll(); return; }
+        if(id==='price-reset'){ $('minp').value=''; $('maxp').value=''; apply(); return; }
         if(id==='q') $('q').value='';
         if(id==='city') $('city').value='';
         if(id==='beds') $('beds').value='';
@@ -251,7 +250,7 @@
           </div>
           <div class="actions">
             <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
-              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" /><span style="color:var(--muted)">View on REALTOR.ca</span>
+              <img src="https://static.realtor.ca/branding/powered-by-realtor.png" alt="Powered by REALTOR.ca" width="24" height="24"> REALTOR.ca
             </a>
             <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
           </div>`;
@@ -275,6 +274,13 @@
       setParams(); renderCount(); renderChips(); renderGrid(); renderWhy();
     }
 
+    function nearestOption(selectId, target){
+      const sel=$(selectId), vals=[...sel.options].map(o=>+o.value||0).filter(Boolean);
+      let best=''; let diff=1e15;
+      vals.forEach(v=>{ const d=Math.abs(v-target); if(d<diff){ diff=d; best=String(v); } });
+      sel.value=best;
+    }
+
     function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
     async function loadData(){
@@ -283,44 +289,6 @@
         try{ const res = await fetch(url,{cache:'no-store'}); if(res.ok) return await res.json(); }catch(_e){}
       }
       throw new Error('Could not load listings.json from expected paths.');
-    }
-
-    // Snap Smart prices to nearest dropdown options
-    function nearestOption(selectId, value){
-      if (!value) return;
-      const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
-      if (!opts.length) return;
-      let chosen = opts.find(v=>v>=value) ?? opts[opts.length-1];
-      sel.value = String(chosen);
-    }
-
-    async function smartFromText(){
-      const text = $('q').value || '';
-      let spec = null;
-
-      try {
-        const res = await fetch('/.netlify/functions/intent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text })
-        });
-        if (res.ok) spec = await res.json();
-      } catch (e) {
-        console.debug('Intent API not available, falling back to demo:', e);
-      }
-
-      if (!spec) spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
-
-      try{
-        if (spec.beds_min) $('beds').value = String(spec.beds_min);
-        if (spec.baths_min) $('baths').value = String(spec.baths_min);
-        if (spec.min_price) nearestOption('minp', spec.min_price);
-        if (spec.max_price) nearestOption('maxp', spec.max_price);
-        if (Array.isArray(spec.areas) && spec.areas.length) $('city').value = spec.areas[0];
-        $('q').value = '';
-        if (spec.sort) $('sort').value = spec.sort;
-        apply(); $('why').open = true;
-      }catch(err){ console.debug('Smart parse apply failed:', err); }
     }
 
     function clearAll(){
@@ -333,6 +301,38 @@
         await navigator.clipboard.writeText(window.location.href);
         const old = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=old,1200);
       }catch{ prompt('Copy this URL:', window.location.href); }
+    }
+
+    let SMART_STATUS='';
+    function updateSmartStatus(){ /* placeholder for future status text if needed */ }
+    async function smartFromText(){
+      const text = $('q').value || '';
+      let spec = null;
+      let usedFallback = false;
+
+      try {
+        const res = await fetch('/.netlify/functions/intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text })
+        });
+        if (res.ok) spec = await res.json();
+      } catch (e) {
+        console.debug('Intent API not available, falling back to demo:', e);
+      }
+
+      if (!spec) { usedFallback = true; spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo); }
+
+      try{
+        if (spec.beds_min) $('beds').value = String(spec.beds_min);
+        if (spec.baths_min) $('baths').value = String(spec.baths_min);
+        if (spec.min_price) nearestOption('minp', spec.min_price);
+        if (spec.max_price) nearestOption('maxp', spec.max_price);
+        if (Array.isArray(spec.areas) && spec.areas.length) $('city').value = spec.areas[0];
+        $('q').value = '';
+        if (spec.sort) $('sort').value = spec.sort;
+        apply(); SMART_STATUS = usedFallback ? 'fallback' : 'server parser'; updateSmartStatus(); $('why').open = true;
+      }catch(err){ console.debug('Smart parse apply failed:', err); }
     }
 
     async function boot(){
@@ -353,5 +353,39 @@
     }
     boot();
   </script>
+
+  <!-- JUNIPER START: OPEN-IN-MAP -->
+  <script>
+    (function(){
+      try{
+        var chips = document.getElementById('chips');
+        if(!chips) return;
+        var row = chips.parentElement;
+        var link = document.createElement('a');
+        link.id = 'open-map-link';
+        link.href = 'map.html' + (location.search || '');
+        link.textContent = 'Open this search on Map →';
+        link.className = 'muted';
+        link.setAttribute('aria-label','Open this search on the map');
+        link.style.marginLeft = 'auto';
+        row.appendChild(link);
+
+        function updateLink(){
+          try{ link.href = 'map.html' + (location.search || ''); }catch(_e){}
+        }
+        ['city','beds','baths','minp','maxp','sort','q'].forEach(function(id){
+          var el = document.getElementById(id);
+          if(!el) return;
+          var ev = (id === 'q') ? 'input' : 'change';
+          el.addEventListener(ev, function(){ setTimeout(updateLink, 0); });
+        });
+        var chipsEl = document.getElementById('chips');
+        if (chipsEl) chipsEl.addEventListener('click', function(){ setTimeout(updateLink, 0); });
+        window.addEventListener('popstate', updateLink);
+      }catch(e){ /* noop */ }
+    })();
+  </script>
+  <!-- JUNIPER END: OPEN-IN-MAP -->
+
 </body>
 </html>
