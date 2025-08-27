@@ -41,6 +41,11 @@
     .addr{font-weight:800}
     .meta{color:var(--muted); font-size:12px}
   </style>
+
+  <!-- JUNIPER START: CLUSTER-CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <!-- JUNIPER END: CLUSTER-CSS -->
 </head>
 <body>
   <div class="wrap">
@@ -148,7 +153,6 @@
       if (!list.length) return;
       const bounds = [];
       list.forEach(it=>{
-        // FIX: accept either `lng` or `lon` from the dataset
         const lat = typeof it.lat === 'number' ? it.lat : null;
         const lng = typeof it.lng === 'number' ? it.lng : (typeof it.lon === 'number' ? it.lon : null);
         if (typeof lat !== 'number' || typeof lng !== 'number') return;
@@ -188,5 +192,45 @@
     }
     boot();
   </script>
+
+  <!-- JUNIPER START: LIST-LINK-PARITY -->
+  <script>
+    (function(){
+      try{
+        var link = document.querySelector('a[aria-label="View as a list"]') || null;
+        if (link) { link.href = 'listings.html' + (location.search || ''); }
+      }catch(e){ /* noop */ }
+    })();
+  </script>
+  <!-- JUNIPER END: LIST-LINK-PARITY -->
+
+  <!-- JUNIPER START: CLUSTER -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <script>
+    (function(){
+      function upgradeToClusters(){
+        if (!window.L || !L.markerClusterGroup) return;
+        var m = window.map, current = window.layer;
+        if (!m || !current) return;
+        try {
+          var cluster = L.markerClusterGroup({ maxClusterRadius: 60, spiderfyOnMaxZoom: true, chunkedLoading: true });
+          if (current.getLayers) {
+            current.getLayers().forEach(function(child){ cluster.addLayer(child); });
+          }
+          m.removeLayer(current);
+          cluster.addTo(m);
+          window.layer = cluster; // future updates add to cluster
+        } catch (_e) {}
+      }
+      if (document.readyState === 'complete') {
+        upgradeToClusters();
+      } else {
+        window.addEventListener('load', upgradeToClusters);
+      }
+    })();
+  </script>
+  <!-- JUNIPER END: CLUSTER -->
+
 </body>
 </html>
+S
