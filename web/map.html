@@ -148,7 +148,11 @@
       if (!list.length) return;
       const bounds = [];
       list.forEach(it=>{
-        if (typeof it.lat !== 'number' || typeof it.lng !== 'number') return;
+        // FIX: accept either `lng` or `lon` from the dataset
+        const lat = typeof it.lat === 'number' ? it.lat : null;
+        const lng = typeof it.lng === 'number' ? it.lng : (typeof it.lon === 'number' ? it.lon : null);
+        if (typeof lat !== 'number' || typeof lng !== 'number') return;
+
         const html = `
           <div class="addr">${it.address}</div>
           <div class="price">${fmtPrice(it.price)}</div>
@@ -156,9 +160,9 @@
           <div style="margin-top:8px;">
             <a href="${it.realtorca_url}" target="_blank" rel="noopener">View on REALTOR.ca →</a>
           </div>`;
-        const m = L.marker([it.lat, it.lng]).bindPopup(html);
+        const m = L.marker([lat, lng]).bindPopup(html);
         m.addTo(layer);
-        bounds.push([it.lat, it.lng]);
+        bounds.push([lat, lng]);
       });
       if (bounds.length) map.fitBounds(bounds, { padding:[40,40] });
     }
