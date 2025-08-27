@@ -3,599 +3,355 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ · Listings</title>
-  <meta name="description" content="Findr™ — clean, compliant real-estate search. Deterministic filters.">
-  <link rel="preload" href="/web/data/listings.json" as="fetch" crossorigin="anonymous" />
+  <title>Findr™ — Listings (Preview)</title>
+  <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
   <style>
-    :root {
-      --brand: #7cc5ff;
-      --bg: #0b0f13;
-      --fg: #e8eef5;
-      --muted: #9fb2c3;
-      --card: #131920;
-      --stroke: #273140;
-      --surface: #0f141a;
-    }
-    [data-theme="light"] {
-      --bg: #ffffff;
-      --fg: #1a2430;
-      --muted: #516171;
-      --card: #f7f9fb;
-      --stroke: #d9e0e7;
-      --surface: #ffffff;
-    }
-    html, body {
-      height: 100%;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      line-height: 1.4;
-    }
-    a { color: var(--brand); text-decoration: none; }
-    a:focus-visible, button:focus-visible, select:focus-visible, input:focus-visible {
-      outline: 2px solid var(--brand);
-      outline-offset: 2px;
-      border-radius: 6px;
-    }
-    header {
-      border-bottom: 1px solid var(--stroke);
-      background: var(--surface);
-      position: sticky; top: 0; z-index: 10;
-    }
-    .wrap { max-width: 1080px; margin: 0 auto; padding: 16px; }
-    .nav {
-      display: flex; align-items: center; gap: 16px; justify-content: space-between;
-    }
-    .nav-left, .nav-right { display: flex; gap: 12px; align-items: center; }
-    .brand { font-weight: 700; letter-spacing: .3px; }
-    .pill { padding: 8px 12px; border: 1px solid var(--stroke); border-radius: 10px; background: var(--card); color: var(--fg); }
-    main .filters { display: grid; gap: 12px; grid-template-columns: 1fr; margin-top: 16px; }
-    @media (min-width: 780px) {
-      main .filters { grid-template-columns: 1.2fr .9fr .9fr .9fr .9fr .9fr; }
-    }
-    label { font-size: 12px; color: var(--muted); display: block; margin-bottom: 6px; }
-    input[type="text"], select {
-      width: 100%; padding: 10px 12px; background: var(--card); color: var(--fg);
-      border: 1px solid var(--stroke); border-radius: 10px;
-    }
-    button { cursor: pointer; }
-    .btn {
-      padding: 10px 12px; border-radius: 10px; border: 1px solid var(--stroke);
-      background: var(--card); color: var(--fg);
-    }
-    .btn.brand { background: var(--brand); color: #0b0f13; border-color: transparent; }
-    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
-    .chip {
-      display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; font-size: 13px;
-      background: var(--card); border: 1px solid var(--stroke); border-radius: 999px;
-    }
-    .chip button { border: none; background: transparent; color: var(--muted); padding: 0; }
-    .row { display: grid; grid-template-columns: 1fr; gap: 12px; }
-    @media (min-width: 780px) { .row { grid-template-columns: 1fr auto; align-items: center; } }
-    .result-meta { color: var(--muted); font-size: 14px; }
-    .why {
-      border: 1px solid var(--stroke); border-radius: 12px; background: var(--surface);
-      padding: 12px; margin-top: 8px;
-    }
-    .grid {
-      display: grid; gap: 14px; margin-top: 14px;
-      grid-template-columns: repeat(1, minmax(0, 1fr));
-    }
-    @media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
-    @media (min-width: 980px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-    .card {
-      border: 1px solid var(--stroke); border-radius: 14px; overflow: clip; background: var(--card);
-      display: flex; flex-direction: column;
-    }
-    .thumb { width: 100%; height: 168px; object-fit: cover; background: #000; }
-    .card-body { padding: 12px; display: grid; gap: 6px; }
-    .meta { color: var(--muted); font-size: 13px; }
-    .compliance {
-      margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--stroke);
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
-    }
-    .badge { display: inline-flex; align-items: center; gap: 8px; }
-    .badge img { height: 20px; width: auto; }
-    footer {
-      border-top: 1px solid var(--stroke); margin-top: 24px; padding: 16px 0; color: var(--muted);
-      font-size: 12px; background: var(--surface);
-    }
-    .sr-only { position: absolute !important; width: 1px; height: 1px; margin: -1px; border: 0; padding: 0; white-space: nowrap; clip-path: inset(50%); clip: rect(0 0 0 0); overflow: hidden; }
+    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; --chip:#1a2335; --chip-border:#2a3c5a; }
+    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; --chip:#f1f4f8; --chip-border:#e5ecf5; }
+    *{box-sizing:border-box}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
+    a{color:var(--brand); text-decoration:none}
+    .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
+
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
+    .brand{display:flex; align-items:center; gap:10px}
+    .logo{font-weight:900}
+    .navlinks{display:flex; align-items:center; gap:14px}
+    .navlinks a{padding:8px 10px; border-radius:10px}
+    .navlinks a.active{background:var(--card); border:1px solid var(--stroke)}
+    .toggle{cursor:pointer; border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:8px 10px}
+
+    .panel{background:var(--card); border:1px solid var(--stroke); border-radius:16px; padding:14px}
+    /* +1 column for City */
+    .toolbar{display:grid; grid-template-columns:1.6fr repeat(5, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
+    @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
+    .searchbox{display:flex; gap:8px}
+    input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
+    .smart{white-space:nowrap; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--card); color:var(--fg); cursor:pointer}
+
+    .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
+    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
+    .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
+    .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
+    .content{padding:14px}
+    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
+    .addr{font-weight:800; line-height:1.25}
+    .price{font-weight:900}
+    .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
+    .broker{font-size:12px; color:var(--muted)}
+    .actions{display:flex; justify-content:space-between; align-items:center; margin-top:auto; padding:12px 14px; border-top:1px solid var(--stroke)}
+    .pbr{display:flex; align-items:center; gap:8px}
+    .pbr img{width:24px; height:24px; object-fit:contain}
+    .chips{display:flex; gap:8px; flex-wrap:wrap}
+    .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
+    .back{font-size:12px; margin-top:18px; color:var(--muted)}
+    .muted{color:var(--muted)}
+    details#why{margin-top:10px}
+    details#why summary{cursor:pointer; color:var(--muted)}
   </style>
 </head>
 <body>
-  <header role="banner">
-    <div class="wrap nav" aria-label="Primary">
-      <div class="nav-left">
-        <div class="brand" aria-label="Findr brand">Findr™</div>
-        <nav role="navigation" aria-label="Main">
-          <a class="pill" href="/web/index.html">Home</a>
-          <a class="pill" href="/web/listings.html" aria-current="page">Listings</a>
-          <a class="pill" href="/web/map.html">Map</a>
-        </nav>
+  <div class="wrap">
+    <!-- Nav -->
+    <nav class="nav" role="navigation" aria-label="Primary">
+      <div class="brand"><div class="logo" aria-label="Findr home">Findr™</div></div>
+      <div class="navlinks">
+        <a href="/">Home</a>
+        <a href="listings.html" class="active" aria-current="page">Listings</a>
+        <a href="map.html">Map</a>
+        <button id="theme-toggle" class="toggle" type="button" aria-label="Toggle theme">🌙</button>
       </div>
-      <div class="nav-right">
-        <button id="themeToggle" class="pill" aria-pressed="false" aria-label="Toggle light or dark theme">Toggle</button>
-      </div>
-    </div>
-  </header>
+    </nav>
 
-  <main class="wrap" role="main">
-    <h1 style="margin-top:12px">Listings</h1>
+    <!-- Controls -->
+    <div class="panel">
+      <div class="toolbar" role="region" aria-label="Search and filters">
+        <div class="searchbox">
+          <input id="q" type="search" placeholder='Describe your needs, then press Enter or click “Smart”' aria-label="Search or describe your needs" />
+          <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
+        </div>
 
-    <!-- Smart search -->
-    <div class="filters" style="margin-top:8px" role="search" aria-label="Smart listing search">
-      <div>
-        <label for="smartText">Smart (plain-English → filters)</label>
-        <input id="smartText" type="text" inputmode="search" autocomplete="off"
-               placeholder="e.g., 2 bed under 900k in Burnaby" aria-describedby="smart-desc" />
-        <p id="smart-desc" class="sr-only">
-          Your text is converted to structured filters only. AI never reads listing data.
-        </p>
-      </div>
-      <div>
-        <label>&nbsp;</label>
-        <button id="smartBtn" class="btn brand" aria-label="Apply Smart search">Smart</button>
-      </div>
-      <!-- Controls -->
-      <div>
-        <label for="citySel">City</label>
-        <select id="citySel" aria-label="City"></select>
-      </div>
-      <div>
-        <label for="bedsSel">Beds (min)</label>
-        <select id="bedsSel" aria-label="Minimum bedrooms">
-          <option value="">Any</option>
-          <option value="1">1+</option>
-          <option value="2">2+</option>
-          <option value="3">3+</option>
-          <option value="4">4+</option>
-          <option value="5">5+</option>
+        <!-- City -->
+        <select id="city" aria-label="City">
+          <option value="">City (any)</option>
+          <option>Vancouver</option><option>Burnaby</option><option>Richmond</option>
+          <option>Surrey</option><option>Coquitlam</option><option>Port Moody</option>
+          <option>Port Coquitlam</option><option>New Westminster</option>
+          <option>Langley</option><option>Maple Ridge</option>
         </select>
-      </div>
-      <div>
-        <label for="bathsSel">Baths (min)</label>
-        <select id="bathsSel" aria-label="Minimum bathrooms">
-          <option value="">Any</option>
-          <option value="1">1+</option>
-          <option value="2">2+</option>
-          <option value="3">3+</option>
-          <option value="4">4+</option>
-          <option value="5">5+</option>
+
+        <!-- Beds (now up to 5+) -->
+        <select id="beds" aria-label="Minimum bedrooms">
+          <option value="">Beds (any)</option>
+          <option value="1">1+ bed</option><option value="2">2+ bed</option>
+          <option value="3">3+ bed</option><option value="4">4+ bed</option>
+          <option value="5">5+ bed</option>
         </select>
-      </div>
-      <div>
-        <label for="minSel">Min price</label>
-        <select id="minSel" aria-label="Minimum price">
-          <option value="">Any</option>
-          <option value="300000">$300k</option>
-          <option value="400000">$400k</option>
-          <option value="500000">$500k</option>
-          <option value="600000">$600k</option>
-          <option value="700000">$700k</option>
-          <option value="800000">$800k</option>
-          <option value="900000">$900k</option>
-          <option value="1000000">$1.0M</option>
-          <option value="1250000">$1.25M</option>
-          <option value="1500000">$1.5M</option>
-          <option value="1750000">$1.75M</option>
+
+        <!-- Baths (now up to 5+) -->
+        <select id="baths" aria-label="Minimum bathrooms">
+          <option value="">Baths (any)</option>
+          <option value="1">1+ bath</option><option value="2">2+ bath</option>
+          <option value="3">3+ bath</option><option value="4">4+ bath</option>
+          <option value="5">5+ bath</option>
+        </select>
+
+        <!-- Better price ranges -->
+        <select id="minp" aria-label="Min price">
+          <option value="">Min price</option>
+          <option value="300000">$300k</option><option value="400000">$400k</option>
+          <option value="500000">$500k</option><option value="600000">$600k</option>
+          <option value="700000">$700k</option><option value="800000">$800k</option>
+          <option value="900000">$900k</option><option value="1000000">$1.0M</option>
+          <option value="1200000">$1.2M</option><option value="1400000">$1.4M</option>
+          <option value="1600000">$1.6M</option><option value="1800000">$1.8M</option>
           <option value="2000000">$2.0M</option>
-          <option value="2500000">$2.5M</option>
+        </select>
+
+        <select id="maxp" aria-label="Max price">
+          <option value="">Max price</option>
+          <option value="500000">$500k</option><option value="600000">$600k</option>
+          <option value="700000">$700k</option><option value="800000">$800k</option>
+          <option value="900000">$900k</option><option value="1000000">$1.0M</option>
+          <option value="1200000">$1.2M</option><option value="1400000">$1.4M</option>
+          <option value="1600000">$1.6M</option><option value="1800000">$1.8M</option>
+          <option value="2000000">$2.0M</option><option value="2500000">$2.5M</option>
+        </select>
+
+        <select id="sort" aria-label="Sort">
+          <option value="relevance">Sort: Relevance</option>
+          <option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option>
+          <option value="beds-desc">Beds ↓</option><option value="baths-desc">Baths ↓</option>
         </select>
       </div>
-      <div>
-        <label for="maxSel">Max price</label>
-        <select id="maxSel" aria-label="Maximum price">
-          <option value="">Any</option>
-          <option value="300000">$300k</option>
-          <option value="400000">$400k</option>
-          <option value="500000">$500k</option>
-          <option value="600000">$600k</option>
-          <option value="700000">$700k</option>
-          <option value="800000">$800k</option>
-          <option value="900000">$900k</option>
-          <option value="1000000">$1.0M</option>
-          <option value="1250000">$1.25M</option>
-          <option value="1500000">$1.5M</option>
-          <option value="1750000">$1.75M</option>
-          <option value="2000000">$2.0M</option>
-          <option value="2500000">$2.5M</option>
-        </select>
+
+      <div class="row" style="margin:12px 0 10px">
+        <div class="muted" id="count" aria-live="polite">Loading…</div>
+        <div class="chips" id="chips" aria-live="polite"></div>
       </div>
-      <div>
-        <label for="sortSel">Sort</label>
-        <select id="sortSel" aria-label="Sort results">
-          <option value="relevance">Relevance</option>
-          <option value="price-asc">Price ↑</option>
-          <option value="price-desc">Price ↓</option>
-          <option value="beds-desc">Beds ↓</option>
-          <option value="baths-desc">Baths ↓</option>
-        </select>
-      </div>
+      <details id="why">
+        <summary>Why these results?</summary>
+        <div id="why-body" class="muted" style="margin-top:6px;"></div>
+      </details>
     </div>
 
-    <!-- Chips + meta -->
-    <div class="row" style="margin-top:8px">
-      <div class="chips" id="chips" aria-label="Active filters"></div>
-      <div class="result-meta">
-        <span id="resultCount" aria-live="polite"></span>
-      </div>
-    </div>
+    <section id="grid" class="grid" aria-live="polite"></section>
+    <p class="back"><a href="/">← Back to Home</a></p>
+  </div>
 
-    <!-- Why these results -->
-    <details id="whyBox" class="why" aria-live="polite">
-      <summary><strong>Why these results?</strong></summary>
-      <div id="whyText" style="margin-top:6px; font-size:14px; color:var(--muted)"></div>
-    </details>
-
-    <!-- Results grid -->
-    <section id="grid" class="grid" aria-label="Listings"></section>
-  </main>
-
-  <footer role="contentinfo">
-    <div class="wrap">
-      The trademarks REALTOR®, REALTORS®, and the REALTOR® logo are controlled by The Canadian Real Estate Association (CREA)
-      and identify real estate professionals who are members of CREA. The trademarks MLS®, Multiple Listing Service® and the
-      associated logos are owned by CREA and identify the quality of services provided by real estate professionals who are
-      members of CREA.
-    </div>
-  </footer>
-
-  <!-- Config & shared guards / filters (do not expose keys here) -->
-  <script src="/web/config.js"></script>
-  <script src="/web/js/ai-guard.js"></script>
-  <script src="/web/js/filters.js"></script>
-  <!-- Optional demo fallback if serverless intent is unavailable -->
-  <script src="/web/js/ai-demo.js" defer></script>
+  <!-- Compliance scaffolding -->
+  <script src="config.js"></script>
+  <script src="js/ai-guard.js"></script>
+  <!-- Shared rules-based filters -->
+  <script src="js/filters.js"></script>
+  <!-- Demo-only NL→filters stub (intent only; never touches listing payloads) -->
+  <script src="js/ai-demo.js"></script>
 
   <script>
-  (function() {
-    /** Theme toggle (persisted) */
-    const themeToggle = document.getElementById('themeToggle');
-    const root = document.documentElement;
-    const storedTheme = localStorage.getItem('findr_theme');
-    if (storedTheme === 'light' || storedTheme === 'dark') {
-      root.setAttribute('data-theme', storedTheme);
-      themeToggle.setAttribute('aria-pressed', storedTheme === 'dark' ? 'true' : 'false');
-    } else {
-      root.setAttribute('data-theme', 'dark');
-      themeToggle.setAttribute('aria-pressed', 'true');
-    }
-    themeToggle.addEventListener('click', () => {
-      const current = root.getAttribute('data-theme');
-      const next = current === 'dark' ? 'light' : 'dark';
-      root.setAttribute('data-theme', next);
-      localStorage.setItem('findr_theme', next);
-      themeToggle.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
-    });
+    // Theme toggle
+    (function(){
+      const root = document.documentElement;
+      const saved = localStorage.getItem('theme');
+      if (saved) root.setAttribute('data-theme', saved);
+      const btn = document.getElementById('theme-toggle');
+      const isDark = () => root.getAttribute('data-theme') !== 'light';
+      const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
+      if (btn) btn.addEventListener('click', () => {
+        root.setAttribute('data-theme', isDark() ? 'light' : 'dark');
+        localStorage.setItem('theme', root.getAttribute('data-theme'));
+        render();
+      });
+      render();
+    })();
 
-    /* Elements */
-    const citySel  = document.getElementById('citySel');
-    const bedsSel  = document.getElementById('bedsSel');
-    const bathsSel = document.getElementById('bathsSel');
-    const minSel   = document.getElementById('minSel');
-    const maxSel   = document.getElementById('maxSel');
-    const sortSel  = document.getElementById('sortSel');
+    const $ = (id) => document.getElementById(id);
+    const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
+    let DATA=[], VIEW=[];
 
-    const smartText = document.getElementById('smartText');
-    const smartBtn  = document.getElementById('smartBtn');
-
-    const chips = document.getElementById('chips');
-    const grid  = document.getElementById('grid');
-    const resultCount = document.getElementById('resultCount');
-    const whyBox  = document.getElementById('whyBox');
-    const whyText = document.getElementById('whyText');
-
-    /* URL params → object */
-    const params = new URLSearchParams(location.search);
-    function getParams() {
+    // URL param sync
+    function getParams(){
+      const p = new URLSearchParams(location.search);
       return {
-        q: params.get('q') || '',
-        city: params.get('city') || '',
-        beds: toNum(params.get('beds')),
-        baths: toNum(params.get('baths')),
-        minp: toNum(params.get('minp')),
-        maxp: toNum(params.get('maxp')),
-        sort: params.get('sort') || 'relevance'
+        q: p.get('q') || '',
+        city: p.get('city') || '',
+        beds: p.get('beds') || '',
+        baths: p.get('baths') || '',
+        minp: p.get('minp') || '',
+        maxp: p.get('maxp') || '',
+        sort: p.get('sort') || 'relevance'
       };
     }
-    function setParams(p) {
-      const next = new URLSearchParams();
-      if (p.q) next.set('q', p.q);
-      if (p.city) next.set('city', p.city);
-      if (p.beds != null && p.beds !== '') next.set('beds', String(p.beds));
-      if (p.baths != null && p.baths !== '') next.set('baths', String(p.baths));
-      if (p.minp != null && p.minp !== '') next.set('minp', String(p.minp));
-      if (p.maxp != null && p.maxp !== '') next.set('maxp', String(p.maxp));
-      if (p.sort && p.sort !== 'relevance') next.set('sort', p.sort);
-      const url = location.pathname + (next.toString() ? '?' + next.toString() : '');
-      history.replaceState(null, '', url);
-    }
-    function toNum(v) { return v == null || v === '' ? null : Number(v); }
-
-    /* Data */
-    let ALL = [];
-    fetch('/web/data/listings.json', { credentials: 'same-origin' })
-      .then(r => r.json())
-      .then(json => {
-        ALL = Array.isArray(json) ? json : [];
-        hydrateCities(ALL);
-        hydrateControlsFromParams();
-        render();
-      })
-      .catch(() => {
-        grid.innerHTML = '<p role="alert">Failed to load listings.</p>';
-      });
-
-    function hydrateCities(list) {
-      const set = new Set(list.map(x => x.city).filter(Boolean));
-      const cities = Array.from(set).sort();
-      citySel.innerHTML = '<option value="">Any</option>' + cities.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
-    }
-    function hydrateControlsFromParams() {
-      const p = getParams();
-      if (p.city)  citySel.value = p.city;
-      if (p.beds)  bedsSel.value = String(p.beds);
-      if (p.baths) bathsSel.value = String(p.baths);
-      if (p.minp)  minSel.value  = String(p.minp);
-      if (p.maxp)  maxSel.value  = String(p.maxp);
-      sortSel.value = p.sort || 'relevance';
+    function setParams(){
+      const p = new URLSearchParams();
+      if($('q').value) p.set('q',$('q').value);
+      if($('city').value) p.set('city',$('city').value);
+      if($('beds').value) p.set('beds',$('beds').value);
+      if($('baths').value) p.set('baths',$('baths').value);
+      if($('minp').value) p.set('minp',$('minp').value);
+      if($('maxp').value) p.set('maxp',$('maxp').value);
+      if($('sort').value && $('sort').value!=='relevance') p.set('sort',$('sort').value);
+      const newUrl = `${location.pathname}?${p.toString()}`;
+      history.replaceState(null,'',newUrl);
     }
 
-    /* Filtering via shared deterministic filters if available; fallback if not */
-    function applyFilters(all, p) {
-      let out = all.slice();
-      const F = (window.FindrFilters && (window.FindrFilters.apply || window.FindrFilters.filter)) || null;
+    function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
 
-      if (F) {
-        // Support either .apply(list, params) or .filter(list, params)
-        out = (window.FindrFilters.apply || window.FindrFilters.filter)(out, p);
-        if (window.FindrFilters.sort && p.sort) out = window.FindrFilters.sort(out, p.sort);
-      } else {
-        // Strict deterministic fallback
-        if (p.city) out = out.filter(x => x.city === p.city);
-        if (p.beds != null) out = out.filter(x => Number(x.beds) >= p.beds);
-        if (p.baths != null) out = out.filter(x => Number(x.baths) >= p.baths);
-        if (p.minp != null) out = out.filter(x => Number(x.price) >= p.minp);
-        if (p.maxp != null) out = out.filter(x => Number(x.price) <= p.maxp);
-        // sort fallback
-        out = sortLocal(out, p.sort);
+    function renderWhy(){
+      const parts=[];
+      const q=$('q').value.trim(); if(q) parts.push(`Text: “${q}”`);
+      if($('city').value) parts.push($('city').value);
+      if($('beds').value) parts.push(`${$('beds').value}+ bed`);
+      if($('baths').value) parts.push(`${$('baths').value}+ bath`);
+      const minp=$('minp').value, maxp=$('maxp').value;
+      if(minp||maxp){
+        const left=minp?fmtPrice(+minp):'Any', right=maxp?fmtPrice(+maxp):'Any';
+        parts.push(`Price: ${left}–${right}`);
       }
-      return out;
-    }
-    function sortLocal(arr, key) {
-      const a = arr.slice();
-      if (key === 'price-asc') a.sort((x,y)=>x.price-y.price);
-      else if (key === 'price-desc') a.sort((x,y)=>y.price-x.price);
-      else if (key === 'beds-desc') a.sort((x,y)=>y.beds-x.beds || y.price-x.price);
-      else if (key === 'baths-desc') a.sort((x,y)=>y.baths-x.baths || y.price-x.price);
-      return a;
+      const s = $('sort').selectedOptions[0].text;
+      if($('sort').value!=='relevance') parts.push(`Sort: ${s}`);
+      $('why-body').textContent = parts.length ? parts.join(' · ') : 'No active filters (all listings).';
     }
 
-    /* Render */
-    function render() {
-      const p = {
-        q: '',
-        city: citySel.value || '',
-        beds: valNum(bedsSel.value),
-        baths: valNum(bathsSel.value),
-        minp: valNum(minSel.value),
-        maxp: valNum(maxSel.value),
-        sort: sortSel.value || 'relevance'
-      };
-      setParams(p);
+    function renderChips(){
+      const chips = $('chips'); const active=[];
+      const q=$('q').value.trim(); if(q) active.push({label:`Search: “${q}”`, id:'q'});
+      const city=$('city').value; if(city) active.push({label:city, id:'city'});
+      const beds=$('beds').value; if(beds) active.push({label:`${beds}+ bed`, id:'beds'});
+      const baths=$('baths').value; if(baths) active.push({label:`${baths}+ bath`, id:'baths'});
+      const minp=$('minp').value, maxp=$('maxp').value;
+      if(minp||maxp) active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'});
+      const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
+      active.push({label:'Copy link', id:'copy'}); active.push({label:'Clear all', id:'clear'});
 
-      const filtered = applyFilters(ALL, p);
-      resultCount.textContent = `${filtered.length} result${filtered.length === 1 ? '' : 's'}`;
-      renderChips(p);
-      renderWhy(p);
-      renderGrid(filtered);
+      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" title="${c.id==='copy'?'Copy current URL to clipboard':'Clear filters'}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
+      chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
+        const id=b.getAttribute('data-id');
+        if(id==='copy'){ copyLink(b); return; }
+        if(id==='clear'){ clearAll(); return; }
+        if(id==='q') $('q').value='';
+        if(id==='city') $('city').value='';
+        if(id==='beds') $('beds').value='';
+        if(id==='baths') $('baths').value='';
+        if(id==='price'){ $('minp').value=''; $('maxp').value=''; }
+        if(id==='sort') $('sort').value='relevance';
+        apply();
+      }));
     }
 
-    function renderGrid(list) {
-      if (!list.length) {
-        grid.innerHTML = `<p role="status">No results. Try widening your filters.</p>`;
-        return;
-      }
-      grid.innerHTML = list.map(cardHTML).join('');
-    }
-
-    function cardHTML(x) {
-      const price = formatPrice(x.price);
-      const addr = escapeHtml(x.address || '');
-      const city = escapeHtml(x.city || '');
-      const beds = Number(x.beds ?? 0);
-      const baths = Number(x.baths ?? 0);
-      const photo = escapeHtml(x.photo || '');
-      const brokerage = escapeHtml(x.brokerage || 'Brokerage');
-      const rurl = escapeHtml(x.realtorca_url || '#');
-
-      return `
-        <article class="card" aria-label="${addr}, ${city}">
-          <img class="thumb" src="${photo}" alt="Listing photo: ${addr}" loading="lazy">
-          <div class="card-body">
-            <div style="display:flex; justify-content:space-between; gap:8px; align-items:center;">
-              <h3 style="margin:0; font-size:16px">${price}</h3>
-              <span class="meta">${beds} bd · ${baths} ba</span>
-            </div>
-            <div class="meta">${addr}${city ? `, ${city}` : ''}</div>
-            <div class="compliance">
-              <div class="meta" aria-label="Listing brokerage">Listing Brokerage: <strong>${brokerage}</strong></div>
-              <a class="badge" href="${rurl}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
-                <img src="https://static.realtor.ca/branding/powered-by-realtorca.svg" alt="Powered by REALTOR.ca">
-              </a>
-            </div>
+    function renderGrid(){
+      const grid=$('grid'); grid.innerHTML='';
+      VIEW.forEach(it=>{
+        const el=document.createElement('article'); el.className='card';
+        el.innerHTML=`
+          <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
+          <div class="content">
+            <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
+            <div class="meta"><span>${it.city}</span><span>•</span><span>${it.beds} bd</span><span>•</span><span>${it.baths} ba</span></div>
+            <div class="broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
           </div>
-        </article>
-      `;
-    }
-
-    function renderChips(p) {
-      const chipEls = [];
-      if (p.city) chipEls.push(makeChip('City: ' + p.city, () => { citySel.value=''; render(); }));
-      if (p.beds) chipEls.push(makeChip(`Beds: ${p.beds}+`, () => { bedsSel.value=''; render(); }));
-      if (p.baths) chipEls.push(makeChip(`Baths: ${p.baths}+`, () => { bathsSel.value=''; render(); }));
-      if (p.minp) chipEls.push(makeChip(`Min: ${formatShort(p.minp)}`, () => { minSel.value=''; render(); }));
-      if (p.maxp) chipEls.push(makeChip(`Max: ${formatShort(p.maxp)}`, () => { maxSel.value=''; render(); }));
-
-      // New: Reset price (only if either min or max is set)
-      if (p.minp || p.maxp) {
-        chipEls.push(`
-          <span class="chip" role="button" tabindex="0" aria-label="Reset price range">
-            Reset price
-          </span>
-        `);
-      }
-
-      // Utility chips
-      chipEls.push(`
-        <span class="chip" role="button" tabindex="0" aria-label="Copy link" id="copyLinkChip">Copy link</span>
-      `);
-      chipEls.push(`
-        <span class="chip" role="button" tabindex="0" aria-label="Clear all filters" id="clearAllChip">Clear all</span>
-      `);
-
-      chips.innerHTML = chipEls.join('');
-
-      // Wire chip handlers
-      chips.querySelectorAll('.chip').forEach(ch => {
-        ch.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') ch.click(); });
+          <div class="actions">
+            <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca" /><span style="color:var(--muted)">View on REALTOR.ca</span>
+            </a>
+            <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
+          </div>`;
+        grid.appendChild(el);
       });
-
-      const resetPrice = Array.from(chips.children).find(el => el.textContent.trim() === 'Reset price');
-      if (resetPrice) {
-        resetPrice.addEventListener('click', () => {
-          minSel.value = ''; maxSel.value = ''; render();
-        });
-      }
-      const copy = document.getElementById('copyLinkChip');
-      if (copy) {
-        copy.addEventListener('click', async () => {
-          try {
-            await navigator.clipboard.writeText(location.href);
-            copy.textContent = 'Copied!';
-            setTimeout(() => (copy.textContent = 'Copy link'), 1200);
-          } catch {}
-        });
-      }
-      const clear = document.getElementById('clearAllChip');
-      if (clear) {
-        clear.addEventListener('click', () => {
-          citySel.value = bedsSel.value = bathsSel.value = minSel.value = maxSel.value = '';
-          sortSel.value = 'relevance';
-          render();
-        });
-      }
     }
 
-    function renderWhy(p) {
-      const clauses = [];
-      if (p.city) clauses.push(`City is <strong>${escapeHtml(p.city)}</strong>`);
-      if (p.beds) clauses.push(`at least <strong>${p.beds} bed${p.beds>1?'s':''}</strong>`);
-      if (p.baths) clauses.push(`at least <strong>${p.baths} bath${p.baths>1?'s':''}</strong>`);
-      if (p.minp) clauses.push(`price ≥ <strong>${formatPrice(p.minp)}</strong>`);
-      if (p.maxp) clauses.push(`price ≤ <strong>${formatPrice(p.maxp)}</strong>`);
-      const sortMap = {
-        'relevance': 'default order',
-        'price-asc': 'lowest price first',
-        'price-desc': 'highest price first',
-        'beds-desc': 'most bedrooms first',
-        'baths-desc': 'most bathrooms first'
-      };
-      const sortTxt = sortMap[p.sort] || 'default order';
-      const line = clauses.length ? ('Filtered by ' + clauses.join(', ') + `; sorted by <strong>${sortTxt}</strong>.`)
-                                  : ('Showing all listings; sorted by <strong>'+sortTxt+'</strong>.');
-      whyText.innerHTML = line + ' Smart search only converts your text to filters; it never reads listing data.';
+    function apply(){
+      const sort=$('sort').value;
+      VIEW = FILTERS.applyFilters(DATA, {
+        q: $('q').value, city: $('city').value,
+        beds: $('beds').value, baths: $('baths').value,
+        minp: $('minp').value, maxp: $('maxp').value
+      });
+      switch(sort){
+        case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
+        case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
+        case 'beds-desc': VIEW.sort((a,b)=>b.beds-a.beds); break;
+        case 'baths-desc': VIEW.sort((a,b)=>b.baths-a.baths); break;
+      }
+      setParams(); renderCount(); renderChips(); renderGrid(); renderWhy();
     }
 
-    // Smart intent
-    smartBtn.addEventListener('click', async () => {
-      const text = (smartText.value || '').trim();
-      if (!text) return;
-      try {
-        const spec = await fetchIntent(text);
-        applyFilterSpec(spec);
-        smartText.value = ''; // clear free-text to avoid over-filtering
-        whyBox.open = true;   // open explanation
-        render();
-      } catch (e) {
-        // graceful fallback already handled in fetchIntent
-      }
-    });
+    function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
-    async function fetchIntent(text) {
-      // Try serverless function first
+    async function loadData(){
+      const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
+      for (const url of candidates){
+        try{ const res = await fetch(url,{cache:'no-store'}); if(res.ok) return await res.json(); }catch(_e){}
+      }
+      throw new Error('Could not load listings.json from expected paths.');
+    }
+
+    // Snap Smart prices to nearest dropdown options
+    function nearestOption(selectId, value){
+      if (!value) return;
+      const sel = $(selectId); const opts=[...sel.options].map(o=>o.value).filter(Boolean).map(Number).sort((a,b)=>a-b);
+      if (!opts.length) return;
+      let chosen = opts.find(v=>v>=value) ?? opts[opts.length-1];
+      sel.value = String(chosen);
+    }
+
+    async function smartFromText(){
+      const text = $('q').value || '';
+      let spec = null;
+
       try {
-        const r = await fetch('/.netlify/functions/intent', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
+        const res = await fetch('/.netlify/functions/intent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ text })
         });
-        if (r.ok) return await r.json();
-      } catch {}
-      // Fallback to demo in-browser parser if present
-      if (window.FindrDemoNLToFilters) {
-        return window.FindrDemoNLToFilters(text);
+        if (res.ok) spec = await res.json();
+      } catch (e) {
+        console.debug('Intent API not available, falling back to demo:', e);
       }
-      // Last resort: empty spec
-      return {
-        min_price: null, max_price: null, beds_min: null, baths_min: null,
-        property_types: null, areas: null, nearby: null, must_have: null,
-        polygon: null, sort: 'relevance'
-      };
+
+      if (!spec) spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo);
+
+      try{
+        if (spec.beds_min) $('beds').value = String(spec.beds_min);
+        if (spec.baths_min) $('baths').value = String(spec.baths_min);
+        if (spec.min_price) nearestOption('minp', spec.min_price);
+        if (spec.max_price) nearestOption('maxp', spec.max_price);
+        if (Array.isArray(spec.areas) && spec.areas.length) $('city').value = spec.areas[0];
+        $('q').value = '';
+        if (spec.sort) $('sort').value = spec.sort;
+        apply(); $('why').open = true;
+      }catch(err){ console.debug('Smart parse apply failed:', err); }
     }
 
-    function applyFilterSpec(spec) {
-      // Map FilterSpec → controls; snap prices to nearest dropdown values.
-      if (Array.isArray(spec.areas) && spec.areas[0]) {
-        citySel.value = spec.areas[0];
+    function clearAll(){
+      $('q').value=''; $('city').value=''; $('beds').value=''; $('baths').value='';
+      $('minp').value=''; $('maxp').value=''; $('sort').value='relevance'; apply();
+    }
+
+    async function copyLink(btn){
+      try{
+        await navigator.clipboard.writeText(window.location.href);
+        const old = btn.textContent; btn.textContent='Copied!'; setTimeout(()=>btn.textContent=old,1200);
+      }catch{ prompt('Copy this URL:', window.location.href); }
+    }
+
+    async function boot(){
+      try{
+        DATA = await loadData(); VIEW = DATA.slice();
+        const p = getParams();
+        $('q').value=p.q; $('city').value=p.city; $('beds').value=p.beds; $('baths').value=p.baths;
+        $('minp').value=p.minp; $('maxp').value=p.maxp; $('sort').value=p.sort;
+        apply();
+      }catch(e){
+        console.error(e);
+        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
       }
-      if (spec.beds_min != null) bedsSel.value = String(spec.beds_min);
-      if (spec.baths_min != null) bathsSel.value = String(spec.baths_min);
-
-      const minSnap = snapToMenu(spec.min_price, minSel);
-      const maxSnap = snapToMenu(spec.max_price, maxSel);
-      minSel.value = minSnap ?? '';
-      maxSel.value = maxSnap ?? '';
-
-      if (spec.sort) sortSel.value = spec.sort;
+      $('q').addEventListener('input',debounce(apply,200));
+      $('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); smartFromText(); }});
+      ['city','beds','baths','minp','maxp','sort'].forEach(id=>document.getElementById(id).addEventListener('change',apply));
+      $('smart-btn').addEventListener('click', smartFromText);
     }
-
-    function snapToMenu(value, selectEl) {
-      if (value == null) return null;
-      const nums = Array.from(selectEl.options)
-        .map(o => o.value)
-        .filter(v => v !== '')
-        .map(v => Number(v))
-        .sort((a,b)=>a-b);
-      // Find nearest
-      let best = nums[0], bestDiff = Math.abs(nums[0] - value);
-      for (let i=1; i<nums.length; i++) {
-        const d = Math.abs(nums[i] - value);
-        if (d < bestDiff) { bestDiff = d; best = nums[i]; }
-      }
-      return String(best);
-    }
-
-    // Control events
-    [citySel, bedsSel, bathsSel, minSel, maxSel, sortSel].forEach(el => {
-      el.addEventListener('change', render);
-    });
-
-    // Helpers
-    function valNum(v) { return v === '' ? null : Number(v); }
-    function formatPrice(n) {
-      if (n == null || isNaN(n)) return '$—';
-      return new Intl.NumberFormat('en-CA', { style: 'currency', currency: 'CAD', maximumFractionDigits: 0 }).format(n);
-    }
-    function formatShort(n) {
-      if (n >= 1_000_000) return '$' + (n/1_000_000).toFixed(n % 1_000_000 === 0 ? 0 : 2) + 'M';
-      if (n >= 1_000) return '$' + Math.round(n/1000) + 'k';
-      return '$' + String(n);
-    }
-    function escapeHtml(s) {
-      return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]));
-    }
-  })();
+    boot();
   </script>
 </body>
 </html>
