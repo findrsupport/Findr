@@ -386,6 +386,30 @@
     })();
   </script>
   <!-- JUNIPER END: OPEN-IN-MAP -->
+  
+  <!-- JUNIPER START: BADGE-VISIBILITY -->
+<style>
+  /* Make the REALTOR.ca badge readable and prevent address/price collisions */
+  .pbr img{height:20px; width:auto; max-width:140px}
+  .row .addr{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+  .row .price{flex:0 0 auto}
+</style>
+<!-- JUNIPER END: BADGE-VISIBILITY -->
+
+<!-- JUNIPER START: BADGE-FALLBACK -->
+<script>
+  // If the image fails to load for any reason, replace with text to preserve compliance
+  document.addEventListener('error', function(e){
+    var t = e.target;
+    if (t && t.matches && t.matches('.pbr img')){
+      var span = document.createElement('span');
+      span.textContent = 'Powered by REALTOR.ca';
+      span.className = 'muted';
+      t.replaceWith(span);
+    }
+  }, true);
+</script>
+<!-- JUNIPER END: BADGE-FALLBACK -->
 
 </body>
 </html>

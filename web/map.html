@@ -153,7 +153,9 @@
       if (!list.length) return;
       const bounds = [];
       list.forEach(it=>{
-        if (typeof it.lat !== 'number' || typeof it.lng !== 'number') return;
+        const lat = typeof it.lat === 'number' ? it.lat : null;
+        const lng = typeof it.lng === 'number' ? it.lng : (typeof it.lon === 'number' ? it.lon : null);
+        if (typeof lat !== 'number' || typeof lng !== 'number') return;
 
         const html = `
           <div class="addr">${it.address}</div>
@@ -162,9 +164,9 @@
           <div style="margin-top:8px;">
             <a href="${it.realtorca_url}" target="_blank" rel="noopener">View on REALTOR.ca →</a>
           </div>`;
-        const m = L.marker([it.lat, it.lng]).bindPopup(html);
+        const m = L.marker([lat, lng]).bindPopup(html);
         m.addTo(layer);
-        bounds.push([it.lat, it.lng]);
+        bounds.push([lat, lng]);
       });
       if (bounds.length) map.fitBounds(bounds, { padding:[40,40] });
     }
@@ -206,57 +208,87 @@
   <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
   <script>
     (function(){
-      // Ensure globals, even though map/layer are declared with let (not window props)
-      function exposeGlobals(){
-        try { window.map = window.map || map; } catch(_) {}
-        try { window.layer = window.layer || layer; } catch(_) {}
-      }
-
-      // After initMap is called, expose and try upgrading to clusters
       function upgradeToClusters(){
         if (!window.L || !L.markerClusterGroup) return;
-        if (!window.map || !window.layer) return;
-
-        var isAlreadyCluster = typeof window.layer.getAllChildMarkers === 'function';
-        if (isAlreadyCluster) return;
-
+        var m = window.map, current = window.layer;
+        if (!m || !current) return;
         try {
-          var cluster = L.markerClusterGroup({
-            maxClusterRadius: 60,
-            spiderfyOnMaxZoom: true,
-            chunkedLoading: true
-          });
-
-          if (window.layer && window.layer.eachLayer) {
-            window.layer.eachLayer(function(child){ cluster.addLayer(child); });
+          var cluster = L.markerClusterGroup({ maxClusterRadius: 60, spiderfyOnMaxZoom: true, chunkedLoading: true });
+          if (current.getLayers) {
+            current.getLayers().forEach(function(child){ cluster.addLayer(child); });
           }
-          window.map.removeLayer(window.layer);
-          cluster.addTo(window.map);
-          window.layer = cluster; // future adds go to cluster
+          m.removeLayer(current);
+          cluster.addTo(m);
+          window.layer = cluster; // future updates add to cluster
         } catch (_e) {}
       }
-
-      // Patch initMap so future loads expose globals automatically
-      (function patchInit(){
-        if (typeof window.initMap === 'function') {
-          var original = window.initMap;
-          window.initMap = function(){
-            var out = original.apply(this, arguments);
-            exposeGlobals();
-            return out;
-          };
-        }
-      })();
-
-      // Try once after load (covers current page load)
-      window.addEventListener('load', function(){
-        exposeGlobals();
-        // slight delay to allow boot->updateMarkers to add initial markers
-        setTimeout(upgradeToClusters, 50);
-      });
+      if (document.readyState === 'complete') {
+        upgradeToClusters();
+      } else {
+        window.addEventListener('load', upgradeToClusters);
+      }
     })();
   </script>
   <!-- JUNIPER END: CLUSTER -->
+  
+  <!-- JUNIPER START: MAP-ENHANCEMENTS -->
+<script>
+  (function(){
+    function withLon(list){
+      return (list||[]).map(function(it){
+        // listings.json provides "lon" — normalize to "lng" for Leaflet
+        if (typeof it.lng !== 'number' && typeof it.lon === 'number'){
+          try { it = Object.assign({}, it, { lng: it.lon }); } catch(_){}
+        }
+        return it;
+      });
+    }
+
+    // Wrap updateMarkers to normalize lon→lng and ensure clustering
+    (function wrapUpdate(){
+      var _u = window.updateMarkers;
+      if (typeof _u === 'function'){
+        window.updateMarkers = function(list){
+          _u(withLon(list));
+          ensureCluster();
+        };
+      }
+    })();
+
+    function injectClusterAssets(cb){
+      var css1=document.createElement('link'); css1.rel='stylesheet'; css1.href='https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
+      var css2=document.createElement('link'); css2.rel='stylesheet'; css2.href='https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css';
+      document.head.appendChild(css1); document.head.appendChild(css2);
+      var s=document.createElement('script'); s.src='https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
+      s.onload=cb; document.body.appendChild(s);
+    }
+
+    function ensureCluster(){
+      if (!window.L || !L.markerClusterGroup) return;
+      try { window.map = window.map || map; window.layer = window.layer || layer; } catch(_){}
+      if (!window.map || !window.layer) return;
+      // Already a cluster group? bail.
+      if (typeof window.layer.getAllChildMarkers === 'function') return;
+
+      try{
+        var cluster = L.markerClusterGroup({ maxClusterRadius:60, spiderfyOnMaxZoom:true, chunkedLoading:true });
+        if (window.layer && window.layer.eachLayer) {
+          window.layer.eachLayer(function(ch){ cluster.addLayer(ch); });
+        }
+        window.map.removeLayer(window.layer);
+        cluster.addTo(window.map);
+        window.layer = cluster;
+      }catch(_){}
+    }
+
+    // Load cluster assets and upgrade once the page is ready
+    window.addEventListener('load', function(){
+      injectClusterAssets(function(){ setTimeout(ensureCluster, 50); });
+    });
+  })();
+</script>
+<!-- JUNIPER END: MAP-ENHANCEMENTS -->
 
 </body>
 </html>
+S
