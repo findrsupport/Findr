@@ -30,8 +30,7 @@
 
     .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
 
-    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
-    .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
+    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column}
     .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
     .content{padding:14px}
     .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
@@ -41,13 +40,17 @@
     .broker{font-size:12px; color:var(--muted)}
     .actions{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); margin-top:auto; padding:12px 14px; border-top:1px solid var(--stroke)}
     .pbr{display:flex; align-items:center; gap:8px}
-    .pbr img{width:24px; height:24px; object-fit:contain}
+    .pbr img{height:20px; width:auto} /* JUNIPER: visible badge size */
     .chips{display:flex; gap:8px; flex-wrap:wrap}
     .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
     .back{font-size:12px; margin-top:18px; color:var(--muted)}
     .muted{color:var(--muted)}
     details#why{margin-top:10px}
     details#why summary{cursor:pointer; color:var(--muted)}
+
+    /* JUNIPER: prevent address/price collisions */
+    .row .addr{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+    .row .price{flex:0 0 auto}
   </style>
 </head>
 <body>
@@ -249,9 +252,11 @@
             <div class="broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
           </div>
           <div class="actions">
+            <!-- JUNIPER START: COMPLIANT BADGE (link only on badge, no extra text) -->
             <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
-              <img src="https://static.realtor.ca/branding/powered-by-realtor.png" alt="Powered by REALTOR.ca" width="24" height="24"> REALTOR.ca
+              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
             </a>
+            <!-- JUNIPER END: COMPLIANT BADGE -->
             <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
           </div>`;
         grid.appendChild(el);
@@ -303,13 +308,9 @@
       }catch{ prompt('Copy this URL:', window.location.href); }
     }
 
-    let SMART_STATUS='';
-    function updateSmartStatus(){ /* placeholder for future status text if needed */ }
     async function smartFromText(){
       const text = $('q').value || '';
       let spec = null;
-      let usedFallback = false;
-
       try {
         const res = await fetch('/.netlify/functions/intent', {
           method: 'POST',
@@ -317,12 +318,8 @@
           body: JSON.stringify({ text })
         });
         if (res.ok) spec = await res.json();
-      } catch (e) {
-        console.debug('Intent API not available, falling back to demo:', e);
-      }
-
-      if (!spec) { usedFallback = true; spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo); }
-
+      } catch (_e) {}
+      if (!spec) { spec = await FindrAI.withUserIntentGuard(text, AIDemo.parseUserIntentDemo); }
       try{
         if (spec.beds_min) $('beds').value = String(spec.beds_min);
         if (spec.baths_min) $('baths').value = String(spec.baths_min);
@@ -331,8 +328,8 @@
         if (Array.isArray(spec.areas) && spec.areas.length) $('city').value = spec.areas[0];
         $('q').value = '';
         if (spec.sort) $('sort').value = spec.sort;
-        apply(); SMART_STATUS = usedFallback ? 'fallback' : 'server parser'; updateSmartStatus(); $('why').open = true;
-      }catch(err){ console.debug('Smart parse apply failed:', err); }
+        apply(); $('why').open = true;
+      }catch(_err){}
     }
 
     async function boot(){
@@ -386,30 +383,6 @@
     })();
   </script>
   <!-- JUNIPER END: OPEN-IN-MAP -->
-  
-  <!-- JUNIPER START: BADGE-VISIBILITY -->
-<style>
-  /* Make the REALTOR.ca badge readable and prevent address/price collisions */
-  .pbr img{height:20px; width:auto; max-width:140px}
-  .row .addr{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
-  .row .price{flex:0 0 auto}
-</style>
-<!-- JUNIPER END: BADGE-VISIBILITY -->
-
-<!-- JUNIPER START: BADGE-FALLBACK -->
-<script>
-  // If the image fails to load for any reason, replace with text to preserve compliance
-  document.addEventListener('error', function(e){
-    var t = e.target;
-    if (t && t.matches && t.matches('.pbr img')){
-      var span = document.createElement('span');
-      span.textContent = 'Powered by REALTOR.ca';
-      span.className = 'muted';
-      t.replaceWith(span);
-    }
-  }, true);
-</script>
-<!-- JUNIPER END: BADGE-FALLBACK -->
 
 </body>
 </html>

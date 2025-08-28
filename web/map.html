@@ -5,23 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Map</title>
   <meta name="description" content="Findr™ map view — mock listings with deterministic filters." />
-  <!-- Leaflet -->
+  <!-- Leaflet core -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <!-- JUNIPER START: CLUSTER CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+  <!-- JUNIPER END: CLUSTER CSS -->
   <style>
-    :root {
-      --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624;
-      --chip:#1a2335; --chip-border:#2a3c5a;
-    }
-    :root[data-theme="light"]{
-      --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff;
-      --chip:#f1f4f8; --chip-border:#e5ecf5;
-    }
+    :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; --chip:#1a2335; --chip-border:#2a3c5a; }
+    :root[data-theme="light"]{ --bg:#f7f9fc; --fg:#0e1420; --muted:#5a6c85; --card:#ffffff; --stroke:#e5ecf5; --surface:#ffffff; --chip:#f1f4f8; --chip-border:#e5ecf5; }
     *{box-sizing:border-box}
     body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif; background:var(--bg); color:var(--fg)}
     a{color:var(--brand); text-decoration:none}
     .wrap{max-width:1200px; margin:0 auto; padding:28px 20px}
 
-    /* Nav */
     .nav{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:10px 0}
     .brand{display:flex; align-items:center; gap:10px}
     .logo{font-weight:900}
@@ -41,11 +38,6 @@
     .addr{font-weight:800}
     .meta{color:var(--muted); font-size:12px}
   </style>
-
-  <!-- JUNIPER START: CLUSTER-CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
-  <!-- JUNIPER END: CLUSTER-CSS -->
 </head>
 <body>
   <div class="wrap">
@@ -64,7 +56,7 @@
     <div class="panel">
       <div class="row">
         <div class="muted" id="count" aria-live="polite">Loading…</div>
-        <div class="muted"><a href="listings.html" aria-label="View as a list">Switch to list →</a></div>
+        <div class="muted"><a id="list-link" href="listings.html" aria-label="View as a list">Switch to list →</a></div>
       </div>
       <details id="why">
         <summary>Why these results?</summary>
@@ -78,6 +70,9 @@
 
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <!-- JUNIPER START: CLUSTER JS -->
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+  <!-- JUNIPER END: CLUSTER JS -->
   <script src="config.js"></script>
   <script src="js/ai-guard.js"></script>
   <script src="js/filters.js"></script>
@@ -137,24 +132,31 @@
       throw new Error('Could not load listings.json from expected paths.');
     }
 
-    // Map + markers
-    let map, layer;
+    // Map + markers (use clustering; normalize lon→lng)
+    var map, layer; // JUNIPER: var so they're globals (needed by some add-ons)
     function initMap(){
       map = L.map('map', { scrollWheelZoom: true });
       const dark = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
       L.tileLayer(dark, { attribution: '&copy; OpenStreetMap' }).addTo(map);
-      // Vancouver-ish default
       map.setView([49.2827, -123.1207], 11);
-      layer = L.layerGroup().addTo(map);
+
+      // JUNIPER: create cluster group up-front (fast for 500–1,000 markers)
+      layer = L.markerClusterGroup({
+        maxClusterRadius: 60,
+        spiderfyOnMaxZoom: true,
+        chunkedLoading: true
+      }).addTo(map);
     }
 
     function updateMarkers(list){
       layer.clearLayers();
-      if (!list.length) return;
+      if (!list || !list.length) return;
+
       const bounds = [];
       list.forEach(it=>{
-        const lat = typeof it.lat === 'number' ? it.lat : null;
-        const lng = typeof it.lng === 'number' ? it.lng : (typeof it.lon === 'number' ? it.lon : null);
+        // normalize lon->lng so markers render regardless of key used in JSON
+        const lat = (typeof it.lat === 'number') ? it.lat : null;
+        const lng = (typeof it.lng === 'number') ? it.lng : (typeof it.lon === 'number' ? it.lon : null);
         if (typeof lat !== 'number' || typeof lng !== 'number') return;
 
         const html = `
@@ -165,7 +167,7 @@
             <a href="${it.realtorca_url}" target="_blank" rel="noopener">View on REALTOR.ca →</a>
           </div>`;
         const m = L.marker([lat, lng]).bindPopup(html);
-        m.addTo(layer);
+        layer.addLayer(m);
         bounds.push([lat, lng]);
       });
       if (bounds.length) map.fitBounds(bounds, { padding:[40,40] });
@@ -178,10 +180,10 @@
         const params = getParams();
         const filtered = FILTERS.applyFilters(data, params);
         $('count').textContent = `${filtered.length} result${filtered.length===1?'':'s'}`;
+        $('list-link').href = 'listings.html' + (location.search || '');
         renderWhy(params);
         updateMarkers(filtered);
         if (!filtered.length){
-          // Keep a friendly default view around Metro Vancouver
           map.setView([49.2827, -123.1207], 10);
         }
       }catch(e){
@@ -192,103 +194,5 @@
     }
     boot();
   </script>
-
-  <!-- JUNIPER START: LIST-LINK-PARITY -->
-  <script>
-    (function(){
-      try{
-        var link = document.querySelector('a[aria-label="View as a list"]') || null;
-        if (link) { link.href = 'listings.html' + (location.search || ''); }
-      }catch(e){ /* noop */ }
-    })();
-  </script>
-  <!-- JUNIPER END: LIST-LINK-PARITY -->
-
-  <!-- JUNIPER START: CLUSTER -->
-  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-  <script>
-    (function(){
-      function upgradeToClusters(){
-        if (!window.L || !L.markerClusterGroup) return;
-        var m = window.map, current = window.layer;
-        if (!m || !current) return;
-        try {
-          var cluster = L.markerClusterGroup({ maxClusterRadius: 60, spiderfyOnMaxZoom: true, chunkedLoading: true });
-          if (current.getLayers) {
-            current.getLayers().forEach(function(child){ cluster.addLayer(child); });
-          }
-          m.removeLayer(current);
-          cluster.addTo(m);
-          window.layer = cluster; // future updates add to cluster
-        } catch (_e) {}
-      }
-      if (document.readyState === 'complete') {
-        upgradeToClusters();
-      } else {
-        window.addEventListener('load', upgradeToClusters);
-      }
-    })();
-  </script>
-  <!-- JUNIPER END: CLUSTER -->
-  
-  <!-- JUNIPER START: MAP-ENHANCEMENTS -->
-<script>
-  (function(){
-    function withLon(list){
-      return (list||[]).map(function(it){
-        // listings.json provides "lon" — normalize to "lng" for Leaflet
-        if (typeof it.lng !== 'number' && typeof it.lon === 'number'){
-          try { it = Object.assign({}, it, { lng: it.lon }); } catch(_){}
-        }
-        return it;
-      });
-    }
-
-    // Wrap updateMarkers to normalize lon→lng and ensure clustering
-    (function wrapUpdate(){
-      var _u = window.updateMarkers;
-      if (typeof _u === 'function'){
-        window.updateMarkers = function(list){
-          _u(withLon(list));
-          ensureCluster();
-        };
-      }
-    })();
-
-    function injectClusterAssets(cb){
-      var css1=document.createElement('link'); css1.rel='stylesheet'; css1.href='https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css';
-      var css2=document.createElement('link'); css2.rel='stylesheet'; css2.href='https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css';
-      document.head.appendChild(css1); document.head.appendChild(css2);
-      var s=document.createElement('script'); s.src='https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js';
-      s.onload=cb; document.body.appendChild(s);
-    }
-
-    function ensureCluster(){
-      if (!window.L || !L.markerClusterGroup) return;
-      try { window.map = window.map || map; window.layer = window.layer || layer; } catch(_){}
-      if (!window.map || !window.layer) return;
-      // Already a cluster group? bail.
-      if (typeof window.layer.getAllChildMarkers === 'function') return;
-
-      try{
-        var cluster = L.markerClusterGroup({ maxClusterRadius:60, spiderfyOnMaxZoom:true, chunkedLoading:true });
-        if (window.layer && window.layer.eachLayer) {
-          window.layer.eachLayer(function(ch){ cluster.addLayer(ch); });
-        }
-        window.map.removeLayer(window.layer);
-        cluster.addTo(window.map);
-        window.layer = cluster;
-      }catch(_){}
-    }
-
-    // Load cluster assets and upgrade once the page is ready
-    window.addEventListener('load', function(){
-      injectClusterAssets(function(){ setTimeout(ensureCluster, 50); });
-    });
-  })();
-</script>
-<!-- JUNIPER END: MAP-ENHANCEMENTS -->
-
 </body>
 </html>
-S
