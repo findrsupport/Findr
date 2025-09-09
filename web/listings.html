@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Findr™ — Listings (Preview)</title>
+  <title>Findr™ — Listings</title>
   <meta name="description" content="Findr™ mock listings — compliant layout with filters and search." />
   <style>
     :root { --brand:#5ea1ff; --bg:#0b0f17; --fg:#e8eef7; --muted:#9fb0c9; --card:rgba(255,255,255,0.04); --stroke:#223148; --surface:#0f1624; --chip:#1a2335; --chip-border:#2a3c5a; }
@@ -28,12 +28,12 @@
     input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
     .smart{white-space:nowrap; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--card); color:var(--fg); cursor:pointer}
 
+    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
     .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
     .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
     .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
     .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
     .content{padding:14px}
-    .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
     .addr{font-weight:800; line-height:1.25}
     .price{font-weight:900}
     .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
@@ -59,6 +59,8 @@
     .agent-broker{font-size:12px; color:var(--muted); line-height:1.2}
     .actions-cta{display:flex; align-items:center; gap:10px; margin-left:auto}
     .contact-btn{display:inline-block; border:1px solid var(--stroke); background:var(--card); color:var(--fg); padding:8px 10px; border-radius:10px; text-decoration:none}
+
+    .error{margin:12px 0; padding:12px; border:1px solid var(--stroke); border-radius:12px; background:var(--card); color:#ffb4b4}
   </style>
 </head>
 <body>
@@ -131,22 +133,25 @@
         <summary>Why these results?</summary>
         <div id="why-body" class="muted" style="margin-top:6px;"></div>
       </details>
+      <div id="err" class="error" role="status" aria-live="polite" style="display:none"></div>
     </div>
 
     <section id="grid" class="grid" aria-live="polite"></section>
     <p class="back"><a href="/">← Back to Home</a></p>
   </div>
 
+  <!-- Config & libs -->
   <script src="config.js"></script>
   <script src="js/ai-guard.js"></script>
   <script src="js/filters.js"></script>
   <script src="js/ai-demo.js"></script>
 
   <script>
+    // Theme: read from localStorage; default dark if none set
     (function(){
       const root = document.documentElement;
       const saved = localStorage.getItem('theme');
-      if (saved) root.setAttribute('data-theme', saved);
+      root.setAttribute('data-theme', saved ? saved : 'dark'); // default dark
       const btn = document.getElementById('theme-toggle');
       const isDark = () => root.getAttribute('data-theme') !== 'light';
       const render = () => { if(btn) btn.textContent = isDark() ? '🌙' : '☀️'; };
@@ -158,9 +163,25 @@
       render();
     })();
 
+    // Defensive shims so missing libs don't crash the page
+    window.FindrAI = window.FindrAI || {
+      withUserIntentGuard: async (text, fn) => fn(text),
+      withListingAIGuard: async (listing, fn) => fn(listing)
+    };
+    window.AIDemo = window.AIDemo || {
+      parseUserIntentDemo: async () => ({ min_price:null, max_price:null, beds_min:null, baths_min:null, areas:null, sort:'relevance' })
+    };
+
     const $ = (id) => document.getElementById(id);
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
+
+    function showErr(msg){
+      console.error('[Findr listings error]', msg);
+      const el = $('err');
+      el.textContent = typeof msg === 'string' ? msg : (msg && msg.message) || 'Unexpected error';
+      el.style.display = 'block';
+    }
 
     function getParams(){
       const p = new URLSearchParams(location.search);
@@ -190,32 +211,32 @@
     function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
     function renderWhy(){
       const parts=[];
-      const q=$('q').value.trim(); if(q) parts.push(\`Text: “\${q}”\`);
+      const q=$('q').value.trim(); if(q) parts.push(`Text: “${q}”`);
       if($('city').value) parts.push($('city').value);
-      if($('beds').value) parts.push(\`\${$('beds').value}+ bed\`);
-      if($('baths').value) parts.push(\`\${$('baths').value}+ bath\`);
+      if($('beds').value) parts.push(`${$('beds').value}+ bed`);
+      if($('baths').value) parts.push(`${$('baths').value}+ bath`);
       const minp=$('minp').value, maxp=$('maxp').value;
       if(minp||maxp){
         const left=minp?fmtPrice(+minp):'Any', right=maxp?fmtPrice(+maxp):'Any';
-        parts.push(\`Price: \${left}–\${right}\`);
+        parts.push(`Price: ${left}–${right}`);
       }
       const s = $('sort').selectedOptions[0].text;
-      if($('sort').value!=='relevance') parts.push(\`Sort: \${s}\`);
+      if($('sort').value!=='relevance') parts.push(`Sort: ${s}`);
       $('why-body').textContent = parts.length ? parts.join(' · ') : 'No active filters (all listings).';
     }
 
     function renderChips(){
       const chips = $('chips'); const active=[];
-      const q=$('q').value.trim(); if(q) active.push({label:\`Search: “\${q}”\`, id:'q'});
+      const q=$('q').value.trim(); if(q) active.push({label:`Search: “${q}”`, id:'q'});
       const city=$('city').value; if(city) active.push({label:city, id:'city'});
-      const beds=$('beds').value; if(beds) active.push({label:\`\${beds}+ bed\`, id:'beds'});
-      const baths=$('baths').value; if(baths) active.push({label:\`\${baths}+ bath\`, id:'baths'});
+      const beds=$('beds').value; if(beds) active.push({label:`${beds}+ bed`, id:'beds'});
+      const baths=$('baths').value; if(baths) active.push({label:`${baths}+ bath`, id:'baths'});
       const minp=$('minp').value, maxp=$('maxp').value;
-      if(minp||maxp){ active.push({label:\`\${minp?fmtPrice(+minp):'Any'}–\${maxp?fmtPrice(+maxp):'Any'}\`, id:'price'}); active.push({label:'Reset price', id:'price-reset'}); }
-      const sort=$('sort').value; if(sort!=='relevance') active.push({label:\`Sort: \${$('sort').selectedOptions[0].text}\`, id:'sort'});
+      if(minp||maxp){ active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'}); active.push({label:'Reset price', id:'price-reset'}); }
+      const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
       active.push({label:'Copy link', id:'copy'}); active.push({label:'Clear all', id:'clear'});
 
-      chips.innerHTML = active.map(c=>\`<button class="chip" data-id="\${c.id}" type="button" aria-label="\${c.label}">\${c.label}\${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>\`).join('');
+      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" type="button" aria-label="${c.label}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
       chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
         const id=b.getAttribute('data-id');
         if(id==='copy'){ copyLink(b); return; }
@@ -236,31 +257,31 @@
       VIEW.forEach(it=>{
         const el=document.createElement('article'); el.className='card';
 
-        const subject = encodeURIComponent(\`Inquiry about \${it.address}, \${it.city}\`);
-        const body = encodeURIComponent(\`Hi,\nI'm interested in \${it.address}, \${it.city} listed at \${fmtPrice(it.price)}.\nListing: \${it.realtorca_url}\n\nSent via Findr\`);
-        const mailto = \`mailto:?subject=\${subject}&body=\${body}\`;
+        const subject = encodeURIComponent(`Inquiry about ${it.address}, ${it.city}`);
+        const body = encodeURIComponent(`Hi,\nI'm interested in ${it.address}, ${it.city} listed at ${fmtPrice(it.price)}.\nListing: ${it.realtorca_url}\n\nSent via Findr`);
+        const mailto = `mailto:?subject=${subject}&body=${body}`;
 
         const propType = (it.type || it.property_type || '').trim();
-        const typePart = propType ? \`<span>\${propType}</span><span>•</span>\` : '';
+        const typePart = propType ? `<span>${propType}</span><span>•</span>` : '';
 
-        el.innerHTML=\`
+        el.innerHTML=`
           <img class="img"
-               src="\${it.photo}"
-               alt="Photo of \${it.address}, \${it.city}"
+               src="${it.photo}"
+               alt="Photo of ${it.address}, ${it.city}"
                loading="lazy"
                decoding="async"
                referrerpolicy="no-referrer"
                onerror="this.onerror=null; this.src='assets/placeholder-real-estate.svg';">
           <div class="content">
-            <div class="row"><div class="addr">\${it.address}</div><div class="price">\${fmtPrice(it.price)}</div></div>
+            <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
             <div class="meta">
-              \${typePart}
-              <span>\${it.city}</span><span>•</span>
-              <span>\${it.beds} \${it.beds===1?'bedroom':'bedrooms'}</span><span>•</span>
-              <span>\${it.baths} \${it.baths===1?'bathroom':'bathrooms'}</span>
+              ${typePart}
+              <span>${it.city}</span><span>•</span>
+              <span>${it.beds} ${it.beds===1?'bedroom':'bedrooms'}</span><span>•</span>
+              <span>${it.baths} ${it.baths===1?'bathroom':'bathrooms'}</span>
             </div>
             <div class="pbr-top">
-              <a class="pbr-badge" href="\${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+              <a class="pbr-badge" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
                 <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
               </a>
             </div>
@@ -271,26 +292,28 @@
               <div class="agent-avatar" aria-hidden="true" title="Agent or Team"></div>
               <div class="agent-info">
                 <div class="agent-name">Agent or Team</div>
-                <div class="agent-broker">Listing Brokerage: <strong>\${it.brokerage}</strong></div>
+                <div class="agent-broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
               </div>
             </div>
 
             <div class="actions-cta">
-              <a class="contact-btn" href="\${mailto}" aria-label="Email about \${it.address}">Contact</a>
-              <a class="details-link" href="\${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View details on REALTOR.ca">Details →</a>
+              <a class="contact-btn" href="${mailto}" aria-label="Email about ${it.address}">Contact</a>
+              <a class="details-link" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View details on REALTOR.ca">Details →</a>
             </div>
-          </div>\`;
+          </div>`;
         grid.appendChild(el);
       });
     }
 
     function apply(){
       const sort=$('sort').value;
-      VIEW = FILTERS.applyFilters(DATA, {
-        q: $('q').value, city: $('city').value,
-        beds: $('beds').value, baths: $('baths').value,
-        minp: $('minp').value, maxp: $('maxp').value
-      });
+      try{
+        VIEW = FILTERS.applyFilters(DATA, {
+          q: $('q').value, city: $('city').value,
+          beds: $('beds').value, baths: $('baths').value,
+          minp: $('minp').value, maxp: $('maxp').value
+        });
+      }catch(e){ showErr('Filter error: ' + (e && e.message || e)); return; }
       switch(sort){
         case 'price-asc': VIEW.sort((a,b)=>a.price-b.price); break;
         case 'price-desc': VIEW.sort((a,b)=>b.price-a.price); break;
@@ -306,13 +329,18 @@
       vals.forEach(v=>{ const d=Math.abs(v-target); if(d<diff){ diff=d; best=String(v); } });
       sel.value=best;
     }
-
     function debounce(fn,ms){ let t; return (...args)=>{ clearTimeout(t); t=setTimeout(()=>fn(...args),ms); } }
 
     async function loadData(){
       const candidates = ['/data/listings.json','data/listings.json','/listings.json','listings.json'];
       for (const url of candidates){
-        try{ const res = await fetch(url,{cache:'no-store'}); if(res.ok) return await res.json(); }catch(_e){}
+        try{
+          const res = await fetch(url,{cache:'no-store'});
+          if(res.ok){
+            console.log('[Findr] Loaded dataset from', url);
+            return await res.json();
+          }
+        }catch(_e){}
       }
       throw new Error('Could not load listings.json from expected paths.');
     }
@@ -350,7 +378,7 @@
         $('q').value = '';
         if (spec.sort) $('sort').value = spec.sort;
         apply(); $('why').open = true;
-      }catch(err){ console.debug('Smart parse apply failed:', err); }
+      }catch(err){ showErr('Smart parse apply failed: ' + (err && err.message || err)); }
     }
 
     async function boot(){
@@ -361,8 +389,8 @@
         $('minp').value=p.minp; $('maxp').value=p.maxp; $('sort').value=p.sort;
         apply();
       }catch(e){
-        console.error(e);
-        document.getElementById('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
+        showErr(e);
+        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
       }
       $('q').addEventListener('input',debounce(apply,200));
       $('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); smartFromText(); }});
@@ -373,6 +401,7 @@
   </script>
 
   <script>
+    // Open-this-search on Map
     (function(){
       try{
         var chips = document.getElementById('chips');
