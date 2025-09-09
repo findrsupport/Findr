@@ -7,7 +7,9 @@
   function safePreview(v, n = 160) {
     try { return ("" + v).slice(0, n); } catch { return ""; }
   }
-  function log(kind, payload) { if (LOG) console.debug(`[AI-LOG] ${kind}:`, payload); }
+  function log(kind, payload) {
+    if (LOG) console.debug(`[AI-LOG] ${kind}:`, payload);
+  }
 
   function guardListingPayload(listing) {
     // Require explicit provenance when evaluating listing content with AI
