@@ -38,7 +38,7 @@
     .price{font-weight:900}
     .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
 
-    .actions{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); margin-top:auto; padding:16px 18px; border-top:1px solid var(--stroke); flex-wrap:wrap} /* enlarged */
+    .actions{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); margin-top:auto; padding:16px 18px; border-top:1px solid var(--stroke); flex-wrap:wrap}
     .chips{display:flex; gap:8px; flex-wrap:wrap}
     .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
     .back{font-size:12px; margin-top:18px; color:var(--muted)}
@@ -267,7 +267,11 @@
           <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
           <div class="content">
             <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
-            <div class="meta"><span>${it.city}</span><span>•</span><span>${it.beds} bd</span><span>•</span><span>${it.baths} ba</span></div>
+            <div class="meta">
+              <span>${it.city}</span><span>•</span>
+              <span>${it.beds} ${it.beds===1?'bedroom':'bedrooms'}</span><span>•</span>
+              <span>${it.baths} ${it.baths===1?'bathroom':'bathrooms'}</span>
+            </div>
             <!-- JUNIPER START: REALTOR BADGE PLACEMENT -->
             <div class="pbr-top">
               <a class="pbr-badge" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
