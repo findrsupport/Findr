@@ -1,4 +1,4 @@
-const CACHE_NAME = 'findr-shell-v3';
+const CACHE_NAME = 'findr-shell-v4';
 const CORE = [
   '/', '/index.html', '/listings.html', '/map.html',
   '/config.js', '/js/filters.js', '/js/ai-guard.js', '/js/ai-demo.js',
@@ -6,12 +6,10 @@ const CORE = [
 ];
 
 self.addEventListener('install', (e) => {
-  self.skipWaiting();
   e.waitUntil(caches.open(CACHE_NAME).then((c) => c.addAll(CORE)));
 });
 
 self.addEventListener('activate', (e) => {
-  self.clients.claim();
   e.waitUntil(
     caches.keys().then(keys => Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k))))
   );
