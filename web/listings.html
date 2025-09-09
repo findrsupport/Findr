@@ -50,12 +50,11 @@
     .row .addr{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
     .row .price{flex:0 0 auto}
 
-    /* JUNIPER START: REALTOR BADGE (moved into content area, larger) */
+    /* REALTOR badge in content */
     .pbr-top{margin-top:6px}
     .pbr-top img{height:22px; width:auto}
-    /* JUNIPER END: REALTOR BADGE */
 
-    /* JUNIPER START: CARD-FOOTER BLOCK (agent + brokerage | contact) */
+    /* Footer: agent + brokerage | contact */
     .agent{display:flex; align-items:center; gap:10px; min-width:0}
     .agent-avatar{width:40px; height:40px; border-radius:50%; background:var(--chip); border:1px solid var(--chip-border)}
     .agent-info{display:flex; flex-direction:column; gap:2px; min-width:0}
@@ -63,7 +62,6 @@
     .agent-broker{font-size:12px; color:var(--muted); line-height:1.2}
     .actions-cta{display:flex; align-items:center; gap:10px; margin-left:auto}
     .contact-btn{display:inline-block; border:1px solid var(--stroke); background:var(--card); color:var(--fg); padding:8px 10px; border-radius:10px; text-decoration:none}
-    /* JUNIPER END: CARD-FOOTER BLOCK */
   </style>
 </head>
 <body>
@@ -263,26 +261,28 @@
         const body = encodeURIComponent(`Hi,\nI'm interested in ${it.address}, ${it.city} listed at ${fmtPrice(it.price)}.\nListing: ${it.realtorca_url}\n\nSent via Findr`);
         const mailto = `mailto:?subject=${subject}&body=${body}`;
 
+        // Optional property type (supports either "type" or "property_type")
+        const propType = (it.type || it.property_type || '').trim();
+        const typePart = propType ? `<span>${propType}</span><span>•</span>` : '';
+
         el.innerHTML=`
           <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
           <div class="content">
             <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
             <div class="meta">
+              ${typePart}
               <span>${it.city}</span><span>•</span>
               <span>${it.beds} ${it.beds===1?'bedroom':'bedrooms'}</span><span>•</span>
               <span>${it.baths} ${it.baths===1?'bathroom':'bathrooms'}</span>
             </div>
-            <!-- JUNIPER START: REALTOR BADGE PLACEMENT -->
             <div class="pbr-top">
               <a class="pbr-badge" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
                 <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
               </a>
             </div>
-            <!-- JUNIPER END: REALTOR BADGE PLACEMENT -->
           </div>
 
           <div class="actions">
-            <!-- JUNIPER START: CARD-FOOTER BLOCK -->
             <div class="agent">
               <div class="agent-avatar" aria-hidden="true" title="Agent or Team"></div>
               <div class="agent-info">
@@ -295,7 +295,6 @@
               <a class="contact-btn" href="${mailto}" aria-label="Email about ${it.address}">Contact</a>
               <a class="details-link" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View details on REALTOR.ca">Details →</a>
             </div>
-            <!-- JUNIPER END: CARD-FOOTER BLOCK -->
           </div>`;
         grid.appendChild(el);
       });
@@ -389,7 +388,7 @@
     boot();
   </script>
 
-  <!-- JUNIPER START: OPEN-IN-MAP -->
+  <!-- Open this search on Map link -->
   <script>
     (function(){
       try{
@@ -420,7 +419,6 @@
       }catch(e){ /* noop */ }
     })();
   </script>
-  <!-- JUNIPER END: OPEN-IN-MAP -->
 
 </body>
 </html>
