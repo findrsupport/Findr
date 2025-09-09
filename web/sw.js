@@ -1,4 +1,4 @@
-const CACHE_NAME = 'findr-shell-v8';
+const CACHE_NAME = 'findr-shell-v9';
 const CORE = [
   '/', '/index.html', '/listings.html', '/map.html',
   '/config.js', '/js/filters.js', '/js/ai-guard.js', '/js/ai-demo.js',

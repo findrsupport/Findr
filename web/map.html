@@ -2,47 +2,6 @@
 <html lang="en" data-theme="dark">
 <head>
   <link rel="stylesheet" href="css/findr-theme.css">
-  
-  
-  
-  <style id="findr-sidebar-styles-embedded">
-    .map-layout{display:grid;grid-template-columns:380px minmax(0,1fr);gap:24px;align-items:start;width:100%;padding:16px 20px 40px}
-    @media (max-width: 1024px){ .map-layout{grid-template-columns:1fr;padding:12px} }
-    /* Sidebar block (non-sticky) */
-    #findr-sidebar{background:var(--surface,#0f0f0f);color:var(--fg,#f4f4f4);
-      border:1px solid var(--stroke,#2a2a2a);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.25);overflow:hidden}
-    #findr-sidebar .sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--stroke,#2a2a2a)}
-    #findr-sidebar .sidebar-title{font-size:16px;margin:0}
-    #findr-sidebar .sidebar-form{padding:12px 14px}
-    #findr-sidebar .row{display:flex;gap:10px}
-    #findr-sidebar .field{display:flex;flex-direction:column;gap:4px;margin:8px 0;flex:1}
-    #findr-sidebar .field input,#findr-sidebar .field select{padding:8px 10px;border-radius:10px;border:1px solid var(--stroke,#2a2a2a);background:var(--card,#1a1a1a);color:var(--fg,#f4f4f4)}
-    #findr-sidebar .actions{display:flex;gap:8px;margin-top:10px}
-    #findr-sidebar .btn-primary{padding:8px 12px;border-radius:10px;background:var(--brand,#ffbc00);border:1px solid var(--stroke,#2a2a2a);color:#111;font-weight:700;cursor:pointer}
-    #findr-sidebar .btn-secondary{padding:8px 12px;border-radius:10px;background:var(--card,#1a1a1a);border:1px solid var(--stroke,#2a2a2a);color:var(--fg,#f4f4f4);cursor:pointer}
-    #findr-sidebar .help{color:var(--muted,#a0a0a0);font-size:12px;margin:8px 0 12px}
-    #findr-sidebar .top-card{border-top:1px solid var(--stroke,#2a2a2a);padding:12px 14px}
-    #findr-sidebar .listing-card{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;border:1px solid var(--stroke,#2a2a2a);border-radius:12px;padding:10px;background:var(--card,#1a1a1a);margin-bottom:10px}
-    #findr-sidebar .listing-card img{width:96px;height:72px;object-fit:cover;border-radius:10px}
-    #findr-sidebar .listing-card .meta{display:flex;flex-direction:column;gap:2px}
-    /* Main column */
-    .map-main{display:flex;flex-direction:column;gap:16px}
-    #map-header{background:var(--card,#1a1a1a);border:1px solid var(--stroke,#2a2a2a);color:var(--fg,#f4f4f4);
-      border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between}
-    #map-header .left{display:flex;align-items:center;gap:10px}
-    #map-header .count{font-weight:700}
-    #map-header .why{color:var(--muted,#a0a0a0);font-size:13px}
-    #map-header .switch{color:var(--fg,#f4f4f4);text-decoration:none;border:1px solid var(--stroke,#2a2a2a);padding:6px 10px;border-radius:9999px;background:var(--surface,#0f0f0f)}
-    #map-card{background:var(--card,#1a1a1a);border:1px solid var(--stroke,#2a2a2a);border-radius:16px;padding:10px}
-    #map{height:68vh;border-radius:12px}
-    @media (max-height: 800px){ #map{height:60vh} }
-    /* Hide duplicate legend */
-    #map-legend{display:none !important}
-  </style>
-
-
-
-
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Map</title>
@@ -82,37 +41,34 @@
   </style>
 
   <style id="findr-theme-enforce">
-    :root{
-      --brand:#ffbc00 !important;
-      --bg:#0d0d0d !important;
-      --fg:#f4f4f4 !important;
-      --muted:#a0a0a0 !important;
-      --card:#1a1a1a !important;
-      --stroke:#2a2a2a !important;
-      --surface:#0f0f0f !important;
-    }
-    :root[data-theme="light"]{
-      --bg:#f9fafb !important;
-      --fg:#111111 !important;
-      --muted:#6b7280 !important;
-      --card:#ffffff !important;
-      --stroke:#e5e7eb !important;
-      --surface:#ffffff !important;
-    }
+    :root{ --brand:#ffbc00 !important; --bg:#0d0d0d !important; --fg:#f4f4f4 !important; --muted:#a0a0a0 !important; --card:#1a1a1a !important; --stroke:#2a2a2a !important; --surface:#0f0f0f !important; }
+    :root[data-theme="light"]{ --bg:#f9fafb !important; --fg:#111111 !important; --muted:#6b7280 !important; --card:#ffffff !important; --stroke:#e5e7eb !important; --surface:#ffffff !important; }
+  </style>
+
+
+  <style id="findr-map-grid-layout">
+    .map-layout{display:grid;grid-template-columns:380px minmax(0,1fr);gap:24px;align-items:start}
+    @media (max-width: 1024px){ .map-layout{grid-template-columns:1fr} }
+    #findr-sidebar{background:var(--surface);color:var(--fg);border:1px solid var(--stroke);border-radius:16px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
+    #findr-sidebar .sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--stroke)}
+    #findr-sidebar .sidebar-title{font-size:16px;margin:0}
+    #findr-sidebar .sidebar-form{padding:12px 14px}
+    #findr-sidebar .row{display:flex;gap:10px}
+    #findr-sidebar .field{display:flex;flex-direction:column;gap:4px;margin:8px 0;flex:1}
+    #findr-sidebar .field input,#findr-sidebar .field select{padding:8px 10px;border-radius:10px;border:1px solid var(--stroke);background:var(--card);color:var(--fg)}
+    #findr-sidebar .actions{display:flex;gap:8px;margin-top:10px}
+    #findr-sidebar .btn-primary{padding:8px 12px;border-radius:10px;background:var(--brand);border:1px solid var(--stroke);color:#111;font-weight:700;cursor:pointer}
+    #findr-sidebar .btn-secondary{padding:8px 12px;border-radius:10px;background:var(--card);border:1px solid var(--stroke);color:var(--fg);cursor:pointer}
+    #findr-sidebar .help{color:var(--muted);font-size:12px;margin:8px 0 12px}
+    #findr-sidebar .top-card{border-top:1px solid var(--stroke);padding:12px 14px}
+    #findr-sidebar .listing-card{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:center;border:1px solid var(--stroke);border-radius:12px;padding:10px;background:var(--card);margin-bottom:10px}
+    #findr-sidebar .listing-card img{width:96px;height:72px;object-fit:cover;border-radius:10px}
+    #findr-sidebar .listing-card .meta{display:flex;flex-direction:column;gap:2px}
+    .map-main{display:flex;flex-direction:column;gap:14px}
   </style>
 
 </head>
 <body>
-  <section class="map-layout">
-    <aside id="findr-sidebar" aria-label="Filters panel">
-      <div class="sidebar-header"><h2 class="sidebar-title">Filters</h2></div>
-      <div class="sidebar-form"><p class="help">Loading…</p></div>
-      <div class="top-card" aria-live="polite" aria-label="Most relevant listing">
-        <h3>Most Relevant</h3>
-        <div id="findr-top-card"></div>
-      </div>
-    </aside>
-
   <div class="wrap">
     <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
@@ -125,7 +81,38 @@
       </div>
     </nav>
 
-    <!-- Summary -->
+    
+    <section class="map-layout">
+      <aside id="findr-sidebar" aria-label="Filters panel">
+        <div class="sidebar-header"><h2 class="sidebar-title">Filters</h2></div>
+        <form id="findr-filter-form" class="sidebar-form" aria-describedby="findr-filter-help">
+          <div class="field"><label for="city">City</label><select id="city" name="city" aria-label="City">
+            <option value="">Any</option>
+            <option>Burnaby</option><option>Coquitlam</option><option>Port Coquitlam</option><option>Port Moody</option>
+            <option>Maple Ridge</option><option>Pitt Meadows</option><option>Langley</option><option>Surrey</option><option>Vancouver</option>
+          </select></div>
+          <div class="row">
+            <div class="field"><label for="beds">Beds (min)</label><select id="beds" name="beds"><option value="">Any</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+            <div class="field"><label for="baths">Baths (min)</label><select id="baths" name="baths"><option value="">Any</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option></select></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="minp">Min Price</label><input id="minp" name="minp" type="number" inputmode="numeric" placeholder="300000" /></div>
+            <div class="field"><label for="maxp">Max Price</label><input id="maxp" name="maxp" type="number" inputmode="numeric" placeholder="2500000" /></div>
+          </div>
+          <div class="row">
+            <div class="field"><label for="type">Type</label><select id="type" name="type"><option value="">Any</option><option>Condo</option><option>Townhouse</option><option>House</option></select></div>
+            <div class="field"><label for="sort">Sort</label><select id="sort" name="sort"><option value="relevance">Relevance</option><option value="price-asc">Price ↑</option><option value="price-desc">Price ↓</option><option value="beds-desc">Beds ↓</option><option value="baths-desc">Baths ↓</option></select></div>
+          </div>
+          <div class="actions"><button type="button" id="findr-apply" class="btn-primary">Apply</button><button type="button" id="findr-clear" class="btn-secondary">Clear</button></div>
+          <p id="findr-filter-help" class="help">Filters update the map without reloading the page.</p>
+        </form>
+        <div class="top-card" aria-live="polite" aria-label="Top listings">
+          <h3>Top Picks</h3>
+          <div id="findr-top-card"></div>
+        </div>
+      </aside>
+      <div class="map-main">
+<!-- Summary -->
     <div class="panel">
       <div class="row">
         <div class="muted" id="count" aria-live="polite">Loading…</div>
@@ -138,18 +125,9 @@
     </div>
 
     <!-- Map -->
-    <div class="map-main">
-      <div id="map-header" role="region" aria-live="polite">
-        <div class="left">
-          <span class="count" id="map-result-count">—</span>
-          <span class="why">Why these results?</span>
-        </div>
-        <a class="switch" href="listings.html">Switch to list →</a>
+    <div id="map" role="region" aria-label="Map of listings"></div>
       </div>
-      <div id="map-card"><div id="map"></div></div>
-    </div>
-  </section>
-</div>
+    </section>
 
   <!-- Scripts -->
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -217,6 +195,41 @@
 
     // Map + markers (use clustering; normalize lon→lng)
     var map, layer; // JUNIPER: var so they're globals (needed by some add-ons)
+
+    function setParamsInUrl(params){
+      const u = new URL(location.href);
+      Object.keys(params).forEach(k => {
+        if (params[k] === '' || params[k] == null) u.searchParams.delete(k);
+        else u.searchParams.set(k, params[k]);
+      });
+      history.replaceState(null,'',u.toString());
+    }
+    function cardHTML(row){
+      if (!row) return '';
+      const img = row.photo || 'assets/placeholder-real-estate-dark.svg';
+      const price = fmtPrice(+row.price) || '$—';
+      const meta = [row.beds + ' bd', row.baths + ' ba', (row.type||'')].filter(Boolean).join(' • ');
+      const brokerage = row.brokerage || '—';
+      
+      return [
+        '<div class="listing-card">',
+        '  <img src="'+img+'" alt="Listing photo for '+(row.address||'')+'">',
+        '  <div class="meta">',
+        '    <strong>'+price+'</strong>',
+        '    <span>'+(row.address||'')+'</span>',
+        '    <span>'+meta+'</span>',
+        '    <span style="font-size:12px;color:var(--muted)">'+brokerage+' • <span style="border:1px solid var(--stroke);padding:2px 6px;border-radius:8px;background:var(--card)">REALTOR.ca</span> • <em>source: mock</em></span>',
+        '  </div>',
+        '</div>'
+      ].join('');
+    }
+    function renderTopList(rows){
+      const host = document.getElementById('findr-top-card');
+      if (!host) return;
+      if (!rows || !rows.length){ host.innerHTML = '<p class="help">No results match the current filters.</p>'; return;}
+      host.innerHTML = rows.slice(0,3).map(cardHTML).join('');
+    }
+
     function initMap(){
       map = L.map('map', { scrollWheelZoom: true });
       const dark = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
@@ -266,6 +279,7 @@
         $('list-link').href = 'listings.html' + (location.search || '');
         renderWhy(params);
         updateMarkers(filtered);
+        try { renderTopList(filtered.length ? filtered : data.sort(()=>Math.random()-0.5)); } catch(_e) {}
         if (!filtered.length){
           map.setView([49.2827, -123.1207], 10);
         }
@@ -276,7 +290,39 @@
       }
     }
     boot();
+
+    document.addEventListener('DOMContentLoaded', function(){
+      // Prefill from URL
+      const p = new URLSearchParams(location.search);
+      ['city','beds','baths','minp','maxp','type','sort'].forEach(id => { const el = document.getElementById(id); if (el && p.get(id)) el.value = p.get(id); });
+      const apply = document.getElementById('findr-apply');
+      const clear = document.getElementById('findr-clear');
+      function recompute(){
+        if (!window.__FINDR_DATA) return;
+        const params = {
+          q: p.get('q')||'',
+          city: document.getElementById('city').value || '',
+          beds: document.getElementById('beds').value || '',
+          baths: document.getElementById('baths').value || '',
+          minp: document.getElementById('minp').value || '',
+          maxp: document.getElementById('maxp').value || '',
+          type: document.getElementById('type').value || '',
+          sort: document.getElementById('sort').value || 'relevance'
+        };
+        setParamsInUrl(params);
+        const filtered = (window.FILTERS && FILTERS.applyFilters) ? FILTERS.applyFilters(window.__FINDR_DATA, params) : window.__FINDR_DATA;
+        document.getElementById('count').textContent = `${filtered.length} result${filtered.length===1?'':'s'}`;
+        renderWhy(params);
+        updateMarkers(filtered);
+        renderTopList(filtered.length ? filtered : window.__FINDR_DATA.sort(()=>Math.random()-0.5));
+      }
+      if (apply) apply.addEventListener('click', recompute);
+      if (clear) clear.addEventListener('click', function(){
+        ['city','beds','baths','minp','maxp','type','sort'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
+        recompute();
+      });
+    });
+
   </script>
-  <script src="js/map-sidebar.js" defer></script>
 </body>
 </html>
