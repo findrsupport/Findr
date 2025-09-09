@@ -63,7 +63,6 @@
 </head>
 <body>
   <div class="wrap">
-    <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
       <div class="brand"><div class="logo" aria-label="Findr home">Findr™</div></div>
       <div class="navlinks">
@@ -74,15 +73,12 @@
       </div>
     </nav>
 
-    <!-- Controls -->
     <div class="panel">
       <div class="toolbar" role="region" aria-label="Search and filters">
         <div class="searchbox">
           <input id="q" type="search" placeholder='Describe your... or click “Smart”' aria-label="Search or describe your needs" />
           <button id="smart-btn" class="smart" type="button" aria-label="Convert description to filters">Smart</button>
         </div>
-
-        <!-- City -->
         <select id="city" aria-label="City">
           <option value="">City (any)</option>
           <option>Vancouver</option><option>Burnaby</option><option>Richmond</option>
@@ -90,24 +86,18 @@
           <option>Port Coquitlam</option><option>New Westminster</option>
           <option>Langley</option><option>Maple Ridge</option>
         </select>
-
-        <!-- Beds -->
         <select id="beds" aria-label="Minimum bedrooms">
           <option value="">Beds (any)</option>
           <option value="1">1+ bed</option><option value="2">2+ bed</option>
           <option value="3">3+ bed</option><option value="4">4+ bed</option>
           <option value="5">5+ bed</option>
         </select>
-
-        <!-- Baths -->
         <select id="baths" aria-label="Minimum bathrooms">
           <option value="">Baths (any)</option>
           <option value="1">1+ bath</option><option value="2">2+ bath</option>
           <option value="3">3+ bath</option><option value="4">4+ bath</option>
           <option value="5">5+ bath</option>
         </select>
-
-        <!-- Price -->
         <select id="minp" aria-label="Min price">
           <option value="">Min price</option>
           <option value="250000">$250k</option><option value="400000">$400k</option>
@@ -124,8 +114,6 @@
           <option value="1500000">$1.5M</option><option value="2000000">$2.0M</option>
           <option value="3000000">$3.0M</option>
         </select>
-
-        <!-- Sort -->
         <select id="sort" aria-label="Sort">
           <option value="relevance">Sort: Relevance</option>
           <option value="price-asc">Price ↑</option>
@@ -202,32 +190,32 @@
     function renderCount(){ $('count').textContent = `${VIEW.length} result${VIEW.length===1?'':'s'}`; }
     function renderWhy(){
       const parts=[];
-      const q=$('q').value.trim(); if(q) parts.push(`Text: “${q}”`);
+      const q=$('q').value.trim(); if(q) parts.push(\`Text: “\${q}”\`);
       if($('city').value) parts.push($('city').value);
-      if($('beds').value) parts.push(`${$('beds').value}+ bed`);
-      if($('baths').value) parts.push(`${$('baths').value}+ bath`);
+      if($('beds').value) parts.push(\`\${$('beds').value}+ bed\`);
+      if($('baths').value) parts.push(\`\${$('baths').value}+ bath\`);
       const minp=$('minp').value, maxp=$('maxp').value;
       if(minp||maxp){
         const left=minp?fmtPrice(+minp):'Any', right=maxp?fmtPrice(+maxp):'Any';
-        parts.push(`Price: ${left}–${right}`);
+        parts.push(\`Price: \${left}–\${right}\`);
       }
       const s = $('sort').selectedOptions[0].text;
-      if($('sort').value!=='relevance') parts.push(`Sort: ${s}`);
+      if($('sort').value!=='relevance') parts.push(\`Sort: \${s}\`);
       $('why-body').textContent = parts.length ? parts.join(' · ') : 'No active filters (all listings).';
     }
 
     function renderChips(){
       const chips = $('chips'); const active=[];
-      const q=$('q').value.trim(); if(q) active.push({label:`Search: “${q}”`, id:'q'});
+      const q=$('q').value.trim(); if(q) active.push({label:\`Search: “\${q}”\`, id:'q'});
       const city=$('city').value; if(city) active.push({label:city, id:'city'});
-      const beds=$('beds').value; if(beds) active.push({label:`${beds}+ bed`, id:'beds'});
-      const baths=$('baths').value; if(baths) active.push({label:`${baths}+ bath`, id:'baths'});
+      const beds=$('beds').value; if(beds) active.push({label:\`\${beds}+ bed\`, id:'beds'});
+      const baths=$('baths').value; if(baths) active.push({label:\`\${baths}+ bath\`, id:'baths'});
       const minp=$('minp').value, maxp=$('maxp').value;
-      if(minp||maxp){ active.push({label:`${minp?fmtPrice(+minp):'Any'}–${maxp?fmtPrice(+maxp):'Any'}`, id:'price'}); active.push({label:'Reset price', id:'price-reset'}); }
-      const sort=$('sort').value; if(sort!=='relevance') active.push({label:`Sort: ${$('sort').selectedOptions[0].text}`, id:'sort'});
+      if(minp||maxp){ active.push({label:\`\${minp?fmtPrice(+minp):'Any'}–\${maxp?fmtPrice(+maxp):'Any'}\`, id:'price'}); active.push({label:'Reset price', id:'price-reset'}); }
+      const sort=$('sort').value; if(sort!=='relevance') active.push({label:\`Sort: \${$('sort').selectedOptions[0].text}\`, id:'sort'});
       active.push({label:'Copy link', id:'copy'}); active.push({label:'Clear all', id:'clear'});
 
-      chips.innerHTML = active.map(c=>`<button class="chip" data-id="${c.id}" type="button" aria-label="${c.label}">${c.label}${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>`).join('');
+      chips.innerHTML = active.map(c=>\`<button class="chip" data-id="\${c.id}" type="button" aria-label="\${c.label}">\${c.label}\${c.id!=='copy'&&c.id!=='clear'?' ✕':''}</button>\`).join('');
       chips.querySelectorAll('.chip').forEach(b=>b.addEventListener('click',()=>{
         const id=b.getAttribute('data-id');
         if(id==='copy'){ copyLink(b); return; }
@@ -248,31 +236,31 @@
       VIEW.forEach(it=>{
         const el=document.createElement('article'); el.className='card';
 
-        const subject = encodeURIComponent(`Inquiry about ${it.address}, ${it.city}`);
-        const body = encodeURIComponent(`Hi,\nI'm interested in ${it.address}, ${it.city} listed at ${fmtPrice(it.price)}.\nListing: ${it.realtorca_url}\n\nSent via Findr`);
-        const mailto = `mailto:?subject=${subject}&body=${body}`;
+        const subject = encodeURIComponent(\`Inquiry about \${it.address}, \${it.city}\`);
+        const body = encodeURIComponent(\`Hi,\nI'm interested in \${it.address}, \${it.city} listed at \${fmtPrice(it.price)}.\nListing: \${it.realtorca_url}\n\nSent via Findr\`);
+        const mailto = \`mailto:?subject=\${subject}&body=\${body}\`;
 
         const propType = (it.type || it.property_type || '').trim();
-        const typePart = propType ? `<span>${propType}</span><span>•</span>` : '';
+        const typePart = propType ? \`<span>\${propType}</span><span>•</span>\` : '';
 
-        el.innerHTML=`
+        el.innerHTML=\`
           <img class="img"
-               src="${it.photo}"
-               alt="Photo of ${it.address}, ${it.city}"
+               src="\${it.photo}"
+               alt="Photo of \${it.address}, \${it.city}"
                loading="lazy"
                decoding="async"
                referrerpolicy="no-referrer"
                onerror="this.onerror=null; this.src='assets/placeholder-real-estate.svg';">
           <div class="content">
-            <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
+            <div class="row"><div class="addr">\${it.address}</div><div class="price">\${fmtPrice(it.price)}</div></div>
             <div class="meta">
-              ${typePart}
-              <span>${it.city}</span><span>•</span>
-              <span>${it.beds} ${it.beds===1?'bedroom':'bedrooms'}</span><span>•</span>
-              <span>${it.baths} ${it.baths===1?'bathroom':'bathrooms'}</span>
+              \${typePart}
+              <span>\${it.city}</span><span>•</span>
+              <span>\${it.beds} \${it.beds===1?'bedroom':'bedrooms'}</span><span>•</span>
+              <span>\${it.baths} \${it.baths===1?'bathroom':'bathrooms'}</span>
             </div>
             <div class="pbr-top">
-              <a class="pbr-badge" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+              <a class="pbr-badge" href="\${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
                 <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
               </a>
             </div>
@@ -283,15 +271,15 @@
               <div class="agent-avatar" aria-hidden="true" title="Agent or Team"></div>
               <div class="agent-info">
                 <div class="agent-name">Agent or Team</div>
-                <div class="agent-broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
+                <div class="agent-broker">Listing Brokerage: <strong>\${it.brokerage}</strong></div>
               </div>
             </div>
 
             <div class="actions-cta">
-              <a class="contact-btn" href="${mailto}" aria-label="Email about ${it.address}">Contact</a>
-              <a class="details-link" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View details on REALTOR.ca">Details →</a>
+              <a class="contact-btn" href="\${mailto}" aria-label="Email about \${it.address}">Contact</a>
+              <a class="details-link" href="\${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View details on REALTOR.ca">Details →</a>
             </div>
-          </div>`;
+          </div>\`;
         grid.appendChild(el);
       });
     }
@@ -384,7 +372,6 @@
     boot();
   </script>
 
-  <!-- Open-this-search on Map -->
   <script>
     (function(){
       try{
