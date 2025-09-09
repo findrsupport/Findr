@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="400">
+  <rect width="100%" height="100%" fill="#0d0d0d"/>
+  <text x="50%" y="45%" font-family="Arial, sans-serif" font-size="28" fill="#ffbc00" text-anchor="middle">Findr™ Placeholder</text>
+  <text x="50%" y="55%" font-family="Arial, sans-serif" font-size="16" fill="#f4f4f4" text-anchor="middle">Dark Mode</text>
+</svg>
