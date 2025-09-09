@@ -25,22 +25,20 @@
     .toolbar{display:grid; grid-template-columns:1.6fr repeat(5, minmax(120px, 0.5fr)) 1fr; gap:10px; align-items:center}
     @media (max-width: 900px){ .toolbar{grid-template-columns:1fr 1fr 1fr; grid-auto-rows:minmax(40px,auto)} }
     .searchbox{display:flex; gap:8px}
-    input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg)}
-    .smart{border:1px solid var(--stroke); background:var(--card); color:var(--fg); border-radius:10px; padding:10px 12px; cursor:pointer}
+    input[type="search"], select{width:100%; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--surface); color:var(--fg); font:inherit}
+    .smart{white-space:nowrap; padding:10px 12px; border-radius:10px; border:1px solid var(--stroke); background:var(--card); color:var(--fg); cursor:pointer}
 
     .grid{display:grid; gap:16px; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); margin-top:14px}
-
-    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column}
+    .card{background:var(--card); border:1px solid var(--stroke); border-radius:16px; overflow:hidden; display:flex; flex-direction:column; transition:transform .15s ease, box-shadow .2s ease}
+    .card:hover{ transform:translateY(-2px); box-shadow:0 6px 28px rgba(0,0,0,.25) }
     .img{aspect-ratio:4/3; width:100%; object-fit:cover; background:#0a0f18}
     .content{padding:14px}
     .row{display:flex; justify-content:space-between; align-items:center; gap:12px}
     .addr{font-weight:800; line-height:1.25}
     .price{font-weight:900}
     .meta{display:flex; gap:10px; font-size:12px; color:var(--muted); margin:6px 0 10px}
-    .broker{font-size:12px; color:var(--muted)}
-    .actions{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); margin-top:auto; padding:12px 14px; border-top:1px solid var(--stroke)}
-    .pbr{display:flex; align-items:center; gap:8px}
-    .pbr img{height:20px; width:auto} /* JUNIPER: visible badge size */
+
+    .actions{display:flex; justify-content:space-between; align-items:center; gap:12px; background:var(--surface); margin-top:auto; padding:16px 18px; border-top:1px solid var(--stroke); flex-wrap:wrap} /* enlarged */
     .chips{display:flex; gap:8px; flex-wrap:wrap}
     .chip{background:var(--chip); border:1px solid var(--chip-border); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
     .back{font-size:12px; margin-top:18px; color:var(--muted)}
@@ -48,9 +46,24 @@
     details#why{margin-top:10px}
     details#why summary{cursor:pointer; color:var(--muted)}
 
-    /* JUNIPER: prevent address/price collisions */
+    /* Prevent address/price collisions */
     .row .addr{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
     .row .price{flex:0 0 auto}
+
+    /* JUNIPER START: REALTOR BADGE (moved into content area, larger) */
+    .pbr-top{margin-top:6px}
+    .pbr-top img{height:22px; width:auto}
+    /* JUNIPER END: REALTOR BADGE */
+
+    /* JUNIPER START: CARD-FOOTER BLOCK (agent + brokerage | contact) */
+    .agent{display:flex; align-items:center; gap:10px; min-width:0}
+    .agent-avatar{width:40px; height:40px; border-radius:50%; background:var(--chip); border:1px solid var(--chip-border)}
+    .agent-info{display:flex; flex-direction:column; gap:2px; min-width:0}
+    .agent-name{font-weight:700; font-size:12px; line-height:1.2; color:var(--fg)}
+    .agent-broker{font-size:12px; color:var(--muted); line-height:1.2}
+    .actions-cta{display:flex; align-items:center; gap:10px; margin-left:auto}
+    .contact-btn{display:inline-block; border:1px solid var(--stroke); background:var(--card); color:var(--fg); padding:8px 10px; border-radius:10px; text-decoration:none}
+    /* JUNIPER END: CARD-FOOTER BLOCK */
   </style>
 </head>
 <body>
@@ -244,20 +257,41 @@
       const grid=$('grid'); grid.innerHTML='';
       VIEW.forEach(it=>{
         const el=document.createElement('article'); el.className='card';
+
+        // Pre-filled email link
+        const subject = encodeURIComponent(`Inquiry about ${it.address}, ${it.city}`);
+        const body = encodeURIComponent(`Hi,\nI'm interested in ${it.address}, ${it.city} listed at ${fmtPrice(it.price)}.\nListing: ${it.realtorca_url}\n\nSent via Findr`);
+        const mailto = `mailto:?subject=${subject}&body=${body}`;
+
         el.innerHTML=`
           <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
           <div class="content">
             <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
             <div class="meta"><span>${it.city}</span><span>•</span><span>${it.beds} bd</span><span>•</span><span>${it.baths} ba</span></div>
-            <div class="broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
+            <!-- JUNIPER START: REALTOR BADGE PLACEMENT -->
+            <div class="pbr-top">
+              <a class="pbr-badge" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
+                <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
+              </a>
+            </div>
+            <!-- JUNIPER END: REALTOR BADGE PLACEMENT -->
           </div>
+
           <div class="actions">
-            <!-- JUNIPER START: COMPLIANT BADGE (link only on badge, no extra text) -->
-            <a class="pbr" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View on REALTOR.ca">
-              <img src="assets/powered-by-realtor.svg" alt="Powered by REALTOR.ca">
-            </a>
-            <!-- JUNIPER END: COMPLIANT BADGE -->
-            <a href="${it.realtorca_url}" target="_blank" rel="noopener">Details →</a>
+            <!-- JUNIPER START: CARD-FOOTER BLOCK -->
+            <div class="agent">
+              <div class="agent-avatar" aria-hidden="true" title="Agent or Team"></div>
+              <div class="agent-info">
+                <div class="agent-name">Agent or Team</div>
+                <div class="agent-broker">Listing Brokerage: <strong>${it.brokerage}</strong></div>
+              </div>
+            </div>
+
+            <div class="actions-cta">
+              <a class="contact-btn" href="${mailto}" aria-label="Email about ${it.address}">Contact</a>
+              <a class="details-link" href="${it.realtorca_url}" target="_blank" rel="noopener" aria-label="View details on REALTOR.ca">Details →</a>
+            </div>
+            <!-- JUNIPER END: CARD-FOOTER BLOCK -->
           </div>`;
         grid.appendChild(el);
       });
@@ -329,7 +363,7 @@
         $('q').value = '';
         if (spec.sort) $('sort').value = spec.sort;
         apply(); $('why').open = true;
-      }catch(_err){}
+      }catch(err){ console.debug('Smart parse apply failed:', err); }
     }
 
     async function boot(){
@@ -341,7 +375,7 @@
         apply();
       }catch(e){
         console.error(e);
-        $('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
+        document.getElementById('grid').innerHTML = '<p class="muted">Could not load mock data. Ensure <code>web/data/listings.json</code> exists (preferred) or place <code>web/listings.json</code>.</p>';
       }
       $('q').addEventListener('input',debounce(apply,200));
       $('q').addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ e.preventDefault(); smartFromText(); }});
