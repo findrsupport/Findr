@@ -138,11 +138,12 @@
     var css = document.createElement('style');
     css.id = 'findr-sidebar-styles';
     css.textContent = [
-      '#findr-open-filters{position:fixed;top:78px;left:16px;z-index:9500;padding:8px 12px;border-radius:9999px;border:1px solid var(--stroke,#2a2a2a);background:var(--card,#1a1a1a);color:var(--fg,#f4f4f4)}',
+      '#findr-open-filters{display:none;position:fixed;top:78px;left:16px;z-index:9500;padding:8px 12px;border-radius:9999px;border:1px solid var(--stroke,#2a2a2a);background:var(--card,#1a1a1a);color:var(--fg,#f4f4f4)}',
       '#findr-sidebar{position:fixed;top:60px;left:0;bottom:0;width:360px;max-width:92vw;z-index:9400;background:var(--surface,#0f0f0f);color:var(--fg,#f4f4f4);border-right:1px solid var(--stroke,#2a2a2a);box-shadow:0 8px 24px rgba(0,0,0,.35);transform:translateX(-100%);transition:transform .25s ease}',
-      'html.sidebar-open #findr-sidebar{transform:none}',
+      'html.sidebar-open #findr-sidebar{transform:none}
+#findr-sidebar{transform:none}',
       'html.sidebar-open #map{margin-left:360px;transition:margin-left .25s ease}',
-      '@media (max-width: 900px){ html.sidebar-open #map{margin-left:0} }',
+      '@media (max-width: 900px){ #map{margin-left:0} }',
       '.sidebar-header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border-bottom:1px solid var(--stroke,#2a2a2a)}',
       '.sidebar-title{font-size:16px;margin:0}',
       '.sidebar-close{font-size:20px;line-height:20px;padding:6px 10px;border-radius:8px;border:1px solid var(--stroke,#2a2a2a);background:var(--card,#1a1a1a);color:var(--fg,#f4f4f4)}',
@@ -290,7 +291,7 @@
   }
 
   // Init when DOM and map scripts are ready
-  document.addEventListener('DOMContentLoaded', function(){
+  document.addEventListener('DOMContentLoaded', function(){ document.documentElement.classList.add('sidebar-open');
     ensureStyles();
     buildSidebar();
     applyFiltersAndRender();
