@@ -63,6 +63,27 @@
 
     .error{margin:12px 0; padding:12px; border:1px solid var(--stroke); border-radius:12px; background:var(--card); color:#ffb4b4}
   </style>
+
+  <style id="findr-theme-enforce">
+    :root{
+      --brand:#ffbc00 !important;
+      --bg:#0d0d0d !important;
+      --fg:#f4f4f4 !important;
+      --muted:#a0a0a0 !important;
+      --card:#1a1a1a !important;
+      --stroke:#2a2a2a !important;
+      --surface:#0f0f0f !important;
+    }
+    :root[data-theme="light"]{
+      --bg:#f9fafb !important;
+      --fg:#111111 !important;
+      --muted:#6b7280 !important;
+      --card:#ffffff !important;
+      --stroke:#e5e7eb !important;
+      --surface:#ffffff !important;
+    }
+  </style>
+
 </head>
 <body>
   <div class="wrap">
