@@ -1,0 +1,19 @@
+
+/* Findr™ shared theme (prevents regressions) */
+:root{
+  --brand:#ffbc00;
+  --bg:#0d0d0d;
+  --fg:#f4f4f4;
+  --muted:#a0a0a0;
+  --card:#1a1a1a;
+  --stroke:#2a2a2a;
+  --surface:#0f0f0f;
+}
+:root[data-theme="light"]{
+  --bg:#f9fafb;
+  --fg:#111111;
+  --muted:#6b7280;
+  --card:#ffffff;
+  --stroke:#e5e7eb;
+  --surface:#ffffff;
+}
