@@ -1,6 +1,8 @@
 <!doctype html>
 <html lang="en" data-theme="dark">
 <head>
+  <meta name="theme-color" content="#0d0d0d">
+  <link rel="apple-touch-icon" href="assets/icons/icon-180.png">
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Findr™ — Map</title>
@@ -40,6 +42,8 @@
   </style>
 </head>
 <body>
+  <button id="copy-search-map" type="button" aria-label="Copy search link" style="position:fixed;top:78px;right:16px;z-index:9000;padding:8px 12px;border-radius:9999px;border:1px solid var(--stroke,#2a2a2a);background:var(--card,#1a1a1a);color:var(--fg,#f4f4f4);cursor:pointer;">Copy Search</button>
+  <div id="map-legend" aria-live="polite" style="position:fixed;top:78px;left:16px;z-index:9000;background:var(--card,#1a1a1a);color:var(--fg,#f4f4f4);border:1px solid var(--stroke,#2a2a2a);padding:8px 12px;border-radius:12px;box-shadow:0 6px 16px rgba(0,0,0,.3)"></div>
   <div class="wrap">
     <!-- Nav -->
     <nav class="nav" role="navigation" aria-label="Primary">
@@ -195,5 +199,51 @@
     boot();
   </script>
   <script src="js/placeholder-fallback.js" defer></script>
+  <script src="js/pwa-install.js" defer></script>
+  <script src="js/clipboard.js" defer></script>
+
+  <script>
+    (function(){
+      function getParams(){
+        var u = new URL(location.href);
+        var p = u.searchParams;
+        return {
+          q: p.get('q')||'',
+          city: p.get('city')||'',
+          beds: p.get('beds')||'',
+          baths: p.get('baths')||'',
+          minp: p.get('minp')||'',
+          maxp: p.get('maxp')||''
+        };
+      }
+      function fmtMoney(n){
+        if(!n) return '';
+        try { return '$' + Number(n).toLocaleString(); } catch { return '$'+n; }
+      }
+      function buildSummary(){
+        var s = getParams();
+        var parts = [];
+        if (s.city) parts.push(s.city);
+        if (s.beds) parts.push(s.beds + '+ beds');
+        if (s.baths) parts.push(s.baths + '+ baths');
+        if (s.minp || s.maxp) parts.push((fmtMoney(s.minp)||'Any') + '–' + (fmtMoney(s.maxp)||'Any'));
+        if (s.q) parts.push('“'+s.q+'”');
+        return parts.length ? parts.join(' • ') : 'All results';
+      }
+      function updateLegend(){
+        var el = document.getElementById('map-legend');
+        if (!el) return;
+        el.textContent = 'Filters: ' + buildSummary();
+      }
+      document.addEventListener('DOMContentLoaded', function(){
+        var btn = document.getElementById('copy-search-map');
+        if (btn) btn.addEventListener('click', function(){ (window.FINDR && FINDR.copyCurrentUrl) ? FINDR.copyCurrentUrl('Map link copied') : null; });
+        updateLegend();
+      });
+      // Also update if URL changes (history navigation)
+      window.addEventListener('popstate', updateLegend);
+    })();
+  </script>
+
 </body>
 </html>

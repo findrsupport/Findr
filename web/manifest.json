@@ -1,25 +1,23 @@
 {
-  "name": "Findr™",
+  "name": "Findr\u2122",
   "short_name": "Findr",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0b0f17",
-  "theme_color": "#0b0f17",
-  "description": "Findr™ — an AI-first real-estate search (mock demo).",
+  "background_color": "#f9fafb",
+  "theme_color": "#0d0d0d",
+  "description": "Findr\u2122 \u2014 an AI-first real-estate search (mock demo).",
   "lang": "en-CA",
   "icons": [
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACklEQVR4nGNgYAAAAgAB4iG8MwAAAABJRU5ErkJggg==",
+      "src": "assets/icons/icon-192.png",
       "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     },
     {
-      "src": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAIAAACQd1PeAAAACklEQVR4nGNgYAAAAgAB4iG8MwAAAABJRU5ErkJggg==",
+      "src": "assets/icons/icon-512.png",
       "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any maskable"
+      "type": "image/png"
     }
   ]
 }
