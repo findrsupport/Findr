@@ -215,7 +215,9 @@
       var sort = getParams().sort || 'relevance';
       filtered = (window.FILTERS && FILTERS.sortRows) ? FILTERS.sortRows(filtered, sort) : filtered;
 
-      updateTopCard(filtered[0] || null);
+      var hasFilters = !!(spec.city || spec.beds || spec.baths || spec.minp || spec.maxp || (getParams().type||"") || (getParams().q||""));
+      var rowsForSide = hasFilters ? filtered : (rows.slice().sort(function(){return Math.random()-0.5;}));
+      renderTopList(rowsForSide);
       updateHeaderCount(filtered.length);
       updateLegendText(spec, sort);
       updateMapMarkers(filtered);
@@ -262,6 +264,16 @@
     ].join('');
   }
 
+  
+  function renderTopList(rows){
+    var host = document.getElementById('findr-top-card');
+    if (!host) return;
+    if (!rows || !rows.length){
+      host.innerHTML = '<p class="help">No results match the current filters.</p>';
+      return;
+    }
+    host.innerHTML = rows.slice(0,3).map(cardHTML).join('');
+  }
   function updateTopCard(row){
     if (!topCardEl) return;
     topCardEl.innerHTML = cardHTML(row);
