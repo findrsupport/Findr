@@ -1,11 +1,12 @@
-<script>
 (function (global) {
   const cfg = global.FINDR_CONFIG || {};
   const ALLOW = !!cfg.ALLOW_AI_ON_LISTINGS;
   const ALLOWED_SOURCES = new Set(cfg.DATA_SOURCES_ALLOWED_FOR_AI || []);
   const LOG = !!cfg.LOG_AI_IO;
 
-  function safePreview(v, n=160){ try { return (""+v).slice(0,n); } catch { return ""; } }
+  function safePreview(v, n = 160) {
+    try { return ("" + v).slice(0, n); } catch { return ""; }
+  }
   function log(kind, payload) { if (LOG) console.debug(`[AI-LOG] ${kind}:`, payload); }
 
   function guardListingPayload(listing) {
@@ -34,4 +35,3 @@
 
   global.FindrAI = { withListingAIGuard, withUserIntentGuard };
 })(window);
-</script>
