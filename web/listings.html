@@ -46,15 +46,12 @@
     details#why{margin-top:10px}
     details#why summary{cursor:pointer; color:var(--muted)}
 
-    /* Prevent address/price collisions */
     .row .addr{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
     .row .price{flex:0 0 auto}
 
-    /* REALTOR badge in content */
     .pbr-top{margin-top:6px}
     .pbr-top img{height:22px; width:auto}
 
-    /* Footer: agent + brokerage | contact */
     .agent{display:flex; align-items:center; gap:10px; min-width:0}
     .agent-avatar{width:40px; height:40px; border-radius:50%; background:var(--chip); border:1px solid var(--chip-border)}
     .agent-info{display:flex; flex-direction:column; gap:2px; min-width:0}
@@ -152,16 +149,12 @@
     <p class="back"><a href="/">← Back to Home</a></p>
   </div>
 
-  <!-- Compliance scaffolding -->
   <script src="config.js"></script>
   <script src="js/ai-guard.js"></script>
-  <!-- Shared rules-based filters -->
   <script src="js/filters.js"></script>
-  <!-- Demo-only NL→filters stub (intent only; never touches listing payloads) -->
   <script src="js/ai-demo.js"></script>
 
   <script>
-    // Theme toggle
     (function(){
       const root = document.documentElement;
       const saved = localStorage.getItem('theme');
@@ -181,7 +174,6 @@
     const fmtPrice = (n) => new Intl.NumberFormat('en-CA', { style:'currency', currency:'CAD', maximumFractionDigits:0 }).format(n);
     let DATA=[], VIEW=[];
 
-    // URL param sync
     function getParams(){
       const p = new URLSearchParams(location.search);
       return {
@@ -256,17 +248,21 @@
       VIEW.forEach(it=>{
         const el=document.createElement('article'); el.className='card';
 
-        // Pre-filled email link
         const subject = encodeURIComponent(`Inquiry about ${it.address}, ${it.city}`);
         const body = encodeURIComponent(`Hi,\nI'm interested in ${it.address}, ${it.city} listed at ${fmtPrice(it.price)}.\nListing: ${it.realtorca_url}\n\nSent via Findr`);
         const mailto = `mailto:?subject=${subject}&body=${body}`;
 
-        // Optional property type (supports either "type" or "property_type")
         const propType = (it.type || it.property_type || '').trim();
         const typePart = propType ? `<span>${propType}</span><span>•</span>` : '';
 
         el.innerHTML=`
-          <img class="img" src="${it.photo}" alt="Photo of ${it.address}, ${it.city}">
+          <img class="img"
+               src="${it.photo}"
+               alt="Photo of ${it.address}, ${it.city}"
+               loading="lazy"
+               decoding="async"
+               referrerpolicy="no-referrer"
+               onerror="this.onerror=null; this.src='assets/placeholder-real-estate.svg';">
           <div class="content">
             <div class="row"><div class="addr">${it.address}</div><div class="price">${fmtPrice(it.price)}</div></div>
             <div class="meta">
@@ -388,7 +384,7 @@
     boot();
   </script>
 
-  <!-- Open this search on Map link -->
+  <!-- Open-this-search on Map -->
   <script>
     (function(){
       try{
@@ -404,12 +400,9 @@
         link.style.marginLeft = 'auto';
         row.appendChild(link);
 
-        function updateLink(){
-          try{ link.href = 'map.html' + (location.search || ''); }catch(_e){}
-        }
+        function updateLink(){ try{ link.href = 'map.html' + (location.search || ''); }catch(_e){} }
         ['city','beds','baths','minp','maxp','sort','q'].forEach(function(id){
-          var el = document.getElementById(id);
-          if(!el) return;
+          var el = document.getElementById(id); if(!el) return;
           var ev = (id === 'q') ? 'input' : 'change';
           el.addEventListener(ev, function(){ setTimeout(updateLink, 0); });
         });
