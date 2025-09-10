@@ -1670,3 +1670,39 @@ input, select, textarea {
 #bg::after { z-index: -2 !important; }
 #bg::before { z-index: -1 !important; }
 #wrapper { position: relative !important; z-index: 0 !important; }
+
+
+/* === Findr final layering overrides (authoritative) === */
+#bg, #bg::before, #bg::after { pointer-events: none !important; }
+#bg {
+  position: fixed !important;
+  top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+  width: 100% !important; height: 100% !important;
+  background: transparent !important;
+  z-index: -3 !important;
+}
+#bg::after {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background-image: url("../../images/bg-house.jpg") !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-repeat: no-repeat !important;
+  opacity: 1 !important;
+  z-index: -2 !important;
+  display: block !important;
+}
+#bg::before {
+  content: "" !important;
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(0,0,0,0.35) !important; /* subtle dark overlay for contrast */
+  z-index: -1 !important;
+  display: block !important;
+}
+#wrapper {
+  position: relative !important;
+  z-index: 0 !important; /* content always above bg layers */
+}
+

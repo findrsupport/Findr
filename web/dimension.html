@@ -25,20 +25,7 @@
   </style>
 
 
-  <style id="dimension-hardening">
-    /* Hide any FontAwesome pseudo icon if present */
-    .logo:before { display:none !important; content:'' !important; }
-    /* Ensure our inline <img> shows */
-    .logo img { display:block !important; width:72px !important; height:72px !important; object-fit:contain !important; }
-    /* Force Unsplash background */
-    #bg, #bg:before, .bg {
-      background-image: url("https://source.unsplash.com/kUdbEEMcRwE/2000x1125") !important;
-      background-size: cover !important;
-      background-position: center center !important;
-      background-repeat: no-repeat !important;
-      opacity: 1 !important;
-    }
-  </style>
+  
 
 
   <style id="dimension-fixes">
@@ -74,54 +61,11 @@
   </style>
 
 
-  <style id="dimension-hard-override">
-    /* Force hero image on the correct layer */
-    #bg::after {
-      content: "";
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background-image: url("https://source.unsplash.com/kUdbEEMcRwE/2000x1125") !important;
-      background-size: cover !important;
-      background-position: center center !important;
-      background-repeat: no-repeat !important;
-      opacity: 1 !important;
-      z-index: 0 !important;
-      display: block !important;
-    }
-    /* Overlay remains handled by :before; ensure it doesn't hide */
-    #bg::before { opacity: 1 !important; }
-    /* Proper stacking: wrapper over bg */
-    #wrapper { position: relative; z-index: 1; }
-    /* Center SVG inside circular logo */
-    .logo { position: relative; }
-    .logo img { position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:70%; height:70%; object-fit:contain; display:block; }
-  </style>
+  
 
 
   
-  <style id="dimension-local-bg">
-    /* Background image sits BEHIND all content */
-    #bg, #bg::before, #bg::after { pointer-events: none !important; }
-    #bg { background: transparent !important; }
-    #bg::after{
-      content: "";
-      position: fixed;
-      inset: 0;
-      background-image: url("assets/dimension/images/bg-house.jpg") !important;
-      background-size: cover !important;
-      background-position: center center !important;
-      background-repeat: no-repeat !important;
-      opacity: 1 !important;
-      z-index: -2 !important;
-      display: block !important;
-    }
-    /* Keep template's overlay above image but still behind content */
-    #bg::before{
-      z-index: -1 !important;
-    }
-    /* Ensure content is above */
-    #wrapper { position: relative !important; z-index: 0 !important; }
-  </style>
+  
 
 
 </head>
@@ -484,7 +428,6 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
       }
     })();
   </script>
-
 
   <div id="bg"></div>
 </body>
