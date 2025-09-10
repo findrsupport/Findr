@@ -9,7 +9,7 @@
 		<title>Findr™ Demo — Dimension</title>
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-		<link rel="stylesheet" href="assets/dimension/assets/css/main.css" />
+		<link rel="stylesheet" href="assets/dimension/assets/css/main.css?v=3" />
 		<noscript><link rel="stylesheet" href="assets/dimension/assets/css/noscript.css" /></noscript>
 	
   <style id="findr-dimension-overrides">
@@ -22,6 +22,22 @@
     }
     /* Ensure the SVG logo image shows correctly */
     .logo img { display:block; width:72px; height:72px; object-fit:contain; }
+  </style>
+
+
+  <style id="dimension-hardening">
+    /* Hide any FontAwesome pseudo icon if present */
+    .logo:before { display:none !important; content:'' !important; }
+    /* Ensure our inline <img> shows */
+    .logo img { display:block !important; width:72px !important; height:72px !important; object-fit:contain !important; }
+    /* Force Unsplash background */
+    #bg, #bg:before, .bg {
+      background-image: url("https://source.unsplash.com/kUdbEEMcRwE/2000x1125") !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+      opacity: 1 !important;
+    }
   </style>
 
 </head>
