@@ -11,7 +11,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 		<link rel="stylesheet" href="assets/dimension/assets/css/main.css" />
 		<noscript><link rel="stylesheet" href="assets/dimension/assets/css/noscript.css" /></noscript>
-	</head>
+	
+  <style id="findr-dimension-overrides">
+    /* Force the hero background to the Unsplash image */
+    #bg:before, #bg, .bg {
+      background-image: url("https://source.unsplash.com/kUdbEEMcRwE/2000x1125") !important;
+      background-size: cover !important;
+      background-position: center center !important;
+      background-repeat: no-repeat !important;
+    }
+    /* Ensure the SVG logo image shows correctly */
+    .logo img { display:block; width:72px; height:72px; object-fit:contain; }
+  </style>
+
+</head>
 	<body class="is-preload">
   
 
