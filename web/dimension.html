@@ -472,5 +472,22 @@ print 'It took ' + i + ' iterations to sort the deck.';</code></pre>
 
 	
   <div id="bg"></div>
+
+  <script>
+    (function(){
+      function showContent(){
+        try { document.body.classList.remove('is-preload'); } catch(e){}
+        var w = document.getElementById('wrapper');
+        if (w){ w.style.opacity = '1'; w.style.transform = 'none'; w.style.visibility = 'visible'; }
+      }
+      if (document.readyState === 'complete' || document.readyState === 'interactive'){
+        showContent();
+      } else {
+        document.addEventListener('DOMContentLoaded', showContent);
+        window.addEventListener('load', showContent);
+      }
+    })();
+  </script>
+
 </body>
 </html>
