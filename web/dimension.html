@@ -98,15 +98,31 @@
   </style>
 
 
+  
   <style id="dimension-local-bg">
+    /* Background image sits BEHIND all content */
+    #bg, #bg::before, #bg::after { pointer-events: none !important; }
+    #bg { background: transparent !important; }
     #bg::after{
+      content: "";
+      position: fixed;
+      inset: 0;
       background-image: url("assets/dimension/images/bg-house.jpg") !important;
       background-size: cover !important;
       background-position: center center !important;
       background-repeat: no-repeat !important;
       opacity: 1 !important;
+      z-index: -2 !important;
+      display: block !important;
     }
+    /* Keep template's overlay above image but still behind content */
+    #bg::before{
+      z-index: -1 !important;
+    }
+    /* Ensure content is above */
+    #wrapper { position: relative !important; z-index: 0 !important; }
   </style>
+
 
 </head>
 	<body class="is-preload">

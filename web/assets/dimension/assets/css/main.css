@@ -1664,3 +1664,9 @@ input, select, textarea {
 #bg::before {
   background-image: url("https://source.unsplash.com/kUdbEEMcRwE/2000x1125") !important;
 }
+
+/* Findr layering */
+#bg, #bg::before, #bg::after { pointer-events: none !important; }
+#bg::after { z-index: -2 !important; }
+#bg::before { z-index: -1 !important; }
+#wrapper { position: relative !important; z-index: 0 !important; }
